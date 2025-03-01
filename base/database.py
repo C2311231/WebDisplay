@@ -2,21 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid, json
 from sqlalchemy.orm import Mapped, mapped_column
 import commons
-required_tables = {
-        "config": {
-                'parameter': 'TEXT NOT NULL',
-                'value': 'TEXT NOT NULL'
-            },
-        "events": {
-                'name': 'TEXT NOT NULL',
-                'color': 'TEXT NOT NULL',
-                'wkDay': 'TEXT NOT NULL',
-                'startTime': 'TEXT NOT NULL',
-                'endTime': 'TEXT NOT NULL',
-                'type': 'TEXT NOT NULL',
-                'data': 'TEXT NOT NULL'
-            }
-    }
 
 required_config = {
     "id": str(uuid.uuid4()),
@@ -28,60 +13,72 @@ required_config = {
     "name": "Screen One",
     "state": "online",
     "platform": "linux",
-    "ip": "localhost"
+    "ip": "localhost",
 }
 db = SQLAlchemy()
+
 
 class Database(commons.BaseClass):
     def __init__(self, app, filepath="./db.db"):
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{filepath}"
         db.init_app(app)
         self.app = app
-        
+
         with app.app_context():
             db.create_all()
-        self.verifyConfig()
+        self.verify_config()
+
     def config(self):
         with self.app.app_context():
             # data =  db.session.execute(db.select(Config)).scalars().all()
             data_dict = {row.parameter: row.value for row in Config.query.all()}
             return data_dict
 
-    def writeConfig(self, parameter, value):
+    def write_config(self, parameter, value):
         with self.app.app_context():
-            data = Config(
-                parameter=parameter,
-                value=value
-            )
+            data = Config(parameter=parameter, value=value)
             db.session.add(data)
             db.session.commit()
 
-    def verifyConfig(self):
+    def verify_config(self):
         config = self.config()
         for key in required_config.keys():
             if key not in config.keys():
                 value = required_config[key]
-                self.writeConfig(key, value)
-                
-    def writeEvent(self, name, color, wkDay, startTime, endTime, type, data, syncID=None):
+                self.write_config(key, value)
+
+    def writeEvent(
+        self, name, color, wk_day, start_time, end_time, type, data, sync_ID=None
+    ):
         if syncID == None:
             syncID = str(uuid.uuid4())
         with self.app.app_context():
-            data = Events(name=name, color=color, wkDay=wkDay, startTime=startTime, endTime=endTime, type=type, data=json.dumps(data), syncID=syncID)
+            data = Events(
+                name=name,
+                color=color,
+                wk_day=wk_day,
+                start_time=start_time,
+                end_time=end_time,
+                type=type,
+                data=json.dumps(data),
+                sync_ID=sync_ID,
+            )
             db.session.add(data)
             db.session.commit()
             id = data.id
             return id
-            
-    def editEvent(self, id, name, color, wkDay, startTime, endTime, type, data, syncID=None):
+
+    def editEvent(
+        self, id, name, color, wk_day, start_time, end_time, type, data, sync_ID=None
+    ):
         with self.app.app_context():
-            if syncID:
-                event = Events.query.filter_by(syncID=syncID).first()
+            if sync_ID:
+                event = Events.query.filter_by(sync_ID=sync_ID).first()
                 event.name = name
                 event.color = color
-                event.wkDay = wkDay
-                event.startTime = startTime
-                event.endTime = endTime
+                event.wk_day = wk_day
+                event.start_time = start_time
+                event.end_time = end_time
                 event.type = type
                 event.data = json.dumps(data)
                 db.session.commit()
@@ -90,62 +87,102 @@ class Database(commons.BaseClass):
                 event = Events.query.filter_by(id=id).first()
                 event.name = name
                 event.color = color
-                event.wkDay = wkDay
-                event.startTime = startTime
-                event.endTime = endTime
+                event.wk_day = wk_day
+                event.start_time = start_time
+                event.end_time = end_time
                 event.type = type
                 event.data = json.dumps(data)
                 db.session.commit()
                 return event
-            
+
     def getEvent(self, id):
         with self.app.app_context():
-            
+
             data_dict = Events.query.filter_by(id=id).first()
             return data_dict
-        
+
     def getEvents(self):
         with self.app.app_context():
-            
+
             data_dict = [row.__dict__ for row in Events.query.all()]
             for row in data_dict:
                 row.pop("_sa_instance_state", None)
             return data_dict
-    
+
     def deleteEvent(self, id):
         with self.app.app_context():
             event = Events.query.filter_by(id=id).first()
             db.session.delete(event)
             db.session.commit()
-            
+
     def deleteSyncEvent(self, id):
         with self.app.app_context():
             event = Events.query.filter_by(syncID=id).first()
             db.session.delete(event)
             db.session.commit()
-            
-    def createPeer(self, web_version, api_version, web_url, web_port, web_encription, device_name, device_state, device_platform, device_id, device_ip, disabled):
+
+    def createPeer(
+        self,
+        web_version,
+        api_version,
+        web_url,
+        web_port,
+        web_encription,
+        device_name,
+        device_state,
+        device_platform,
+        device_id,
+        device_ip,
+        disabled,
+    ):
         with self.app.app_context():
-            data = Peers(web_version=web_version, api_version=api_version, web_url=web_url, web_port=web_port, web_encription=web_encription, device_name=device_name, device_state=device_state, device_platform=device_platform, device_id=device_id, device_ip=device_ip, disabled=disabled)
+            data = Peers(
+                web_version=web_version,
+                api_version=api_version,
+                web_url=web_url,
+                web_port=web_port,
+                web_encription=web_encription,
+                device_name=device_name,
+                device_state=device_state,
+                device_platform=device_platform,
+                device_id=device_id,
+                device_ip=device_ip,
+                disabled=disabled,
+            )
             db.session.add(data)
             db.session.commit()
             id = data.id
             return id
+
     def getPeer(self, id):
         with self.app.app_context():
-            
+
             data_dict = Peers.query.filter_by(id=id).first()
             return data_dict
-        
+
     def getPeers(self):
         with self.app.app_context():
-            
+
             data_dict = [row.__dict__ for row in Peers.query.all()]
             for row in data_dict:
                 row.pop("_sa_instance_state", None)
             return data_dict
-            
-    def editPeer(self, id, web_version=None, api_version=None, web_url=None, web_port=None, web_encription=None, device_name=None, device_state=None, device_platform=None, device_id=None, device_ip=None, disabled=None):
+
+    def editPeer(
+        self,
+        id,
+        web_version=None,
+        api_version=None,
+        web_url=None,
+        web_port=None,
+        web_encription=None,
+        device_name=None,
+        device_state=None,
+        device_platform=None,
+        device_id=None,
+        device_ip=None,
+        disabled=None,
+    ):
         with self.app.app_context():
             peer = Peers.query.filter_by(id=id).first()
             if web_version != None:
@@ -153,7 +190,7 @@ class Database(commons.BaseClass):
 
             if api_version != None:
                 peer.api_version = api_version
-                
+
             if web_url != None:
                 peer.web_url = web_url
 
@@ -165,7 +202,7 @@ class Database(commons.BaseClass):
 
             if device_state != None:
                 peer.web_version = device_state
-                
+
             if device_ip != None:
                 peer.device_ip = device_ip
 
@@ -181,22 +218,26 @@ class Database(commons.BaseClass):
             if disabled != None:
                 peer.disabled = disabled
             db.session.commit()
+
+
 class Config(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     parameter: Mapped[str] = mapped_column(unique=True)
     value: Mapped[str]
 
+
 class Events(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     color: Mapped[str]
-    wkDay: Mapped[str]
-    startTime: Mapped[float]
-    endTime: Mapped[float]
+    wk_day: Mapped[str]
+    start_time: Mapped[float]
+    end_time: Mapped[float]
     type: Mapped[str]
     syncID: Mapped[str] = mapped_column(unique=True)
     data: Mapped[str]
-    
+
+
 class Peers(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     web_version: Mapped[str]
