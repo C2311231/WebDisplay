@@ -2,18 +2,17 @@ from flask import render_template, redirect, Flask
 import time
 from subprocess import call
 from base import networking, database, browser, api, peers, cec, scheduler
-from flask_sqlalchemy import SQLAlchemy
 import sys
 
-manager = browser.BrowserManager()
+browser_manager = browser.BrowserManager()
 app = Flask(__name__)
 db = database.Database(app=app, filepath=sys.argv[1])
 network_manager = networking.NetworkingManager(db)
 cec_manager = cec.CecManager()
 peer_manager = peers.PeerManager(network_manager, db=db)
 # initialize the app with the extension
-scheduler = scheduler.Scheduler(db, manager, cec_manager)
-peer_manager.startDiscovery()
+scheduler = scheduler.Scheduler(db, browser_manager, cec_manager)
+peer_manager.start_discovery()
 
 
 @app.route("/")
@@ -25,16 +24,6 @@ def home():
         name=db.config()["name"],
         adapters=network_manager.get_interfaces(),
     )
-
-
-@app.route("/open/")
-def open():
-    manager.openURL(
-        "https://docs.google.com/presentation/d/1BlpnIVpDFSrweIgXjYzX46dmdsnnJIAJDOUVnizpIg0/pub?start=true&loop=true&delayms=3000"
-    )
-    time.sleep(1)
-    manager.get_screenshot()
-    return "Done"
 
 
 @app.route("/restart/")
@@ -51,7 +40,7 @@ def idle_screen():
 
 @app.route("/getScreenshot/")
 def screenshot():
-    manager.get_screenshot()
+    browser_manager.get_screenshot()
     return redirect("/static/images/latestScreenShot.png")
 
 
@@ -70,7 +59,7 @@ def add_header(r):
 
 if __name__ == "__main__":
     scheduler.start()
-    apiBlueprint = api.APIV1(db, cec_manager, manager, peer_manager).get_blueprint()
-    app.register_blueprint(apiBlueprint, url_prefix="/api")
+    api_blueprint = api.api_v1(db, cec_manager, browser_manager, peer_manager).get_blueprint()
+    app.register_blueprint(api_blueprint, url_prefix="/api")
     app.run(host="0.0.0.0", port=sys.argv[2], debug=False)
     scheduler.stop()

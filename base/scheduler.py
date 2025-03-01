@@ -2,16 +2,16 @@ import threading
 import time
 from datetime import datetime
 import json
-from base import commons
+from base import commons, database, browser, cec
 
 
 class Scheduler(commons.BaseClass):
-    def __init__(self, db, browser_manager, cec):
+    def __init__(self, db: database.Database, browser_manager: browser.BrowserManager, cec: cec.CecManager):
         self.db = db
         self.run = False
         self.browser_manager = browser_manager
         self.cec = cec
-        self.turnedScreenOff = False
+        self.turned_screen_off = False
 
     def running(self):
         while self.run:
@@ -21,22 +21,23 @@ class Scheduler(commons.BaseClass):
             )
 
             wk_day = datetime.now().strftime("%A")
-            events = self.db.getEvents()
-            currentEvent = False
+            events = self.db.get_events()
+            current_event = False
             for event in events:
                 if event["wkDay"] == wk_day:
                     if (float(event["startTime"]) <= t) and (
                         float(event["endTime"]) > t
                     ):
-                        currentEvent = True
-                        if self.browser_manager.getEvent() != event["id"]:
-                            self.startEvent(event)
-            if not currentEvent:
+                        current_event = True
+                        if self.browser_manager.get_event() != event["id"]:
+                            self.start_event(event)
+            if not current_event:
                 if self.browser_manager.driver != None:
                     self.browser_manager.close()
-                if not self.turnedScreenOff:
+                    
+                if not self.turned_screen_off:
                     self.cec.tv_off()
-                    self.turnedScreenOff = True
+                    self.turned_screen_off = True
             time.sleep(2)
 
     def start(self):
@@ -47,11 +48,11 @@ class Scheduler(commons.BaseClass):
     def stop(self):
         self.run = False
 
-    def startEvent(self, event):
+    def start_event(self, event):
         print("Starting Event")
         if not self.cec.get_tv_power():
             self.cec.tv_on()
-        self.turnedScreenOff = False
+        self.turned_screen_off = False
 
         self.cec.set_active()
 
@@ -70,20 +71,20 @@ class Scheduler(commons.BaseClass):
 
         elif event["type"] == "publishedSlide":
             data = json.loads(event["data"])
-            urlSplit = data["url"].split("/")
+            url_split = data["url"].split("/")
             self.browser_manager.open_url(
                 "https://docs.google.com/presentation/d/e/"
-                + urlSplit[-2]
+                + url_split[-2]
                 + f"/pub?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}"
             )
             self.browser_manager.set_event(event["id"])
 
         elif event["type"] == "viewingSlide":
             data = json.loads(event["data"])
-            urlSplit = data["url"].split("/")
+            url_split = data["url"].split("/")
             self.browser_manager.open_url(
                 "https://docs.google.com/presentation/d/"
-                + urlSplit[-2]
+                + url_split[-2]
                 + f"/present?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}"
             )
             self.browser_manager.set_event(event["id"])

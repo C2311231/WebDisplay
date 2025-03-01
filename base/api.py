@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, request, make_response, jsonify
 import json
 import copy
-from base import commons
+from base import commons, peers, browser, cec, database
 
 DAYSOFWEEK = [
     "Monday",
@@ -15,8 +15,8 @@ DAYSOFWEEK = [
 EVENTTYPES = ["idle", "publishedSlide", "URL", "viewingSlide"]
 
 
-class APIV1(commons.BaseClass):
-    def __init__(self, database, cec, browser_manager, peer_manager):
+class api_v1(commons.BaseClass):
+    def __init__(self, database: database.Database, cec: cec.CecManager, browser_manager: browser.BrowserManager, peer_manager: peers.PeerManager) -> None:
         self.cec = cec
         self.database = database
         self.browser = browser_manager
@@ -85,12 +85,12 @@ class APIV1(commons.BaseClass):
 
         @self.bp.route("/add/peer/", methods=["POST"])
         def api_add_peer():
-            self.peer_manager.addDevice(request.json["ip"], request.json["port"])
+            self.peer_manager.add_device(request.json["ip"], request.json["port"])
             data = {"message": "Success", "code": "Peer Disabled"}
             return make_response(jsonify(data), 200)
 
         @self.bp.route("/disable/peer/<id>")
-        def api_disable_peer(id):
+        def api_disable_peer(id: str):
             for peer in self.peer_manager.devices:
                 if peer.device_id == id:
                     peer.disable()
@@ -100,7 +100,7 @@ class APIV1(commons.BaseClass):
             return make_response(jsonify(data), 400)
 
         @self.bp.route("/enable/peer/<id>")
-        def api_enable_peer(id):
+        def api_enable_peer(id: str):
             for peer in self.peer_manager.devices:
                 if peer.device_id == id:
                     peer.enable()
@@ -223,7 +223,7 @@ class APIV1(commons.BaseClass):
             return make_response({}, 400)
 
         @self.bp.route("/remove/schedule/event/<id>")
-        def api_remove_schedule_event(id):
+        def api_remove_schedule_event(id: str):
             if id.isdigit():
                 self.database.delete_event(id)
             else:

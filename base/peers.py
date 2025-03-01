@@ -240,7 +240,7 @@ class Device:
         return False
 
     def check_connection(self):
-        if time.time() - self.lastCommunication > 5:
+        if time.time() - self.last_communication > 5:
             if self.ping():
                 self.available = True
             else:

@@ -23,10 +23,10 @@ class BrowserManager(commons.BaseClass):
             try:
                 self.driver.get(url)
             except:
-                self.initDriver()
+                self.init_driver()
                 self.driver.get(url)
         else:
-            self.initDriver()
+            self.init_driver()
             self.driver.get(url)
 
     def get_screenshot(self):
@@ -35,8 +35,8 @@ class BrowserManager(commons.BaseClass):
                 self.driver.save_screenshot("./static/images/latestScreenShot.png")
 
             except:
-                self.initDriver()
-                self.getScreenShot()
+                self.init_driver()
+                self.get_screenshot()
 
     def close(self):
         if self.driver:

@@ -47,11 +47,11 @@ class Database(commons.BaseClass):
                 value = required_config[key]
                 self.write_config(key, value)
 
-    def writeEvent(
-        self, name, color, wk_day, start_time, end_time, type, data, sync_ID=None
+    def write_event(
+        self, name, color, wk_day, start_time, end_time, type, data, sync_id=None
     ):
-        if syncID == None:
-            syncID = str(uuid.uuid4())
+        if sync_id == None:
+            sync_id = str(uuid.uuid4())
         with self.app.app_context():
             data = Events(
                 name=name,
@@ -61,19 +61,19 @@ class Database(commons.BaseClass):
                 end_time=end_time,
                 type=type,
                 data=json.dumps(data),
-                sync_ID=sync_ID,
+                sync_id=sync_id,
             )
             db.session.add(data)
             db.session.commit()
             id = data.id
             return id
 
-    def editEvent(
-        self, id, name, color, wk_day, start_time, end_time, type, data, sync_ID=None
+    def edit_event(
+        self, id, name, color, wk_day, start_time, end_time, type, data, sync_id=None
     ):
         with self.app.app_context():
-            if sync_ID:
-                event = Events.query.filter_by(sync_ID=sync_ID).first()
+            if sync_id:
+                event = Events.query.filter_by(sync_id=sync_id).first()
                 event.name = name
                 event.color = color
                 event.wk_day = wk_day
@@ -95,13 +95,13 @@ class Database(commons.BaseClass):
                 db.session.commit()
                 return event
 
-    def getEvent(self, id):
+    def get_event(self, id):
         with self.app.app_context():
 
             data_dict = Events.query.filter_by(id=id).first()
             return data_dict
 
-    def getEvents(self):
+    def get_events(self):
         with self.app.app_context():
 
             data_dict = [row.__dict__ for row in Events.query.all()]
@@ -109,19 +109,19 @@ class Database(commons.BaseClass):
                 row.pop("_sa_instance_state", None)
             return data_dict
 
-    def deleteEvent(self, id):
+    def delete_event(self, id):
         with self.app.app_context():
             event = Events.query.filter_by(id=id).first()
             db.session.delete(event)
             db.session.commit()
 
-    def deleteSyncEvent(self, id):
+    def delete_sync_event(self, id):
         with self.app.app_context():
             event = Events.query.filter_by(syncID=id).first()
             db.session.delete(event)
             db.session.commit()
 
-    def createPeer(
+    def create_peer(
         self,
         web_version,
         api_version,
@@ -154,21 +154,19 @@ class Database(commons.BaseClass):
             id = data.id
             return id
 
-    def getPeer(self, id):
+    def get_peer(self, id):
         with self.app.app_context():
-
             data_dict = Peers.query.filter_by(id=id).first()
             return data_dict
 
-    def getPeers(self):
+    def get_peers(self):
         with self.app.app_context():
-
             data_dict = [row.__dict__ for row in Peers.query.all()]
             for row in data_dict:
                 row.pop("_sa_instance_state", None)
             return data_dict
 
-    def editPeer(
+    def edit_peer(
         self,
         id,
         web_version=None,
@@ -185,6 +183,7 @@ class Database(commons.BaseClass):
     ):
         with self.app.app_context():
             peer = Peers.query.filter_by(id=id).first()
+            
             if web_version != None:
                 peer.web_version = web_version
 
@@ -217,6 +216,7 @@ class Database(commons.BaseClass):
 
             if disabled != None:
                 peer.disabled = disabled
+                
             db.session.commit()
 
 
