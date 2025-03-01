@@ -1,6 +1,6 @@
 import os
 import subprocess
-import commons
+from base import commons
 
 
 class NetworkingManager(commons.BaseClass):
@@ -101,7 +101,7 @@ class NetworkingManager(commons.BaseClass):
         return info
 
     def tick(self) -> None:
-        # Run any maintance tasks and checks (about every 5 seconds)
+        # Run any maintenance tasks and checks (about every 5 seconds)
         pass
 
     def required_config() -> dict:
@@ -111,7 +111,7 @@ class NetworkingManager(commons.BaseClass):
             "api_version": None,
             "web_url": None,
             "web_port": None,
-            "web_encription": None,
+            "web_encryption": None,
             "device_name": None,
             "device_state": None,
             "device_platform": None,

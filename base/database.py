@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import uuid, json
 from sqlalchemy.orm import Mapped, mapped_column
-import commons
+from base import commons
 
 required_config = {
     "id": str(uuid.uuid4()),
@@ -9,7 +9,7 @@ required_config = {
     "api_version": "1.0",
     "url": "http://localhost:5000",
     "port": "5000",
-    "encription": "False",
+    "encryption": "False",
     "name": "Screen One",
     "state": "online",
     "platform": "linux",
@@ -127,7 +127,7 @@ class Database(commons.BaseClass):
         api_version,
         web_url,
         web_port,
-        web_encription,
+        web_encryption,
         device_name,
         device_state,
         device_platform,
@@ -141,7 +141,7 @@ class Database(commons.BaseClass):
                 api_version=api_version,
                 web_url=web_url,
                 web_port=web_port,
-                web_encription=web_encription,
+                web_encryption=web_encryption,
                 device_name=device_name,
                 device_state=device_state,
                 device_platform=device_platform,
@@ -175,7 +175,7 @@ class Database(commons.BaseClass):
         api_version=None,
         web_url=None,
         web_port=None,
-        web_encription=None,
+        web_encryption=None,
         device_name=None,
         device_state=None,
         device_platform=None,
@@ -194,8 +194,8 @@ class Database(commons.BaseClass):
             if web_url != None:
                 peer.web_url = web_url
 
-            if web_encription != None:
-                peer.web_encription = web_encription
+            if web_encryption != None:
+                peer.web_encryption = web_encryption
 
             if device_name != None:
                 peer.device_name = device_name
@@ -244,7 +244,7 @@ class Peers(db.Model):
     api_version: Mapped[str]
     web_url: Mapped[str]
     web_port: Mapped[str]
-    web_encription: Mapped[str]
+    web_encryption: Mapped[str]
     device_name: Mapped[str]
     device_state: Mapped[str]
     device_platform: Mapped[str]

@@ -2,7 +2,7 @@ import socket
 import struct
 import json
 import time
-import commons
+from base import commons
 from networking import address
 
 
@@ -31,7 +31,7 @@ class DiscoveryEngine(commons.BaseClass):
                 "api_version": self.database.config()["api_version"],
                 "web_url": self.database.config()["url"],
                 "web_port": self.database.config()["port"],
-                "web_encription": self.database.config()["encription"],
+                "web_encryption": self.database.config()["encryption"],
                 "device_name": self.database.config()["name"],
                 "device_state": self.database.config()["state"],
                 "device_platform": self.database.config()["platform"],
@@ -59,7 +59,7 @@ class DiscoveryEngine(commons.BaseClass):
             "api_version": self.database.config()["api_version"],
             "web_url": self.database.config()["url"],
             "web_port": self.database.config()["port"],
-            "web_encription": self.database.config()["encription"],
+            "web_encryption": self.database.config()["encryption"],
             "device_name": self.database.config()["name"],
             "device_state": self.database.config()["state"],
             "device_platform": self.database.config()["platform"],
@@ -81,7 +81,7 @@ class DiscoveryEngine(commons.BaseClass):
                 print(f"Invalid Message from {address}")
 
     def tick(self) -> None:
-        # Run any maintance tasks and checks (about every 5 seconds)
+        # Run any maintenance tasks and checks (about every 5 seconds)
         pass
 
     def required_config() -> dict:
@@ -91,7 +91,7 @@ class DiscoveryEngine(commons.BaseClass):
             "api_version": None,
             "web_url": None,
             "web_port": None,
-            "web_encription": None,
+            "web_encryption": None,
             "device_name": None,
             "device_state": None,
             "device_platform": None,

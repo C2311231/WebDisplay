@@ -2,7 +2,7 @@ import threading
 import time
 import requests
 import json
-import commons
+from base import commons
 
 
 class PeerManager(commons.BaseClass):
@@ -17,7 +17,7 @@ class PeerManager(commons.BaseClass):
                     peer["api_version"],
                     peer["web_url"],
                     peer["web_port"],
-                    peer["web_encription"],
+                    peer["web_encryption"],
                     peer["device_name"],
                     peer["device_state"],
                     peer["device_platform"],
@@ -53,7 +53,7 @@ class PeerManager(commons.BaseClass):
                 data["api_version"],
                 data["web_url"],
                 data["web_port"],
-                data["web_encription"],
+                data["web_encryption"],
                 data["device_name"],
                 data["device_state"],
                 data["device_platform"],
@@ -74,7 +74,7 @@ class PeerManager(commons.BaseClass):
                     data["api_version"],
                     data["web_url"],
                     data["web_port"],
-                    data["web_encription"],
+                    data["web_encryption"],
                     data["device_name"],
                     data["device_state"],
                     data["device_platform"],
@@ -89,7 +89,7 @@ class PeerManager(commons.BaseClass):
     def check_device_connections(self):
         while True:
             for device in self.devices:
-                device.check_conection()
+                device.check_connection()
 
             time.sleep(5)
 
@@ -101,7 +101,7 @@ class Device:
         api_version,
         web_url,
         web_port,
-        web_encription,
+        web_encryption,
         device_name,
         device_state,
         device_platform,
@@ -119,7 +119,7 @@ class Device:
                 api_version,
                 web_url,
                 web_port,
-                web_encription,
+                web_encryption,
                 device_name,
                 device_state,
                 device_platform,
@@ -147,8 +147,8 @@ class Device:
         return self.get_data().web_port
 
     @property  # Getter
-    def web_encription(self):
-        return self.get_data().web_encription
+    def web_encryption(self):
+        return self.get_data().web_encryption
 
     @property  # Getter
     def device_name(self):
@@ -186,9 +186,9 @@ class Device:
     def web_url(self, web_url):
         self.db.editPeer(self.id, web_url=web_url)
 
-    @web_encription.setter  # Setter
-    def web_encription(self, web_encription):
-        self.db.editPeer(self.id, web_encription=web_encription)
+    @web_encryption.setter  # Setter
+    def web_encryption(self, web_encryption):
+        self.db.editPeer(self.id, web_encryption=web_encryption)
 
     @device_name.setter  # Setter
     def device_name(self, device_name):
@@ -239,7 +239,7 @@ class Device:
             return True
         return False
 
-    def check_conection(self):
+    def check_connection(self):
         if time.time() - self.lastCommunication > 5:
             if self.ping():
                 self.available = True

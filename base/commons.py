@@ -1,6 +1,6 @@
 class BaseClass:
     def tick(self) -> None:
-        # Run any maintance tasks and checks (about every 5 seconds)
+        # Run any maintenance tasks and checks (about every 5 seconds)
         pass
 
     def required_config() -> dict:

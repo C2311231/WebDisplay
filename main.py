@@ -9,10 +9,10 @@ manager = browser.BrowserManager()
 app = Flask(__name__)
 db = database.Database(app=app, filepath=sys.argv[1])
 network_manager = networking.NetworkingManager(db)
-cec_manager = cec.cecManager()
+cec_manager = cec.CecManager()
 peer_manager = peers.PeerManager(network_manager, db=db)
 # initialize the app with the extension
-scheduler = scheduler.scheduler(db, manager, cec_manager)
+scheduler = scheduler.Scheduler(db, manager, cec_manager)
 peer_manager.startDiscovery()
 
 

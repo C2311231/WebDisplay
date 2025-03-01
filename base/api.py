@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, request, make_response, jsonify
 import json
 import copy
-import commons
+from base import commons
 
 DAYSOFWEEK = [
     "Monday",
@@ -32,7 +32,7 @@ class APIV1(commons.BaseClass):
                 "api_version": self.database.config()["api_version"],
                 "web_url": self.database.config()["url"],
                 "web_port": self.database.config()["port"],
-                "web_encription": self.database.config()["encription"],
+                "web_encryption": self.database.config()["encryption"],
                 "device_name": self.database.config()["name"],
                 "device_state": self.database.config()["state"],
                 "device_platform": self.database.config()["platform"],
@@ -86,7 +86,7 @@ class APIV1(commons.BaseClass):
         @self.bp.route("/add/peer/", methods=["POST"])
         def api_add_peer():
             self.peer_manager.addDevice(request.json["ip"], request.json["port"])
-            data = {"message": "Sucsess", "code": "Peer Disabled"}
+            data = {"message": "Success", "code": "Peer Disabled"}
             return make_response(jsonify(data), 200)
 
         @self.bp.route("/disable/peer/<id>")
@@ -94,7 +94,7 @@ class APIV1(commons.BaseClass):
             for peer in self.peer_manager.devices:
                 if peer.device_id == id:
                     peer.disable()
-                    data = {"message": "Sucsess", "code": "Peer Disabled"}
+                    data = {"message": "Success", "code": "Peer Disabled"}
                     return make_response(jsonify(data), 200)
             data = {"message": "Failed", "code": "Peer not found"}
             return make_response(jsonify(data), 400)
@@ -104,7 +104,7 @@ class APIV1(commons.BaseClass):
             for peer in self.peer_manager.devices:
                 if peer.device_id == id:
                     peer.enable()
-                    data = {"message": "Sucsess", "code": "Peer Enabled"}
+                    data = {"message": "Success", "code": "Peer Enabled"}
                     return make_response(jsonify(data), 200)
             data = {"message": "Failed", "code": "Peer not found"}
             return make_response(jsonify(data), 400)
@@ -113,7 +113,7 @@ class APIV1(commons.BaseClass):
         def api_add_schedule_event():
 
             if request.is_json:
-                ## Data Validataion
+                ## Data Validation
                 if float(request.json["startTime"]) > float(request.json["endTime"]):
                     data = {
                         "message": "Failed",
@@ -160,8 +160,8 @@ class APIV1(commons.BaseClass):
                         peers = request.json["data"]["peers"]
                         print(f"created event: {id}")
                         event = self.database.get_event(id)
-                        for peer in self.peer_manager.devices and not peer.disabled:
-                            if peer.device_id in peers:
+                        for peer in self.peer_manager.devices:
+                            if peer.device_id in peers and not peer.disabled:
                                 peer.sync_event(
                                     copy.deepcopy(event), self.database.config()["id"]
                                 )
@@ -201,7 +201,7 @@ class APIV1(commons.BaseClass):
                                 and not peer.disabled
                             ):
                                 peer.delete_event(event.syncID)
-                                ## Must create new event on newly added peer if it doesn't yet exist and then must delete event from any peers that get removed from event sync
+                                # Must create new event on newly added peer if it doesn't yet exist and then must delete event from any peers that get removed from event sync
 
                             elif (
                                 peer.device_id
@@ -209,9 +209,9 @@ class APIV1(commons.BaseClass):
                                 and peer.device_id in peers
                                 and not peer.disabled
                             ):
-                                tempEvent = copy.deepcopy(event)
-                                tempEvent.id = "0"
-                                peer.sync_event(tempEvent, self.database.config()["id"])
+                                temp_event = copy.deepcopy(event)
+                                temp_event.id = "0"
+                                peer.sync_event(temp_event, self.database.config()["id"])
 
                             elif peer.device_id in peers and not peer.disabled:
                                 peer.sync_event(

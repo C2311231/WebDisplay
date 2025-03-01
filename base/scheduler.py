@@ -2,10 +2,10 @@ import threading
 import time
 from datetime import datetime
 import json
-import commons
+from base import commons
 
 
-class scheduler(commons.BaseClass):
+class Scheduler(commons.BaseClass):
     def __init__(self, db, browser_manager, cec):
         self.db = db
         self.run = False

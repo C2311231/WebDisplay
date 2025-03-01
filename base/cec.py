@@ -31,7 +31,7 @@ venderDecoder = {
 }
 
 cec = None  # clears problems in ide (no affect on code)
-import commons
+from base import commons
 
 
 class CecManager(commons.BaseClass):
@@ -45,7 +45,7 @@ class CecManager(commons.BaseClass):
             self.tv = cec.Device(cec.CECDEVICE_TV)
             self.disableCEC = False
         except:
-            print("CEC Unavailabe")
+            print("CEC Unavailable")
             self.disableCEC = True
 
     def tv_on(self):
