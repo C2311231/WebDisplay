@@ -2,72 +2,89 @@ import threading
 import time
 from datetime import datetime
 import json
-import commons
-class scheduler(commons.BaseClass):
-    def __init__(self, db, browserManager, cec):
+from base import commons, database, browser, cec
+
+
+class Scheduler(commons.BaseClass):
+    def __init__(self, db: database.Database, browser_manager: browser.BrowserManager, cec: cec.CecManager):
         self.db = db
         self.run = False
-        self.browserManager = browserManager
+        self.browser_manager = browser_manager
         self.cec = cec
-        self.turnedScreenOff=False
-    def running(self):
+        self.turned_screen_off = False
+
+    def running(self) -> None:
         while self.run:
-            t = float(datetime.now().strftime('%H')) + float(datetime.now().strftime('%M'))/60
-            
-            wkDay = datetime.now().strftime('%A')
-            events = self.db.getEvents()
-            currentEvent = False
+            t = (
+                float(datetime.now().strftime("%H"))
+                + float(datetime.now().strftime("%M")) / 60
+            )
+
+            wk_day = datetime.now().strftime("%A")
+            events = self.db.get_events()
+            current_event = False
             for event in events:
-                if event["wkDay"] == wkDay:
-                    if (float(event["startTime"])<=t) and (float(event["endTime"])>t):
-                        currentEvent = True
-                        if self.browserManager.getEvent() != event["id"]:
-                            self.startEvent(event)
-            if not currentEvent:
-                if self.browserManager.driver != None:
-                    self.browserManager.close()
-                if not self.turnedScreenOff:
+                if event["wk_day"] == wk_day:
+                    if (float(event["start_time"]) <= t) and (
+                        float(event["end_time"]) > t
+                    ):
+                        current_event = True
+                        if self.browser_manager.get_event() != event["id"]:
+                            self.start_event(event)
+            if not current_event:
+                if self.browser_manager.driver != None:
+                    self.browser_manager.close()
+                    
+                if not self.turned_screen_off:
                     self.cec.tv_off()
-                    self.turnedScreenOff = True
+                    self.turned_screen_off = True
             time.sleep(2)
-            
-    def start(self):
+
+    def start(self) -> None:
         self.run = True
         self.thread = threading.Thread(target=self.running, args=(), daemon=True)
         self.thread.start()
-        
-    def stop(self):
+
+    def stop(self) -> None:
         self.run = False
-        
-    def startEvent(self, event):
+
+    def start_event(self, event: dict) -> None:
         print("Starting Event")
         if not self.cec.get_tv_power():
             self.cec.tv_on()
-        self.turnedScreenOff = False
-        
+        self.turned_screen_off = False
+
         self.cec.set_active()
-        
+
         if event["type"] == "URL":
             data = json.loads(event["data"])
             if not data["url"].startswith("http"):
-                self.browserManager.openURL("http://" + data["url"])
+                self.browser_manager.open_url("http://" + data["url"])
             else:
-                self.browserManager.openURL(data["url"])
-            self.browserManager.setEvent(event["id"])
-            
+                self.browser_manager.open_url(data["url"])
+            self.browser_manager.set_event(event["id"])
+
         elif event["type"] == "idle":
             config = self.db.config()
-            self.browserManager.openURL(config["url"] + "/idle")
-            self.browserManager.setEvent(event["id"])
-            
+            self.browser_manager.open_url(config["url"] + "/idle")
+            self.browser_manager.set_event(event["id"])
+
         elif event["type"] == "publishedSlide":
             data = json.loads(event["data"])
-            urlSplit = data["url"].split("/")
-            self.browserManager.openURL("https://docs.google.com/presentation/d/e/" + urlSplit[-2] + f"/pub?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}")
-            self.browserManager.setEvent(event["id"])
-            
+            url_split = data["url"].split("/")
+            self.browser_manager.open_url(
+                "https://docs.google.com/presentation/d/e/"
+                + url_split[-2]
+                + f"/pub?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}"
+            )
+            self.browser_manager.set_event(event["id"])
+
         elif event["type"] == "viewingSlide":
             data = json.loads(event["data"])
-            urlSplit = data["url"].split("/")
-            self.browserManager.openURL("https://docs.google.com/presentation/d/" + urlSplit[-2] + f"/present?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}")
-            self.browserManager.setEvent(event["id"])
+            url_split = data["url"].split("/")
+            self.browser_manager.open_url(
+                "https://docs.google.com/presentation/d/"
+                + url_split[-2]
+                + f"/present?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}"
+            )
+            self.browser_manager.set_event(event["id"])

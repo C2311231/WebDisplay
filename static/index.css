@@ -39,7 +39,7 @@ body {
 .settings {
     width: 50%;
     border: 1px wheat solid;
-    
+
 }
 
 .preview {
@@ -66,10 +66,11 @@ body {
 }
 
 .previewDisplay {
-   
+
     max-height: 70%;
     width: 90%;
 }
+
 iframe.previewDisplay {
     height: 70%;
 }
@@ -91,7 +92,7 @@ iframe.previewDisplay {
     margin-bottom: 1rem;
 }
 
-.settings-bar button{
+.settings-bar button {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -102,8 +103,8 @@ iframe.previewDisplay {
     border-top: none;
     border-bottom: 0.25px solid grey;
     font-size: medium;
-    font-family:'Times New Roman', Times, serif;
-    font-weight:normal;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: normal;
 }
 
 .settings-bar button:hover {
@@ -114,7 +115,7 @@ iframe.previewDisplay {
     margin: 5%;
 }
 
-.controls form *{
+.controls form * {
     margin-top: 1rem;
 }
 
@@ -122,7 +123,8 @@ iframe.previewDisplay {
     width: 80%;
 }
 
-.form-url-options, .form-idle-options {
+.form-url-options,
+.form-idle-options {
     display: none;
 }
 

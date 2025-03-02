@@ -1,7 +1,7 @@
 {% extends "homeLayout.html"%} {% block sidebar %} {% for item in peers %}
 {%if not item.disabled%}
 {%if item.available %}
-  <a href="{{item.web_url}}">{{item.device_name}}</a>
+<a href="{{item.web_url}}">{{item.device_name}}</a>
 {%else%}
 <a href="{{item.web_url}}" class="disabled">{{item.device_name}}</a>
 {%endif%}
@@ -10,34 +10,25 @@
 <div class="settings">
   <div class="settings-bar">
     <button
-      onclick="{settingsClear(); document.getElementsByClassName('presentation-controls')[0].style.display = 'block';}"
-    >
+      onclick="{settingsClear(); document.getElementsByClassName('presentation-controls')[0].style.display = 'block';}">
       Presentation
     </button>
-    <button
-      onclick="{settingsClear(); document.getElementsByClassName('CEC-controls')[0].style.display = 'block';}"
-    >
+    <button onclick="{settingsClear(); document.getElementsByClassName('CEC-controls')[0].style.display = 'block';}">
       CEC
     </button>
     <button
-      onclick="{settingsClear(); document.getElementsByClassName('paired-screens-controls')[0].style.display = 'block';}"
-    >
-      Paried Screens
+      onclick="{settingsClear(); document.getElementsByClassName('paired-screens-controls')[0].style.display = 'block';}">
+      Paired Screens
     </button>
     <button
-      onclick="{settingsClear(); document.getElementsByClassName('configuration-controls')[0].style.display = 'block';}"
-    >
+      onclick="{settingsClear(); document.getElementsByClassName('configuration-controls')[0].style.display = 'block';}">
       Config
     </button>
   </div>
   <div class="presentation-controls controls" style="display: block">
     <h2 style="font-weight: normal">Presentation Configuration</h2>
     <form id="presentation">
-      <canvas
-        class="previewDisplay"
-        id="previewCanvas"
-        style="width: 100%"
-      ></canvas>
+      <canvas class="previewDisplay" id="previewCanvas" style="width: 100%"></canvas>
       <label>Display Type: </label>
       <select id="presentationType">
         <option value="publishedSlide">Published - Google Slides</option>
@@ -49,7 +40,7 @@
         <label>Name: </label>
         <input id="name" type="text" class="textbox" /><br />
         <label>URL: </label>
-        <input id="url" type="url" class="textbox" onchange="updatePreviewURL(this.value)"/><br />
+        <input id="url" type="url" class="textbox" onchange="updatePreviewURL(this.value)" /><br />
         <label>Day: </label>
         <select id="wkDay">
           <option value="Monday">Monday</option>
@@ -58,8 +49,8 @@
           <option value="Thursday">Thursday</option>
           <option value="Friday">Friday</option>
           <option value="Saturday">Saturday</option>
-          <option value="Sunday">Sunday</option></select
-        ><br />
+          <option value="Sunday">Sunday</option>
+        </select><br />
         <label>Start Time: </label>
         <input id="startTime" type="time" /><br />
         <label>End Time: </label>
@@ -71,7 +62,7 @@
         <label>Name: </label>
         <input id="name" type="text" class="textbox" /><br />
         <label>URL: </label>
-        <input id="url" type="url" class="textbox" onchange="updatePreviewURL(this.value)"/><br />
+        <input id="url" type="url" class="textbox" onchange="updatePreviewURL(this.value)" /><br />
         <label>Day: </label>
         <select id="wkDay">
           <option value="Monday">Monday</option>
@@ -80,8 +71,8 @@
           <option value="Thursday">Thursday</option>
           <option value="Friday">Friday</option>
           <option value="Saturday">Saturday</option>
-          <option value="Sunday">Sunday</option></select
-        ><br />
+          <option value="Sunday">Sunday</option>
+        </select><br />
         <label>Start Time: </label>
         <input id="startTime" type="time" /><br />
         <label>End Time: </label>
@@ -106,8 +97,8 @@
           <option value="Thursday">Thursday</option>
           <option value="Friday">Friday</option>
           <option value="Saturday">Saturday</option>
-          <option value="Sunday">Sunday</option></select
-        ><br />
+          <option value="Sunday">Sunday</option>
+        </select><br />
         <label>Start Time: </label>
         <input id="startTime" type="time" /><br />
         <label>End Time: </label>
@@ -121,12 +112,13 @@
         {% for peer in peers%}
         {%if not item.disabled%}
         <label>{{ peer.device_name }}</label>
-        <input type="checkbox" name="{{ peer.device_id }}"/><br />
+        <input type="checkbox" name="{{ peer.device_id }}" /><br />
         {%endif%}
         {% endfor %}
       </div>
     </form>
-    <button onclick="processEvent(false)">Update</button><button onclick="processEvent(true)">New</button><button onclick="deleteEvent(document.getElementById('identifier').value)">Delete</button>
+    <button onclick="processEvent(false)">Update</button><button onclick="processEvent(true)">New</button><button
+      onclick="deleteEvent(document.getElementById('identifier').value)">Delete</button>
   </div>
   <div class="configuration-controls controls" style="display: none">
     <h2 style="font-weight: normal">Configuration</h2>
@@ -138,22 +130,14 @@
         <label>IP Type: </label>
         <select>
           <option value="DHCP">DHCP</option>
-          <option value="Manual">Manual</option></select
-        ><br />
+          <option value="Manual">Manual</option>
+        </select><br />
         <label>IP: </label>
-        <input
-          type="text"
-          value="{{adapter.data.ip_address}}"
-          class="textbox"
-        /><br />
+        <input type="text" value="{{adapter.data.ip_address}}" class="textbox" /><br />
         <label>Subnet: </label>
         <input type="text" class="textbox" /><br />
         <label>Gateway: </label>
-        <input
-          type="text"
-          value="{{adapter.data.gateway}}"
-          class="textbox"
-        /><br />
+        <input type="text" value="{{adapter.data.gateway}}" class="textbox" /><br />
         <label>DNS: </label>
         <input type="text" value="{{adapter.data.dns}}" class="textbox" /><br />
       </div>
@@ -170,22 +154,14 @@
         <label>IP Type: </label>
         <select>
           <option value="DHCP">DHCP</option>
-          <option value="Manual">Manual</option></select
-        ><br />
+          <option value="Manual">Manual</option>
+        </select><br />
         <label>IP: </label>
-        <input
-          type="text"
-          value="{{adapter.data.ip_address}}"
-          class="textbox"
-        /><br />
+        <input type="text" value="{{adapter.data.ip_address}}" class="textbox" /><br />
         <label>Subnet: </label>
         <input type="text" class="textbox" /><br />
         <label>Gateway: </label>
-        <input
-          type="text"
-          value="{{adapter.data.gateway}}"
-          class="textbox"
-        /><br />
+        <input type="text" value="{{adapter.data.gateway}}" class="textbox" /><br />
         <label>DNS: </label>
         <input type="text" value="{{adapter.data.dns}}" class="textbox" /><br />
       </div>
@@ -201,26 +177,27 @@
   <div class="paired-screens-controls controls" style="display: none">
     <h2 style="font-weight: normal">Peer Configuration</h2>
 
-      <h3>Add Peer</h3>
-      <label>IP Address: </label>
-      <input type="text" id="addPeerIP"/><br />
-      <label>Port: </label>
-      <input type="number" id="addPeerPort" value="5000"/><br />
-      <!-- <label>Add to existing peers: </label>
+    <h3>Add Peer</h3>
+    <label>IP Address: </label>
+    <input type="text" id="addPeerIP" /><br />
+    <label>Port: </label>
+    <input type="number" id="addPeerPort" value="5000" /><br />
+    <!-- <label>Add to existing peers: </label>
       <input type="checkbox" checked><br> -->
-      <button onclick="addPeer(event)">Add</button>
-      <h3>Remove Peer</h3>
-      <div id="peerRemove">
-        {% for peer in peers%}
-        {% if peer.disabled%}
-        <label>{{ peer.device_name }}</label>
-        <input type="checkbox" onchange="setdisabled('{{peer.device_id}}', this.checked)" name="{{ peer.id }}" checked/><br />
-        {%else%}
-        <label>{{ peer.device_name }}</label>
-        <input type="checkbox" onchange="setdisabled('{{peer.device_id}}', this.checked)" name="{{ peer.id }}"/><br />
-        {%endif%}
-        {% endfor %}
-      </div>
+    <button onclick="addPeer(event)">Add</button>
+    <h3>Remove Peer</h3>
+    <div id="peerRemove">
+      {% for peer in peers%}
+      {% if peer.disabled%}
+      <label>{{ peer.device_name }}</label>
+      <input type="checkbox" onchange="setdisabled('{{peer.device_id}}', this.checked)" name="{{ peer.id }}"
+        checked /><br />
+      {%else%}
+      <label>{{ peer.device_name }}</label>
+      <input type="checkbox" onchange="setdisabled('{{peer.device_id}}', this.checked)" name="{{ peer.id }}" /><br />
+      {%endif%}
+      {% endfor %}
+    </div>
     </form>
   </div>
   <div class="CEC-controls controls" style="display: none">
@@ -237,13 +214,11 @@
 <div class="preview">
   <div class="previewButtons">
     <button
-      onclick="{document.getElementsByClassName('live-preview')[0].style.display = 'flex'; document.getElementsByClassName('url-preview')[0].style.display = 'none';}"
-    >
+      onclick="{document.getElementsByClassName('live-preview')[0].style.display = 'flex'; document.getElementsByClassName('url-preview')[0].style.display = 'none';}">
       Live
     </button>
     <button
-      onclick="{document.getElementsByClassName('live-preview')[0].style.display = 'none'; document.getElementsByClassName('url-preview')[0].style.display = 'flex';}"
-    >
+      onclick="{document.getElementsByClassName('live-preview')[0].style.display = 'none'; document.getElementsByClassName('url-preview')[0].style.display = 'flex';}">
       Preview
     </button>
   </div>
@@ -252,16 +227,11 @@
     <button onclick="refreshImage(document.getElementById('previewIframe'));">
       Reload
     </button>
-    <iframe
-      src=""
-      id="previewIframe"
-      class="previewDisplay"
-      style="display: block !important;"
-    ></iframe>
+    <iframe src="" id="previewIframe" class="previewDisplay" style="display: block !important;"></iframe>
     <p>
       This is a preview of the entered url in your browser. If it shows an error
       related to embedding or your browser being unable to open the page, this
-      is likely caused by the page not allowing embeding. If this is the case it
+      is likely caused by the page not allowing embedding. If this is the case it
       will still work once sent to the device.
     </p>
   </div>
@@ -269,11 +239,7 @@
     <button onclick="refreshImage(document.getElementById('imagePreview'));">
       Reload
     </button>
-    <img
-      src="/getScreenshot"
-      class="previewDisplay"
-      id="imagePreview"
-    />
+    <img src="/getScreenshot" class="previewDisplay" id="imagePreview" />
     <p>
       This is a screenshot of the browser being displayed currently. Press
       reload to get a new image.

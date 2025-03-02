@@ -189,21 +189,21 @@ function sendEventToServer(id, name, color, wkDay, startTime, endTime, type, dat
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-          },
+        },
         body: JSON.stringify(serverData)
-      })
-      .then(response => {
-        if (response.ok) {
-          // Successful submission, reload the page
-          window.location.reload();
-        } else {
-            response.json().then(data => {
-                alert("Form submission failed: " + data.code);
-            })
-          
-        }
-      })
-      .catch(error => console.error("Error:", error));
+    })
+        .then(response => {
+            if (response.ok) {
+                // Successful submission, reload the page
+                window.location.reload();
+            } else {
+                response.json().then(data => {
+                    alert("Form submission failed: " + data.code);
+                })
+
+            }
+        })
+        .catch(error => console.error("Error:", error));
 }
 canvas.addEventListener('click', function (event) {
     var { x, y } = getCanvasCoordinates(event)
@@ -233,10 +233,10 @@ function loadEvent(event) {
     let type = event.type
     let peerSelect = document.getElementById("peerSelect")
     let elements = peerSelect.getElementsByTagName("input")
-    for(let i=0; i<elements.length; i++){
+    for (let i = 0; i < elements.length; i++) {
         elements[i].checked = false
-        for (let j=0; j<event.data.peers.length; j++){
-            if (elements[i].name == event.data.peers[j]){
+        for (let j = 0; j < event.data.peers.length; j++) {
+            if (elements[i].name == event.data.peers[j]) {
                 elements[i].checked = true
             }
         }
@@ -291,26 +291,26 @@ function getCanvasCoordinates(event) {
 
 const form = document.getElementById('presentation');
 
-function deleteEvent(id){
-    fetch("/api/remove/schedule/event/"+id).then(response => {
+function deleteEvent(id) {
+    fetch("/api/remove/schedule/event/" + id).then(response => {
         if (response.ok) {
-          // Successful submission, reload the page
-          window.location.reload();
+            // Successful submission, reload the page
+            window.location.reload();
         }
-      })
-      .catch(error => console.error("Error:", error));
+    })
+        .catch(error => console.error("Error:", error));
 }
 
 
-function processEvent(newEvent){
-    let id = newEvent ? "0": document.getElementById("identifier").value
+function processEvent(newEvent) {
+    let id = newEvent ? "0" : document.getElementById("identifier").value
     let type = form.getElementsByTagName("select")[0].value;
     let peers = []
 
     let peerSelect = document.getElementById("peerSelect")
     let elements = peerSelect.getElementsByTagName("input")
-    for(let i=0; i<elements.length; i++){
-        if (elements[i].checked){
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i].checked) {
             peers.push(elements[i].name)
         }
     };
@@ -389,41 +389,41 @@ function processEvent(newEvent){
 
 
 fetch("./api/get/schedule/event/")
-  .then((response) => response.json())
-  .then((json) => {
-    json.forEach(element => {
-        displayEvent(element.id, element.wkDay, element.color, element.startTime, element.endTime, element.type, element.name, JSON.parse(element.data))
+    .then((response) => response.json())
+    .then((json) => {
+        json.forEach(element => {
+            displayEvent(element.id, element.wk_day, element.color, element.start_time, element.end_time, element.type, element.name, JSON.parse(element.data))
+        });
+
     });
-    
-  });
 
 
-function updatePreviewURL(url){
+function updatePreviewURL(url) {
     let type = form.getElementsByTagName("select")[0].value;
-    if (type == "publishedSlide"){
-         document.getElementById("previewIframe").src = "https://docs.google.com/presentation/d/e/" + url.split("/")[url.split("/").length-2] + "/embed";
+    if (type == "publishedSlide") {
+        document.getElementById("previewIframe").src = "https://docs.google.com/presentation/d/e/" + url.split("/")[url.split("/").length - 2] + "/embed";
     }
-    else if (type == "viewingSlide"){
-        document.getElementById("previewIframe").src = "https://docs.google.com/presentation/d/" + url.split("/")[url.split("/").length-2] + "/view";
-   }
-    else if (type == "URL"){
+    else if (type == "viewingSlide") {
+        document.getElementById("previewIframe").src = "https://docs.google.com/presentation/d/" + url.split("/")[url.split("/").length - 2] + "/view";
+    }
+    else if (type == "URL") {
         document.getElementById("previewIframe").src = url
     }
-    else if (type == "idle"){
+    else if (type == "idle") {
         document.getElementById("previewIframe").src = "/idle"
     }
 }
 
-function setdisabled(id, state){
-    if (state){
-        fetch("/api/disable/peer/"+id)
+function setdisabled(id, state) {
+    if (state) {
+        fetch("/api/disable/peer/" + id)
     }
-    else{
-        fetch("/api/enable/peer/"+id)
+    else {
+        fetch("/api/enable/peer/" + id)
     }
 }
 
-function addPeer(event){
+function addPeer(event) {
     event.preventDefault();
     let serverData = {
         "ip": document.getElementById("addPeerIP").value,
@@ -433,19 +433,19 @@ function addPeer(event){
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-          },
+        },
         body: JSON.stringify(serverData)
-      })
-      .then(response => {
-        if (response.ok) {
-          // Successful submission, reload the page
-          window.location.reload();
-        } else {
-            response.json().then(data => {
-                alert("Form submission failed: " + data.code);
-            })
-          
-        }
-      })
-      .catch(error => console.error("Error:", error));
+    })
+        .then(response => {
+            if (response.ok) {
+                // Successful submission, reload the page
+                window.location.reload();
+            } else {
+                response.json().then(data => {
+                    alert("Form submission failed: " + data.code);
+                })
+
+            }
+        })
+        .catch(error => console.error("Error:", error));
 }

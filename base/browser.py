@@ -1,69 +1,50 @@
-# from selenium import webdriver
-# import time
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.chrome.options import Options
-# import os
-# ## https://www.youtube.com/watch?v=qQOgqeRteJA
-# chrome_options = Options()
-# #chrome_options.add_argument("--kiosk")  # Example of adding an argument (adjust as needed)
-# chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-# chrome_options.add_experimental_option("useAutomationExtension", False)
-# driver = webdriver.Chrome(options=chrome_options)
-# driver.get("https://www.google.com")
-# time.sleep(10)
-# driver.get("https://www.youtube.com")
-# time.sleep(20)
-
-# driver.close()
-
-import os
-import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-import commons
+from base import commons
+
+
 class BrowserManager(commons.BaseClass):
     def __init__(self):
         self.event = 0
         self.awaiting = []
         self.driver = None
 
-    def initDriver(self):
+    def init_driver(self) -> None:
         chrome_options = Options()
-        #chrome_options.add_argument("--kiosk")  # Uncomment if needed
+        # chrome_options.add_argument("--kiosk")  # Uncomment if needed
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option("useAutomationExtension", False)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.event = 0
 
-    def openURL(self, url):
+    def open_url(self, url: commons.url) -> None:
         if self.driver:
             try:
                 self.driver.get(url)
             except:
-                self.initDriver()
+                self.init_driver()
                 self.driver.get(url)
         else:
-            self.initDriver()
+            self.init_driver()
             self.driver.get(url)
 
-    def getScreenShot(self):
+    def get_screenshot(self) -> None:
         if self.driver:
             try:
                 self.driver.save_screenshot("./static/images/latestScreenShot.png")
-                
-            except:
-                self.initDriver()
-                self.getScreenShot()
-                
 
-    def close(self):
+            except:
+                self.init_driver()
+                self.get_screenshot()
+
+    def close(self) -> None:
         if self.driver:
-            self.driver.quit()  # Use `quit()` to close all windows and processes
+            self.driver.quit()
             self.driver = None
 
-    def getEvent(self):
+    def get_event(self) -> int:
         return self.event
-    
-    def setEvent(self, eventID):
+
+    def set_event(self, eventID: int) -> None:
         self.event = eventID
