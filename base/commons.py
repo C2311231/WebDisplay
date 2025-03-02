@@ -13,7 +13,7 @@ class address:
         split_address = address.strip().split(".")
 
         # Data Validation
-        if split_address.length != 4:
+        if len(split_address) != 4:
             raise ValueError()
 
         for value in split_address:
@@ -21,7 +21,7 @@ class address:
             if not value.isdigit():
                 raise ValueError()
 
-            elif len(value) != 3:
+            elif len(value) > 3:
                 raise ValueError()
 
             elif int(value) < 0 or int(value) > 255:

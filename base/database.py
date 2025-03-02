@@ -21,7 +21,7 @@ db = SQLAlchemy()
 
 
 class Database(commons.BaseClass):
-    def __init__(self, app: Flask, filepath="./db.db"):
+    def __init__(self, app: Flask, filepath: str="./db.db"):
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{filepath}"
         db.init_app(app)
         self.app = app
@@ -233,7 +233,7 @@ class Events(db.Model):
     start_time: Mapped[float]
     end_time: Mapped[float]
     type: Mapped[str]
-    syncID: Mapped[str] = mapped_column(unique=True)
+    sync_id: Mapped[str] = mapped_column(unique=True)
     data: Mapped[str]
 
 

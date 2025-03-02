@@ -41,17 +41,17 @@ class DiscoveryEngine(commons.BaseClass):
             }
             message = json.dumps(init_message, indent=4).encode()
             sock.sendto(
-                message, (self.discovery_multicast_address, self.discovery_port)
+                message, (str(self.discovery_multicast_address), self.discovery_port)
             )
             time.sleep(5)  # Send every 5 seconds
 
-    def listen_for_discovery(self, callback: function) -> None:
+    def listen_for_discovery(self, callback) -> None:
         """Listen for discovery messages."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", self.discovery_port))
 
-        group = socket.inet_aton(self.discovery_multicast_address)
+        group = socket.inet_aton(str(self.discovery_multicast_address))
         mreq = struct.pack("4sL", group, socket.INADDR_ANY)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 

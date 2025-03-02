@@ -24,9 +24,9 @@ class Scheduler(commons.BaseClass):
             events = self.db.get_events()
             current_event = False
             for event in events:
-                if event["wkDay"] == wk_day:
-                    if (float(event["startTime"]) <= t) and (
-                        float(event["endTime"]) > t
+                if event["wk_day"] == wk_day:
+                    if (float(event["start_time"]) <= t) and (
+                        float(event["end_time"]) > t
                     ):
                         current_event = True
                         if self.browser_manager.get_event() != event["id"]:

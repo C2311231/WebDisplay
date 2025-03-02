@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, request, make_response, jsonify
 import json
 import copy
+from datetime import datetime
 from base import commons, peers, browser, cec, database
 
 DAYSOFWEEK = [
@@ -16,7 +17,13 @@ EVENTTYPES = ["idle", "publishedSlide", "URL", "viewingSlide"]
 
 
 class api_v1(commons.BaseClass):
-    def __init__(self, database: database.Database, cec: cec.CecManager, browser_manager: browser.BrowserManager, peer_manager: peers.PeerManager) -> None:
+    def __init__(
+        self,
+        database: database.Database,
+        cec: cec.CecManager,
+        browser_manager: browser.BrowserManager,
+        peer_manager: peers.PeerManager,
+    ) -> None:
         self.cec = cec
         self.database = database
         self.browser = browser_manager
@@ -209,13 +216,26 @@ class api_v1(commons.BaseClass):
                             ):
                                 temp_event = copy.deepcopy(event)
                                 temp_event.id = "0"
-                                peer.sync_event(temp_event, self.database.config()["id"])
+                                peer.sync_event(
+                                    temp_event, self.database.config()["id"]
+                                )
 
                             elif peer.device_id in peers and not peer.disabled:
                                 peer.sync_event(
                                     copy.deepcopy(event), self.database.config()["id"]
                                 )
 
+                        t = (
+                            float(datetime.now().strftime("%H"))
+                            + float(datetime.now().strftime("%M")) / 60
+                        )
+
+                        wk_day = datetime.now().strftime("%A")
+                        if request.json["wkDay"] == wk_day:
+                            if (float(request.json["startTime"]) <= t) and (
+                                float(request.json["endTime"]) > t
+                            ):
+                                self.browser.set_event(0)
                 data = {"message": "Done", "code": "SUCCESS"}
                 return make_response(jsonify(data), 200)
             return make_response({}, 400)

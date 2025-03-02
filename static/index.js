@@ -392,7 +392,7 @@ fetch("./api/get/schedule/event/")
     .then((response) => response.json())
     .then((json) => {
         json.forEach(element => {
-            displayEvent(element.id, element.wkDay, element.color, element.startTime, element.endTime, element.type, element.name, JSON.parse(element.data))
+            displayEvent(element.id, element.wk_day, element.color, element.start_time, element.end_time, element.type, element.name, JSON.parse(element.data))
         });
 
     });
