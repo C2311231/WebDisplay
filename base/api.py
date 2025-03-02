@@ -201,8 +201,6 @@ class api_v1(commons.BaseClass):
                                 and not peer.disabled
                             ):
                                 peer.delete_event(event.syncID)
-                                # Must create new event on newly added peer if it doesn't yet exist and then must delete event from any peers that get removed from event sync
-
                             elif (
                                 peer.device_id
                                 not in json.loads(original_event.data)["peers"]

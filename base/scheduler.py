@@ -13,7 +13,7 @@ class Scheduler(commons.BaseClass):
         self.cec = cec
         self.turned_screen_off = False
 
-    def running(self):
+    def running(self) -> None:
         while self.run:
             t = (
                 float(datetime.now().strftime("%H"))
@@ -40,15 +40,15 @@ class Scheduler(commons.BaseClass):
                     self.turned_screen_off = True
             time.sleep(2)
 
-    def start(self):
+    def start(self) -> None:
         self.run = True
         self.thread = threading.Thread(target=self.running, args=(), daemon=True)
         self.thread.start()
 
-    def stop(self):
+    def stop(self) -> None:
         self.run = False
 
-    def start_event(self, event):
+    def start_event(self, event: dict) -> None:
         print("Starting Event")
         if not self.cec.get_tv_power():
             self.cec.tv_on()

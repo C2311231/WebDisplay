@@ -2,23 +2,24 @@ import socket
 import struct
 import json
 import time
-from base import commons
-from networking import address
+from base import commons, database
 
 
 class DiscoveryEngine(commons.BaseClass):
     def __init__(
         self,
+        database: database,
         discovery_port: int = 5000,
-        discovery_multicast_address: address = address("239.143.23.9"),
+        discovery_multicast_address: commons.address = commons.address("239.143.23.9")
     ):
         if not discovery_multicast_address.is_multicast():
             raise ValueError()
 
         self.discovery_port = discovery_port
         self.discovery_multicast_address = discovery_multicast_address
-
-    def send_discovery(self):
+        self.database = database
+        
+    def send_discovery(self) -> None:
         """Send discovery message periodically."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(
@@ -44,7 +45,7 @@ class DiscoveryEngine(commons.BaseClass):
             )
             time.sleep(5)  # Send every 5 seconds
 
-    def listen_for_discovery(self, callback):
+    def listen_for_discovery(self, callback: function) -> None:
         """Listen for discovery messages."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

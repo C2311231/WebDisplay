@@ -10,7 +10,7 @@ class BrowserManager(commons.BaseClass):
         self.awaiting = []
         self.driver = None
 
-    def init_driver(self):
+    def init_driver(self) -> None:
         chrome_options = Options()
         # chrome_options.add_argument("--kiosk")  # Uncomment if needed
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -18,7 +18,7 @@ class BrowserManager(commons.BaseClass):
         self.driver = webdriver.Chrome(options=chrome_options)
         self.event = 0
 
-    def open_url(self, url):
+    def open_url(self, url: commons.url) -> None:
         if self.driver:
             try:
                 self.driver.get(url)
@@ -29,7 +29,7 @@ class BrowserManager(commons.BaseClass):
             self.init_driver()
             self.driver.get(url)
 
-    def get_screenshot(self):
+    def get_screenshot(self) -> None:
         if self.driver:
             try:
                 self.driver.save_screenshot("./static/images/latestScreenShot.png")
@@ -38,13 +38,13 @@ class BrowserManager(commons.BaseClass):
                 self.init_driver()
                 self.get_screenshot()
 
-    def close(self):
+    def close(self) -> None:
         if self.driver:
             self.driver.quit()
             self.driver = None
 
-    def get_event(self):
+    def get_event(self) -> int:
         return self.event
 
-    def set_event(self, eventID):
+    def set_event(self, eventID: int) -> None:
         self.event = eventID

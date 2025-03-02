@@ -1,5 +1,4 @@
 from flask import render_template, redirect, Flask
-import time
 from subprocess import call
 from base import networking, database, browser, api, peers, cec, scheduler
 import sys

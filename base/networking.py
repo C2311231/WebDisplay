@@ -7,7 +7,7 @@ class NetworkingManager(commons.BaseClass):
     def __init__(self, database):
         self.database = database
 
-    def configure_wifi(self, ssid, psk):
+    def configure_wifi(self, ssid: str, psk: str) -> None:
         command = f'nmcli dev wifi connect "{ssid}" password "{psk}"'
         result = os.system(command)
         if result == 0:
@@ -17,13 +17,13 @@ class NetworkingManager(commons.BaseClass):
                 f"Failed to connect to SSID: {ssid}. Check your credentials or WiFi availability."
             )
 
-    def configure_dhcp(self, interface):
+    def configure_dhcp(self, interface: str) -> None:
         command = f"nmcli con mod {interface} ipv4.method auto"
         os.system(command)
         os.system(f"nmcli con up {interface}")
         print(f"Ethernet ({interface}) configured to use DHCP.")
 
-    def configure_static(self, ip, gateway, dns, interface):
+    def configure_static(self, ip: commons.address, gateway: commons.address, dns: commons.address, interface: str) -> None:
         os.system(f"nmcli con mod {interface} ipv4.addresses {ip}/24")
         os.system(f"nmcli con mod {interface} ipv4.gateway {gateway}")
         os.system(f"nmcli con mod {interface} ipv4.dns {dns}")
@@ -31,7 +31,7 @@ class NetworkingManager(commons.BaseClass):
         os.system(f"nmcli con up {interface}")
         print(f"Ethernet ({interface}) configured with static IP: {ip}")
 
-    def get_interfaces(self):
+    def get_interfaces(self) -> list[dict]:
         # result = subprocess.run(["nmcli", "device", "status"], stdout=subprocess.PIPE, text=True)
         # lines = result.stdout.splitlines()[1:]  # Skip the first line (header)
 
@@ -79,7 +79,7 @@ class NetworkingManager(commons.BaseClass):
         ]
         return interfaces
 
-    def get_interface_details(self, interface):
+    def get_interface_details(self, interface) -> dict:
         result = subprocess.run(
             ["nmcli", "device", "show", interface], stdout=subprocess.PIPE, text=True
         )
@@ -128,35 +128,3 @@ class NetworkingManager(commons.BaseClass):
     #     # Keep the main thread alive
     #     while True:
     #         time.sleep(1)
-
-
-class address:
-    def __init__(self, address: str):
-        split_address = address.strip().split(".")
-
-        # Data Validation
-        if split_address.length != 4:
-            raise ValueError()
-
-        for value in split_address:
-
-            if not value.isdigit():
-                raise ValueError()
-
-            elif len(value) != 3:
-                raise ValueError()
-
-            elif int(value) < 0 or int(value) > 255:
-                raise ValueError()
-
-        self.address = [int(value) for value in split_address]
-
-    def is_multicast(self) -> bool:
-        if self.address[0] >= 224 and self.address[0] <= 239:
-            return True
-        return False
-
-    def __str__(self) -> str:
-        return (
-            f"{self.address[0]}.{self.address[1]}.{self.address[2]}.{self.address[3]}"
-        )

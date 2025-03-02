@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid, json
 from sqlalchemy.orm import Mapped, mapped_column
 from base import commons
+from flask import Flask
+
 
 required_config = {
     "id": str(uuid.uuid4()),
@@ -19,7 +21,7 @@ db = SQLAlchemy()
 
 
 class Database(commons.BaseClass):
-    def __init__(self, app, filepath="./db.db"):
+    def __init__(self, app: Flask, filepath="./db.db"):
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{filepath}"
         db.init_app(app)
         self.app = app
@@ -28,19 +30,18 @@ class Database(commons.BaseClass):
             db.create_all()
         self.verify_config()
 
-    def config(self):
+    def config(self) -> dict:
         with self.app.app_context():
-            # data =  db.session.execute(db.select(Config)).scalars().all()
             data_dict = {row.parameter: row.value for row in Config.query.all()}
             return data_dict
 
-    def write_config(self, parameter, value):
+    def write_config(self, parameter: str, value: str) -> None:
         with self.app.app_context():
             data = Config(parameter=parameter, value=value)
             db.session.add(data)
             db.session.commit()
 
-    def verify_config(self):
+    def verify_config(self) -> None:
         config = self.config()
         for key in required_config.keys():
             if key not in config.keys():
@@ -48,8 +49,8 @@ class Database(commons.BaseClass):
                 self.write_config(key, value)
 
     def write_event(
-        self, name, color, wk_day, start_time, end_time, type, data, sync_id=None
-    ):
+        self, name: str, color: str, wk_day: str, start_time: float, end_time: float, type: str, data: dict, sync_id: str | None=None
+    ) -> None:
         if sync_id == None:
             sync_id = str(uuid.uuid4())
         with self.app.app_context():
@@ -69,8 +70,8 @@ class Database(commons.BaseClass):
             return id
 
     def edit_event(
-        self, id, name, color, wk_day, start_time, end_time, type, data, sync_id=None
-    ):
+        self, id: str, name: str, color: str, wk_day: str, start_time: float, end_time: float, type: str, data: dict, sync_id: str | None=None
+    ) -> None:
         with self.app.app_context():
             if sync_id:
                 event = Events.query.filter_by(sync_id=sync_id).first()
@@ -95,27 +96,25 @@ class Database(commons.BaseClass):
                 db.session.commit()
                 return event
 
-    def get_event(self, id):
+    def get_event(self, id: int) -> dict:
         with self.app.app_context():
-
             data_dict = Events.query.filter_by(id=id).first()
             return data_dict
 
-    def get_events(self):
+    def get_events(self) -> list[dict]:
         with self.app.app_context():
-
             data_dict = [row.__dict__ for row in Events.query.all()]
             for row in data_dict:
                 row.pop("_sa_instance_state", None)
             return data_dict
 
-    def delete_event(self, id):
+    def delete_event(self, id: int) -> None:
         with self.app.app_context():
             event = Events.query.filter_by(id=id).first()
             db.session.delete(event)
             db.session.commit()
 
-    def delete_sync_event(self, id):
+    def delete_sync_event(self, id: str) -> None:
         with self.app.app_context():
             event = Events.query.filter_by(syncID=id).first()
             db.session.delete(event)
@@ -123,18 +122,18 @@ class Database(commons.BaseClass):
 
     def create_peer(
         self,
-        web_version,
-        api_version,
-        web_url,
-        web_port,
-        web_encryption,
-        device_name,
-        device_state,
-        device_platform,
-        device_id,
-        device_ip,
-        disabled,
-    ):
+        web_version: str,
+        api_version: str,
+        web_url: str,
+        web_port: int,
+        web_encryption: bool,
+        device_name: str,
+        device_state: str,
+        device_platform: str,
+        device_id: str,
+        device_ip: str,
+        disabled: bool,
+    ) -> None:
         with self.app.app_context():
             data = Peers(
                 web_version=web_version,
@@ -154,12 +153,12 @@ class Database(commons.BaseClass):
             id = data.id
             return id
 
-    def get_peer(self, id):
+    def get_peer(self, id: int) -> dict:
         with self.app.app_context():
             data_dict = Peers.query.filter_by(id=id).first()
             return data_dict
 
-    def get_peers(self):
+    def get_peers(self) -> list[dict]:
         with self.app.app_context():
             data_dict = [row.__dict__ for row in Peers.query.all()]
             for row in data_dict:
@@ -169,18 +168,18 @@ class Database(commons.BaseClass):
     def edit_peer(
         self,
         id,
-        web_version=None,
-        api_version=None,
-        web_url=None,
-        web_port=None,
-        web_encryption=None,
-        device_name=None,
-        device_state=None,
-        device_platform=None,
-        device_id=None,
-        device_ip=None,
-        disabled=None,
-    ):
+        web_version: str = None,
+        api_version: str = None,
+        web_url: str = None,
+        web_port: int = None,
+        web_encryption: bool = None,
+        device_name: str = None,
+        device_state: str = None,
+        device_platform: str = None,
+        device_id: str = None,
+        device_ip: str = None,
+        disabled: bool = None,
+    ) -> None:
         with self.app.app_context():
             peer = Peers.query.filter_by(id=id).first()
             

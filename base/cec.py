@@ -48,42 +48,42 @@ class CecManager(commons.BaseClass):
             print("CEC Unavailable")
             self.disable_cec = True
 
-    def tv_on(self):
+    def tv_on(self) -> None:
         if not self.disable_cec:
             self.tv.power_on()
         print("Tv On")
 
-    def tv_off(self):
+    def tv_off(self) -> None:
         if not self.disable_cec:
             self.tv.standby()
         print("Tv Off")
 
-    def get_tv_power(self):
+    def get_tv_power(self) -> bool:
         if not self.disable_cec:
             return self.tv.is_on()
         return False
 
-    def set_active(self):
+    def set_active(self) -> None:
         if not self.disable_cec:
             cec.set_active_source()
         print("Active")
 
-    def volume_up(self):
+    def volume_up(self) -> None:
         if not self.disable_cec:
             cec.volume_up()
         print("Volume Up")
 
-    def volume_down(self):
+    def volume_down(self) -> None:
         if not self.disable_cec:
             cec.volume_down()
         print("Volume Down")
 
-    def toggle_mute(self):
+    def toggle_mute(self) -> None:
         if not self.disable_cec:
             cec.toggle_mute()
         print("Volume Mute")
 
-    def get_vender(self):
+    def get_vender(self) -> str:
         if not self.disable_cec:
             try:
                 return venderDecoder[self.tv.vendor]
