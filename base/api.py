@@ -207,7 +207,7 @@ class api_v1(commons.BaseClass):
                                 and peer.device_id not in peers
                                 and not peer.disabled
                             ):
-                                peer.delete_event(event.syncID)
+                                peer.delete_event(event.sync_id)
                             elif (
                                 peer.device_id
                                 not in json.loads(original_event.data)["peers"]
@@ -225,17 +225,17 @@ class api_v1(commons.BaseClass):
                                     copy.deepcopy(event), self.database.config()["id"]
                                 )
 
-                        t = (
-                            float(datetime.now().strftime("%H"))
-                            + float(datetime.now().strftime("%M")) / 60
-                        )
+                    t = (
+                        float(datetime.now().strftime("%H"))
+                        + float(datetime.now().strftime("%M")) / 60
+                    )
 
-                        wk_day = datetime.now().strftime("%A")
-                        if request.json["wkDay"] == wk_day:
-                            if (float(request.json["startTime"]) <= t) and (
-                                float(request.json["endTime"]) > t
-                            ):
-                                self.browser.set_event(0)
+                    wk_day = datetime.now().strftime("%A")
+                    if request.json["wkDay"] == wk_day:
+                        if (float(request.json["startTime"]) <= t) and (
+                            float(request.json["endTime"]) > t
+                        ):
+                            self.browser.set_event(0)
                 data = {"message": "Done", "code": "SUCCESS"}
                 return make_response(jsonify(data), 200)
             return make_response({}, 400)

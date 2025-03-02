@@ -77,7 +77,7 @@ class DiscoveryEngine(commons.BaseClass):
                     continue
                 if data.keys() == init_message.keys():
 
-                    callback(data, address)
+                    callback(data)
             except ValueError:
                 print(f"Invalid Message from {address}")
 

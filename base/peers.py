@@ -176,47 +176,47 @@ class Device:
         return self.get_data().disabled
 
     @web_version.setter  # Setter
-    def web_version(self, web_version) -> None:
+    def web_version(self, web_version: str) -> None:
         self.db.edit_peer(self.id, web_version=web_version)
 
     @api_version.setter  # Setter
-    def api_version(self, api_version) -> None:
+    def api_version(self, api_version: str) -> None:
         self.db.edit_peer(self.id, api_version=api_version)
 
     @web_url.setter  # Setter
-    def web_url(self, web_url) -> None:
+    def web_url(self, web_url: str) -> None:
         self.db.edit_peer(self.id, web_url=web_url)
 
     @web_encryption.setter  # Setter
-    def web_encryption(self, web_encryption) -> None:
+    def web_encryption(self, web_encryption: bool) -> None:
         self.db.edit_peer(self.id, web_encryption=web_encryption)
 
     @device_name.setter  # Setter
-    def device_name(self, device_name) -> None:
+    def device_name(self, device_name: str) -> None:
         self.db.edit_peer(self.id, device_name=device_name)
 
     @device_state.setter  # Setter
-    def device_state(self, device_state) -> None:
+    def device_state(self, device_state: str) -> None:
         self.db.edit_peer(self.id, web_version=device_state)
 
     @device_ip.setter  # Setter
-    def device_ip(self, device_ip) -> None:
+    def device_ip(self, device_ip: str) -> None:
         self.db.edit_peer(self.id, device_ip=device_ip)
 
     @device_platform.setter  # Setter
-    def device_platform(self, device_platform) -> None:
+    def device_platform(self, device_platform: str) -> None:
         self.db.edit_peer(self.id, device_platform=device_platform)
 
     @device_id.setter  # Setter
-    def device_id(self, device_id) -> None:
+    def device_id(self, device_id: str) -> None:
         self.db.edit_peer(self.id, device_id=device_id)
 
     @web_port.setter  # Setter
-    def web_port(self, web_port) -> None:
+    def web_port(self, web_port: int) -> None:
         self.db.edit_peer(self.id, web_port=web_port)
 
     @disabled.setter  # Setter
-    def disabled(self, disabled) -> None:
+    def disabled(self, disabled: bool) -> None:
         self.db.edit_peer(self.id, disabled=disabled)
 
     def pinged(self) -> None:
@@ -250,28 +250,28 @@ class Device:
     def get_data(self) -> dict:
         return self.db.get_peer(self.id)
 
-    def sync_event(self, event: object, source_uuid: str) -> None:
+    def sync_event(self, event: database.Events, source_uuid: str) -> None:
         if type(event.data) == str:
             data = json.loads(event.data)
         else:
             data = event.data
-        data["peers"].remove(self.get_data()["device_id"])
+        data["peers"].remove(self.device_id)
         data["peers"].append(source_uuid)
         event.data = data
         send_data = {
             "name": event.name,
             "color": event.color,
-            "wkDay": event.wkDay,
-            "startTime": event.startTime,
-            "endTime": event.endTime,
+            "wkDay": event.wk_day,
+            "startTime": event.start_time,
+            "endTime": event.end_time,
             "type": event.type,
             "data": data,
-            "syncID": event.syncID,
+            "syncID": event.sync_id,
             "id": event.id,
         }
         try:
             request = requests.post(
-                self.get_data()["web_url"] + "/api/add/schedule/event/", json=send_data
+                self.web_url + "/api/add/schedule/event/", json=send_data
             )
         except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
             threading.Thread(
@@ -282,7 +282,7 @@ class Device:
         while True:
             try:
                 request = requests.post(
-                    self.get_data()["web_url"] + "/api/add/schedule/event/", json=event
+                    self.web_url + "/api/add/schedule/event/", json=event
                 )
                 return
             except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
@@ -291,7 +291,7 @@ class Device:
     def delete_event(self, id: str) -> None:
         try:
             request = requests.get(
-                self.get_data()["web_url"] + f"/api/remove/schedule/event/{id}"
+                self.web_url + f"/api/remove/schedule/event/{id}"
             )
         except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
             threading.Thread(
@@ -302,7 +302,7 @@ class Device:
         while True:
             try:
                 request = requests.get(
-                    self.get_data()["web_url"] + f"/api/remove/schedule/event/{id}"
+                    self.web_url + f"/api/remove/schedule/event/{id}"
                 )
                 return
             except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
