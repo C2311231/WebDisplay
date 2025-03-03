@@ -1,6 +1,5 @@
 import os
 import shutil
-<<<<<<< HEAD
 import subprocess
 import datetime
 import requests
