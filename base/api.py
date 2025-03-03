@@ -259,20 +259,24 @@ class api_v1(commons.BaseClass):
         def api_get_schedule_event():
             return make_response(json.dumps(self.database.get_events()), 200)
         
-        @self.bp.route("/update/readme")
+        @self.bp.route("/update/readme/")
         def get_readme():
-            return updater.fetch_readme_from_github()
+            return make_response(json.dumps({"data": updater.fetch_readme_from_github()}), 200) 
         
         @self.bp.route("/update/available/")
         def get_update_available():
-            return  make_response(json.dumps({"update_available": updater.is_update_available()}), 200)
+            return make_response(json.dumps({"update_available": updater.is_update_available()}), 200)
         
-        @self.bp.route("/update/update")
+        @self.bp.route("/update/update/")
         def start_update():
             updater.main()
             print("Relaunching program...")
             python = sys.executable
             os.execv(python, [python] + sys.argv)
+            
+        @self.bp.route("/update/nextVersion/")
+        def get_next_version():
+            return make_response(json.dumps({"version": "testVersion"}), 200)
             
         @self.bp.route("/restart/")
         def restart():
