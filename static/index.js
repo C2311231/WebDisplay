@@ -327,8 +327,11 @@ function processEvent(newEvent) {
         let color = section.querySelector("#color").value
         let restart = section.querySelector("#restart").checked
         let start = section.querySelector("#start").checked
-        let delay = section.querySelector("#delay").value
+        let delay = Math.round(section.querySelector("#delay").value)
         let wkDay = section.querySelector("#wkDay").value
+        if (delay < 1){
+            delay = 1;
+        }
         displayEvent(id, wkDay, color, startTime, endTime, type, name, {
             "url": url,
             "restart": restart,

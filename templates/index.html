@@ -110,7 +110,7 @@
       <p>Sync:</p>
       <div id="peerSelect">
         {% for peer in peers%}
-        {%if not item.disabled%}
+        {%if not peer.disabled%}
         <label>{{ peer.device_name }}</label>
         <input type="checkbox" name="{{ peer.device_id }}" /><br />
         {%endif%}

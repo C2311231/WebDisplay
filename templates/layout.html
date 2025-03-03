@@ -10,8 +10,14 @@
     </head>
     <body>
     <div class="topbar">
-        <a href="/settings"><img>testing</a>
-        <button onclick="fetch('/restart')">test </button>
+        <div>
+            <button>Updates</button>
+            <div style="position: absolute; top: 3rem; right: 0; background-color: grey; width: 30vw; height: 40vh;">
+                <p>Release Notes....</p>
+                <button>Update</button>
+            </div>
+        </div>
+        <button onclick="fetch('/restart')">Restart</button>
         <h1>{{name}}</h1>
 
     </div>
