@@ -12,13 +12,13 @@ ARCHIVE_DIR = '../archives'
 BRANCH = 'main'
 
 
-def fetch_readme_from_github():
-    url = "https://raw.githubusercontent.com/C2311231/WebDisplay/main/README.md"
+def fetch_release_notes_from_github():
+    url = "https://raw.githubusercontent.com/C2311231/WebDisplay/main/release_notes.txt"
     response = requests.get(url)
     if response.status_code == 200:
         return response.text
     else:
-        return f"Failed to fetch README.md (status code {response.status_code})"
+        return f"Failed to fetch release_notes.txt (status code {response.status_code})"
 
 
 def run_command(cmd, cwd=None):

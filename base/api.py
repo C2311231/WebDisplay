@@ -259,9 +259,9 @@ class api_v1(commons.BaseClass):
         def api_get_schedule_event():
             return make_response(json.dumps(self.database.get_events()), 200)
         
-        @self.bp.route("/update/readme/")
-        def get_readme():
-            return make_response(json.dumps({"data": updater.fetch_readme_from_github()}), 200) 
+        @self.bp.route("/update/releaseNotes/")
+        def get_release_notes():
+            return make_response(json.dumps({"data": updater.fetch_release_notes_from_github()}), 200) 
         
         @self.bp.route("/update/available/")
         def get_update_available():

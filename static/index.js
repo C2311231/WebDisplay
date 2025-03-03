@@ -469,7 +469,7 @@ fetch("./api/update/available/")
             document.getElementById("openUpdateMenuButton").style.display = "none"
         }
         else {
-            fetch("/api/update/readme/")
+            fetch("/api/update/releaseNotes/")
                 .then((response) => response.json())
                 .then((json) => {
                     document.getElementById("releaseNotes").innerText = json.data
