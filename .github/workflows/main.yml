@@ -90,7 +90,7 @@ jobs:
     - name: Build Image
       run: |
         cd PiGen
-        ./build.sh
+        sudo ./build.sh
 
     # Pi-Gen does weird things with the image file name, so let's make sure we have it right.
     - name: Get Image Name
