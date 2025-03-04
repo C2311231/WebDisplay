@@ -6,3 +6,5 @@ gldriver-test
 vulkan-tools mesa-vulkan-drivers
 xserver-xorg xinit
 chromium-chromedriver
+python3-pip
+libcec-dev

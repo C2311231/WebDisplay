@@ -15,7 +15,11 @@ class BrowserManager(commons.BaseClass):
         # chrome_options.add_argument("--kiosk")  # Uncomment if needed
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option("useAutomationExtension", False)
-        self.driver = webdriver.Chrome(options=chrome_options)
+        try:
+            service = Service(executable_path=r'/usr/bin/chromedriver')
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
+        except:
+            self.driver = webdriver.Chrome(options=chrome_options)
         self.event = 0
 
     def open_url(self, url: commons.url) -> None:

@@ -43,6 +43,7 @@ class CecManager(commons.BaseClass):
             cec.init()
             self.devices = cec.list_devices()
             self.tv = cec.Device(cec.CECDEVICE_TV)
+            self.tv.is_on()
             self.disable_cec = False
         except:
             print("CEC Unavailable")
