@@ -63,6 +63,7 @@ jobs:
       id: config
       run: |
         cd PiGen
+        ls -R
         NOW=$(date +"%Y-%m-%d-%H%M")
         IMAGE=WebDisplay-${GITHUB_REF##*/}-$NOW
         echo IMG_NAME=$IMAGE                        > config
