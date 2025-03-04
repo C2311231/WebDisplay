@@ -1,0 +1,109 @@
+name: Build RPI_Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    - release/*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Maximize Build Space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 11240 
+        swap-size-mb: 1024
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'true'
+
+    - name: List Available Space
+      run: |
+        echo "Free space:"
+        df -h
+
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y coreutils quilt parted qemu-user-static debootstrap zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc qemu-utils kpartx gpg
+
+    - name: Checkout WebDisplay
+      uses: actions/checkout@v3
+      with:
+        path: WebDisplay
+
+    # We will periodically have to update PiGen to a newer version.
+    # Because we've been broken by them in the past, we pin the version to prevent us from being broken by them.
+    - name: Checkout PiGen
+      uses: actions/checkout@v3
+      with:
+        repository: 'RPi-Distro/pi-gen'
+        path: PiGen
+        fetch-depth: 1
+        ref: arm64
+
+    # This is where we install all of our PiGen extras.
+    # Helpful:  https://geoffhudik.com/tech/2020/05/15/using-pi-gen-to-build-a-custom-raspbian-lite-image/
+    - name: Install Custom PiGen Files
+      run: |
+        cd PiGen
+        mkdir WebDisplay
+        cd ..
+        cd WebDisplay
+        cp -R * ../PiGen/WebDisplay/
+        cd pi-gen_stage
+        cp -R * ../../PiGen/
+
+    # See README at https://github.com/RPi-Distro/pi-gen
+    - name: Create Config File
+      id: config
+      run: |
+        cd PiGen
+        NOW=$(date +"%Y-%m-%d-%H%M")
+        IMAGE=WebDisplay-${GITHUB_REF##*/}-$NOW
+        echo IMG_NAME=$IMAGE                        > config
+        echo DEPLOY_COMPRESSION=none               >> config
+        echo ENABLE_SSH=1                          >> config
+        echo TARGET_HOSTNAME=WebDisplay              >> config
+        echo TIMEZONE_DEFAULT=Etc/UTC              >> config
+        echo FIRST_USER_NAME=web                    >> config
+        echo FIRST_USER_PASS=display              >> config
+        echo LOCALE_DEFAULT=en_US.UTF-8            >> config
+        echo KEYBOARD_KEYMAP=us                    >> config
+        echo KEYBOARD_LAYOUT=\"English\ \(US\)\"   >> config
+        echo DISABLE_FIRST_BOOT_USER_RENAME=1      >> config
+        echo WPA_COUNTRY=US                        >> config
+        echo "image=$IMAGE"                        >> $GITHUB_OUTPUT
+
+    # Greatly speed up our build because we don't need a desktop
+    # or anything more advanced for our little IoT devices.
+    - name: Disable Non-Lite Builds
+      run: |
+        cd PiGen
+        touch ./stage3/SKIP ./stage4/SKIP ./stage5/SKIP
+        touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
+
+    - name: Build Image
+      run: |
+        cd PiGen
+        ./build-docker.sh
+
+    # Pi-Gen does weird things with the image file name, so let's make sure we have it right.
+    - name: Get Image Name
+      id: imagefile
+      run: |
+        cd PiGen
+        cd deploy
+        ls
+        IMAGE_FILE=$(ls *.img)
+        echo "imagefile=$IMAGE_FILE" >> $GITHUB_OUTPUT
+
+    # The image now exists in deploy/.  Let's save it somewhere.
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.config.outputs.image }}
+        path: PiGen/deploy/${{ steps.imagefile.outputs.imagefile }}
