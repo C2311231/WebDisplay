@@ -1,5 +1,4 @@
 from flask import render_template, redirect, Flask
-from subprocess import call
 from base import networking, database, browser, api, peers, cec, scheduler
 import sys
 
@@ -23,11 +22,6 @@ def home():
         name=db.config()["name"],
         adapters=network_manager.get_interfaces(),
     )
-
-
-@app.route("/restart/")
-def restart():
-    call("sudo shutdown -h now", shell=True)
 
 
 @app.route("/idle/")

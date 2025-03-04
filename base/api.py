@@ -2,7 +2,9 @@ from flask import Blueprint, redirect, request, make_response, jsonify
 import json
 import copy
 from datetime import datetime
-from base import commons, peers, browser, cec, database
+from base import commons, peers, browser, cec, database, updater
+import os, sys
+from subprocess import call
 
 DAYSOFWEEK = [
     "Monday",
@@ -207,7 +209,7 @@ class api_v1(commons.BaseClass):
                                 and peer.device_id not in peers
                                 and not peer.disabled
                             ):
-                                peer.delete_event(event.syncID)
+                                peer.delete_event(event.sync_id)
                             elif (
                                 peer.device_id
                                 not in json.loads(original_event.data)["peers"]
@@ -225,17 +227,17 @@ class api_v1(commons.BaseClass):
                                     copy.deepcopy(event), self.database.config()["id"]
                                 )
 
-                        t = (
-                            float(datetime.now().strftime("%H"))
-                            + float(datetime.now().strftime("%M")) / 60
-                        )
+                    t = (
+                        float(datetime.now().strftime("%H"))
+                        + float(datetime.now().strftime("%M")) / 60
+                    )
 
-                        wk_day = datetime.now().strftime("%A")
-                        if request.json["wkDay"] == wk_day:
-                            if (float(request.json["startTime"]) <= t) and (
-                                float(request.json["endTime"]) > t
-                            ):
-                                self.browser.set_event(0)
+                    wk_day = datetime.now().strftime("%A")
+                    if request.json["wkDay"] == wk_day:
+                        if (float(request.json["startTime"]) <= t) and (
+                            float(request.json["endTime"]) > t
+                        ):
+                            self.browser.set_event(0)
                 data = {"message": "Done", "code": "SUCCESS"}
                 return make_response(jsonify(data), 200)
             return make_response({}, 400)
@@ -256,6 +258,29 @@ class api_v1(commons.BaseClass):
         @self.bp.route("/get/schedule/event/")
         def api_get_schedule_event():
             return make_response(json.dumps(self.database.get_events()), 200)
+        
+        @self.bp.route("/update/releaseNotes/")
+        def get_release_notes():
+            return make_response(json.dumps({"data": updater.fetch_release_notes_from_github()}), 200) 
+        
+        @self.bp.route("/update/available/")
+        def get_update_available():
+            return make_response(json.dumps({"update_available": updater.is_update_available()}), 200)
+        
+        @self.bp.route("/update/update/")
+        def start_update():
+            updater.main()
+            print("Relaunching program...")
+            python = sys.executable
+            os.execv(python, [python] + sys.argv)
+            
+        @self.bp.route("/update/nextVersion/")
+        def get_next_version():
+            return make_response(json.dumps({"version": "testVersion"}), 200)
+            
+        @self.bp.route("/restart/")
+        def restart():
+            call("sudo shutdown -h now", shell=True)
 
     def get_blueprint(self):
         return self.bp

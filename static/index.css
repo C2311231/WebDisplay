@@ -158,3 +158,36 @@ form button {
     color: rgb(53, 53, 53) !important;
     pointer-events: none;
 }
+
+#UpdatePopup {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    background-color: rgb(36, 36, 36);
+    width: 30vw;
+    height: 40vh;
+    padding: 3rem;
+    display: none;
+    border-radius: 5px
+}
+
+#releaseNotes {
+    overflow: auto;
+    width: 100%;
+    height: 20vh;
+    background-color: black;
+    padding: 1rem;
+    border-radius: 5px
+}
+
+#beganUpdateButton {
+    margin: 2rem;
+
+}
+
+button {
+    margin: 0.75rem;
+    padding: 0.5rem 1rem;
+    background-color: darkgray;
+    border-radius: 8px;
+}

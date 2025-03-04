@@ -1,0 +1,9 @@
+[Unit]
+Description=WebDisplay Service
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Restart=always
+ExecStart=python /WebDisplay/main.py

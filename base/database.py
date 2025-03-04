@@ -53,6 +53,7 @@ class Database(commons.BaseClass):
     ) -> None:
         if sync_id == None:
             sync_id = str(uuid.uuid4())
+        
         with self.app.app_context():
             data = Events(
                 name=name,
@@ -96,10 +97,10 @@ class Database(commons.BaseClass):
                 db.session.commit()
                 return event
 
-    def get_event(self, id: int) -> dict:
+    def get_event(self, id: int) -> object:
         with self.app.app_context():
-            data_dict = Events.query.filter_by(id=id).first()
-            return data_dict
+            data = Events.query.filter_by(id=id).first()
+            return data
 
     def get_events(self) -> list[dict]:
         with self.app.app_context():
@@ -133,7 +134,7 @@ class Database(commons.BaseClass):
         device_id: str,
         device_ip: str,
         disabled: bool,
-    ) -> None:
+    ) -> int:
         with self.app.app_context():
             data = Peers(
                 web_version=web_version,
@@ -155,8 +156,8 @@ class Database(commons.BaseClass):
 
     def get_peer(self, id: int) -> dict:
         with self.app.app_context():
-            data_dict = Peers.query.filter_by(id=id).first()
-            return data_dict
+            data = Peers.query.filter_by(id=id).first()
+            return data
 
     def get_peers(self) -> list[dict]:
         with self.app.app_context():

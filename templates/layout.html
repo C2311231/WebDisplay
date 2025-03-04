@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{{title}}</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
-    </head>
-    <body>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+</head>
+
+<body>
     <div class="topbar">
-        <a href="/settings"><img>testing</a>
-        <button onclick="fetch('/restart')">test </button>
+        <div>
+            <button onclick="toggleUpdatePopup()" id="openUpdateMenuButton">Updates</button>
+            <div id="UpdatePopup">
+                <h4 id="releaseVersion">V0.0.0</h4>
+<pre id="releaseNotes">
+</pre>
+                <button id="beganUpdateButton" onclick="fetch('api/update/update/')">Began Update</button>
+            </div>
+        </div>
+        <button onclick="fetch('/restart')">Restart</button>
         <h1>{{name}}</h1>
 
     </div>
     <div class="main">
         {% block main %}
-        
+
         {% endblock main %}
     </div>
-        
-    
-    </body>
-    <script src="{{url_for('static', filename='index.js')}}" async defer></script>
+
+
+</body>
+<script src="{{url_for('static', filename='index.js')}}" async defer></script>
+
 </html>
