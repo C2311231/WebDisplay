@@ -1,0 +1,8 @@
+git
+policykit-1
+rfkill
+chromium rpi-chromium-mods libwidevinecdm0
+gldriver-test
+vulkan-tools mesa-vulkan-drivers
+xserver-xorg xinit
+chromium-chromedriver
