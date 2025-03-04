@@ -8,7 +8,7 @@ on:
     - release/*
 jobs:
   build:
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Maximize Build Space
       uses: easimon/maximize-build-space@master
@@ -90,7 +90,7 @@ jobs:
     - name: Build Image
       run: |
         cd PiGen
-        ./build-docker.sh
+        ./build.sh
 
     # Pi-Gen does weird things with the image file name, so let's make sure we have it right.
     - name: Get Image Name
