@@ -8,7 +8,7 @@ on:
     - release/*
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     steps:
     - name: Maximize Build Space
       uses: easimon/maximize-build-space@master
