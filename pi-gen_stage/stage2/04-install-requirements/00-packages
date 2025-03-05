@@ -8,3 +8,5 @@ xserver-xorg xinit
 chromium-chromedriver
 python3-pip
 libcec-dev
+openbox
+unclutter

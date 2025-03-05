@@ -2,5 +2,5 @@
 xset -dpms
 xset s off
 xset s noblank
-while true; do sleep 3600; done
-
+exec openbox-session
+exec unclutter -idle 1 &

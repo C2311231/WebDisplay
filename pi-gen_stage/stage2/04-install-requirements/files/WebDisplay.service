@@ -8,3 +8,4 @@ WantedBy=default.target
 User=pi
 Restart=always
 ExecStart=/WebDisplay/.venv/bin/python3 /WebDisplay/main.py db.db 5000
+WorkingDirectory=/home/web/WebDisplay
