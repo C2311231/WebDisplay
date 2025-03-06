@@ -1,0 +1,22 @@
+[Unit]
+Description=Start X session for %i
+After=systemd-user-sessions.service network.target getty@tty1.service
+Requires=getty@tty1.service
+
+[Service]
+User=%i
+WorkingDirectory=/home/%i
+Environment=DISPLAY=:0
+PAMName=login
+StandardInput=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+
+ExecStart=/usr/bin/startx /home/%i/.xinitrc -- -keeptty -nolisten tcp vt1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

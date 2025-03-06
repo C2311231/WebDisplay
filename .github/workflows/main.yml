@@ -71,8 +71,8 @@ jobs:
         echo ENABLE_SSH=1                          >> config
         echo TARGET_HOSTNAME=WebDisplay              >> config
         echo TIMEZONE_DEFAULT=Etc/UTC              >> config
-        echo FIRST_USER_NAME=web                    >> config
-        echo FIRST_USER_PASS=display              >> config
+        echo FIRST_USER_NAME=admin                    >> config
+        echo FIRST_USER_PASS=webdisplay              >> config
         echo LOCALE_DEFAULT=en_US.UTF-8            >> config
         echo KEYBOARD_KEYMAP=us                    >> config
         echo KEYBOARD_LAYOUT=\"English\ \(US\)\"   >> config
