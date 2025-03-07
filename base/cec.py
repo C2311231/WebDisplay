@@ -32,14 +32,13 @@ venderDecoder = {
 
 cec = None  # clears problems in ide (no affect on code)
 from base import commons
-
-
+try:
+    import cec
+except:
+    print("CEC Unavailable")
 class CecManager(commons.BaseClass):
     def __init__(self):
         try:
-
-            import cec  # type: ignore
-
             cec.init()
             self.devices = cec.list_devices()
             self.tv = cec.Device(cec.CECDEVICE_TV)
