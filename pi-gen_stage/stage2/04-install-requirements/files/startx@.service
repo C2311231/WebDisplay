@@ -13,7 +13,7 @@ TTYReset=yes
 TTYVHangup=yes
 TTYVTDisallocate=yes
 
-ExecStart=sudo startx -- -keeptty -nolisten tcp
+ExecStart=startx -- -keeptty -nolisten tcp
 Restart=always
 RestartSec=3
 

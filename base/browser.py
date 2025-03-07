@@ -11,14 +11,20 @@ class BrowserManager(commons.BaseClass):
         self.driver = None
 
     def init_driver(self) -> None:
-        chrome_options = Options()
-        # chrome_options.add_argument("--kiosk")  # Uncomment if needed
-        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        chrome_options.add_experimental_option("useAutomationExtension", False)
+
         try:
+            chrome_options = Options()
+            chrome_options.add_argument("--kiosk")  # Uncomment if needed
+            chrome_options.add_argument("--display=:0")
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option("useAutomationExtension", False)
             service = Service(executable_path=r'/usr/bin/chromedriver')
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
         except:
+            chrome_options = Options()
+            chrome_options.add_argument("--kiosk")  # Uncomment if needed
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option("useAutomationExtension", False)
             self.driver = webdriver.Chrome(options=chrome_options)
         self.event = 0
 

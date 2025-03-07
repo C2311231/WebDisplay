@@ -5,7 +5,7 @@ Description=WebDisplay Service
 WantedBy=default.target
 
 [Service]
-User=webdisplay
+User=pi
 Restart=always
 ExecStart=/WebDisplay/.venv/bin/python3 /WebDisplay/main.py db.db 5000
-WorkingDirectory=/WebDisplay/
+WorkingDirectory=/home/pi

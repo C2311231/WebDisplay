@@ -2,7 +2,6 @@
 
 cp -R ../../WebDisplay "${ROOTFS_DIR}"
 on_chroot << EOF
-        useradd webdisplay
         chmod 755 /WebDisplay/
         python -m venv /WebDisplay/.venv
         source /WebDisplay/.venv/bin/activate
@@ -14,6 +13,8 @@ cp files/WebDisplay.service "${ROOTFS_DIR}/etc/systemd/system"
 cp files/startx@.service "${ROOTFS_DIR}/etc/systemd/system"
 cp files/Xwrapper.config "${ROOTFS_DIR}/etc/X11/Xwrapper.config"
 cp files/.xinitrc "${ROOTFS_DIR}/home/pi/.xinitrc"
+cp files/firstboot.sh "${ROOTFS_DIR}/usr/local/sbin/firstboot.sh"
+cp files/firstboot.service "${ROOTFS_DIR}/etc/systemd/system"
 on_chroot << EOF
         chown root:root /etc/systemd/system/WebDisplay.service
         chmod 644 /etc/systemd/system/WebDisplay.service
@@ -23,6 +24,11 @@ on_chroot << EOF
         chown root:root /etc/systemd/system/startx@.service
         chmod 644 /etc/systemd/system/startx@.service
         systemctl enable startx@pi
+
+        chown root:root /etc/systemd/system/firstboot.service
+        chmod 644 /etc/systemd/system/firstboot.service
+        chmod +x /usr/local/sbin/firstboot.sh
+        systemctl enable firstboot
 EOF
 
 
