@@ -42,7 +42,6 @@ class Database(commons.BaseClass):
             if parameter in config.keys():
                     setting = Config.query.filter_by(parameter=parameter).first()
                     setting.value = value
-                    print("updating value")
                     db.session.commit()
             else:
                 data = Config(parameter=parameter, value=value)

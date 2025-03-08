@@ -12,9 +12,9 @@ peer_manager = peers.PeerManager(network_manager, db=db)
 # initialize the app with the extension
 scheduler = scheduler.Scheduler(db, browser_manager, cec_manager)
 peer_manager.start_discovery()
-
-db.write_config("ip", socket.gethostbyname(socket.gethostname()))
-db.write_config("url", f"http://{socket.gethostbyname(socket.gethostname())}:{sys.argv[2]}")
+ip = network_manager.get_local_ip()
+db.write_config("ip", ip)
+db.write_config("url", f"http://{ip}:{sys.argv[2]}")
 db.write_config("port", sys.argv[2])
 
 @app.route("/")
