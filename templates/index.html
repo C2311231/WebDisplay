@@ -122,8 +122,8 @@
   </div>
   <div class="configuration-controls controls" style="display: none">
     <h2 style="font-weight: normal">Configuration</h2>
-    <form>
-      {%for adapter in adapters%} {%if adapter.type == "Ethernet"%}
+    <form id="configForm">
+      <!-- {%for adapter in adapters%} {%if adapter.type == "Ethernet"%}
       <div class="form-ethernet-adapter-options">
         <h3>Adapter:{{" " + adapter.name}}:{{" " + adapter.state}}</h3>
         <h4>IP Configuration</h4>
@@ -166,12 +166,12 @@
         <input type="text" value="{{adapter.data.dns}}" class="textbox" /><br />
       </div>
       <hr />
-      {%endif%} {%endfor%}
+      {%endif%} {%endfor%} -->
+      <label>Name: </label>
+      <input id="name" type="text" value="{{config['name']}}"/><br />
       <label>Minutes Between Automatic Reloads (0 for never): </label>
-      <input type="number" /><br />
-      <label>Resume On Boot: </label>
-      <input type="checkbox" /><br />
-      <button>Apply</button>
+      <input type="number" id="reloadTime" value="{{config['reload_time']}}"/><br />
+      <button onclick="sendConfig(event)">Apply</button>
     </form>
   </div>
   <div class="paired-screens-controls controls" style="display: none">

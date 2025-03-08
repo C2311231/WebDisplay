@@ -16,6 +16,7 @@ required_config = {
     "state": "online",
     "platform": "linux",
     "ip": "localhost",
+    "reload_time": "0"
 }
 db = SQLAlchemy()
 
@@ -37,9 +38,16 @@ class Database(commons.BaseClass):
 
     def write_config(self, parameter: str, value: str) -> None:
         with self.app.app_context():
-            data = Config(parameter=parameter, value=value)
-            db.session.add(data)
-            db.session.commit()
+            config = self.config()
+            if parameter in config.keys():
+                    setting = Config.query.filter_by(parameter=parameter).first()
+                    setting.value = value
+                    print("updating value")
+                    db.session.commit()
+            else:
+                data = Config(parameter=parameter, value=value)
+                db.session.add(data)
+                db.session.commit()
 
     def verify_config(self) -> None:
         config = self.config()

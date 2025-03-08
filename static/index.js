@@ -481,3 +481,30 @@ fetch("./api/update/available/")
                 });
         }
     });
+
+
+function sendConfig(event){
+    event.preventDefault();
+    let configSection = document.getElementById("configForm")
+    let name = configSection.querySelector("#name").value
+    let reloadTime = configSection.querySelector("#reloadTime").value
+    fetch("/api/set/config/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"name": name, "reload_time": reloadTime})
+    })
+        .then(response => {
+            if (response.ok) {
+                // Successful submission, reload the page
+                window.location.reload();
+            } else {
+                response.json().then(data => {
+                    alert("Form submission failed: " + data.code);
+                })
+
+            }
+        })
+        .catch(error => console.error("Error:", error));
+}

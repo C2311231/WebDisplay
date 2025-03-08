@@ -12,6 +12,7 @@ class Scheduler(commons.BaseClass):
         self.browser_manager = browser_manager
         self.cec = cec
         self.turned_screen_off = False
+        self.last_reload_time = 9999999999999999999999999999999999999999999999999999999999999999
 
     def running(self) -> None:
         while self.run:
@@ -29,9 +30,16 @@ class Scheduler(commons.BaseClass):
                         float(event["end_time"]) > t
                     ):
                         current_event = True
+                        reload_time = 60*float(self.db.config()["reload_time"])
+                        if time.time() - self.last_reload_time >= reload_time and reload_time != 0:
+                            self.last_reload_time = time.time()
+                            self.start_event(event)
+                                                        
                         if self.browser_manager.get_event() != event["id"]:
+                            self.last_reload_time = time.time()
                             self.start_event(event)
             if not current_event:
+                self.last_reload_time = 9999999999999999999999999999999999999999999999999999999999999999
                 if self.browser_manager.driver != None:
                     self.browser_manager.close()
                     

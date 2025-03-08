@@ -1,6 +1,7 @@
 from flask import render_template, redirect, Flask
 from base import networking, database, browser, api, peers, cec, scheduler
 import sys
+import socket
 
 browser_manager = browser.BrowserManager()
 app = Flask(__name__)
@@ -12,6 +13,9 @@ peer_manager = peers.PeerManager(network_manager, db=db)
 scheduler = scheduler.Scheduler(db, browser_manager, cec_manager)
 peer_manager.start_discovery()
 
+db.write_config("ip", socket.gethostbyname(socket.gethostname()))
+db.write_config("url", f"http://{socket.gethostbyname(socket.gethostname())}:{sys.argv[2]}")
+db.write_config("port", sys.argv[2])
 
 @app.route("/")
 def home():
@@ -20,6 +24,7 @@ def home():
         peers=peer_manager.devices,
         title=db.config()["name"],
         name=db.config()["name"],
+        config=db.config(),
         adapters=network_manager.get_interfaces(),
     )
 

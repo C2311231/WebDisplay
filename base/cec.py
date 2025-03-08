@@ -35,7 +35,7 @@ from base import commons
 try:
     import cec
 except:
-    print("CEC Unavailable")
+    pass
 class CecManager(commons.BaseClass):
     def __init__(self):
         try:

@@ -88,9 +88,16 @@ class api_v1(commons.BaseClass):
         def api_cec_get_vender():
             return make_response(json.dumps({"vender": self.cec.get_vender()}), 200)
 
-        @self.bp.route("/set/config/")
+        @self.bp.route("/set/config/", methods=["POST"])
         def api_set_config():
-            pass
+            if request.is_json:
+                print(request.json)
+                self.database.write_config("name", str(request.json["name"]))
+                self.database.write_config("reload_time", str(request.json["reload_time"]))
+                data = {"message": "Success", "code": "Config Updated"}
+                return make_response(jsonify(data), 200)
+            data = {"message": "Failed", "code": "Request must be json"}
+            return make_response(jsonify(data), 400)
 
         @self.bp.route("/add/peer/", methods=["POST"])
         def api_add_peer():
