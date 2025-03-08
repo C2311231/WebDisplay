@@ -30,17 +30,12 @@ on_chroot << EOF
         chmod +x /usr/local/sbin/firstboot.sh
         systemctl enable firstboot
 
-        chown -R pi:pi /WebDisplay/
         mkdir /archives
         chown -R pi:pi /archives/
         cd /WebDisplay
-        git init
-EOF
-
-
-# Delete now-unnecessary custom pi-gen stuff.
-on_chroot << EOF
-        rm -rf /WebDisplay/pi-gen_stage
+        git init --shared=0777
+        git remote add origin https://github.com/C2311231/WebDisplay.git
+        chown -R pi:pi /WebDisplay/
 EOF
 
 on_chroot << EOF
