@@ -287,7 +287,7 @@ class api_v1(commons.BaseClass):
             
         @self.bp.route("/restart/")
         def restart():
-            call("sudo shutdown -h now", shell=True)
+            call("sudo reboot", shell=True)
 
     def get_blueprint(self):
         return self.bp
