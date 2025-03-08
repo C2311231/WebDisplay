@@ -29,6 +29,12 @@ on_chroot << EOF
         chmod 644 /etc/systemd/system/firstboot.service
         chmod +x /usr/local/sbin/firstboot.sh
         systemctl enable firstboot
+
+        chown -R pi:pi /WebDisplay/
+        mkdir /archives
+        chown -R pi:pi /archives/
+        cd /WebDisplay
+        git init
 EOF
 
 

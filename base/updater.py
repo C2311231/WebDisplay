@@ -111,6 +111,7 @@ def main():
     clone_or_update_repo()
 
     print("Update complete.")
-
+    exit(0)
+    
 if __name__ == '__main__':
     main()
