@@ -10,3 +10,4 @@ Simple project to remotely manage and control a web browser for digital signage
 - Add user defined templates
 - Add automated tests
 - Add ICS calender support
+- Add networking config

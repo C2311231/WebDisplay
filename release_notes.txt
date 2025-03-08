@@ -6,3 +6,4 @@ Features Added:
 Bugs Fixed:
 
 Notes:
+This program still contains numerous bugs, unexpected behavior may occur.
