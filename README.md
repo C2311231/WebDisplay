@@ -70,35 +70,11 @@ Enable Service
 
 #### Windows Install (Coming Soon)
 ### Usage
-#### Running Manualy:
+#### Running Manually:
     /{path/to/WebDisplay/directory}/.venv/bin/python3 /{path/to/WebDisplay/directory}/main.py db.db {port}
 #### Accessing the Web Interface:
 The web interface is available at: http://{device ip}:{port}  
 Other devices should automatically be detected and added to the side menu.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## To Do
 - Add multi display support
