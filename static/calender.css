@@ -1,0 +1,49 @@
+body {
+    background-color: black;
+    color: white;
+    height: 100vh;
+    margin: 0;
+}
+h1 {
+    margin: 0;
+    padding: 10px;
+}
+
+#cal_head {
+    height: 8vh;
+}
+
+#calenderBody {
+    display: flex;
+    margin: 0 5vw;
+    height: 92vh;
+}
+.cal_day {
+    width: 100%;
+    border-right: thin solid white;
+    padding: 1rem;
+}
+#calenderBody div.cal_day:first-of-type {
+    border-left: thin solid white;
+}
+
+.cal_event * {
+    display: inline-block;
+}
+.cal_event {
+    border: thin lightgrey solid;
+    border-radius: 3px;
+    font-size: small;
+    padding: 2px;
+    margin-bottom: 3px;
+}
+
+.cal_event_time {
+    float:right;
+}
+
+.cal_day_title {
+    border-bottom: thin white solid;
+    margin-bottom: 8px;
+    padding: 3px;
+}
