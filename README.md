@@ -78,8 +78,6 @@ Other devices should automatically be detected and added to the side menu.
 
 ## To Do
 - Add multi display support
-- Document
-- Improve Error Handling
 - Add user defined templates
 - Add automated tests
 - Add ICS calender support
