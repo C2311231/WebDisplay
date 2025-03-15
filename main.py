@@ -35,6 +35,11 @@ def idle_screen():
         "idle.html", name=db.config()["name"], url=db.config()["url"]
     )
 
+@app.route("/calender/")
+def calender_screen():
+    return render_template(
+        "calender.html"
+    )
 
 @app.route("/getScreenshot/")
 def screenshot():
