@@ -1,4 +1,11 @@
 const CALENDER = document.getElementById("calenderBody")
+
+class calender {
+    constructor(name){
+        this.name = name
+    }
+}
+
 class day {
     constructor(name, date) {
         this.name = name

@@ -64,5 +64,5 @@ if __name__ == "__main__":
     scheduler.start()
     api_blueprint = api.api_v1(db, cec_manager, browser_manager, peer_manager).get_blueprint()
     app.register_blueprint(api_blueprint, url_prefix="/api")
-    app.run(host="0.0.0.0", port=sys.argv[2], debug=False)
+    app.run(host="0.0.0.0", port=sys.argv[2], debug=True)
     scheduler.stop()

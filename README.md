@@ -90,3 +90,4 @@ Other devices should automatically be detected and added to the side menu.
 - Add automated tests
 - Add ICS calender support
 - Add networking config
+- Create Install Script
