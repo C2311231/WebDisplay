@@ -99,7 +99,8 @@ h1 {
 }
 
 .multi-event {
-    display: flex;
+    display: grid;
+    flex-grow: 1;
 }
 
 .multi-event .event{

@@ -36,6 +36,7 @@ class day {
 
     sort_events(arr) {
         let n = arr.length;
+        console.log(arr)
         let swapped = false;
         for (let i = 0; i < n; i++) {
             swapped = false;
@@ -120,7 +121,7 @@ class day {
         for (let i = 0; i < condensed_overlap.length; i++) {
             let temp_events = []
             for (let j = 0; j < condensed_overlap[i].length; j++) {
-                temp_events.push(sorted[condensed_overlap[j]])
+                temp_events.push(sorted[condensed_overlap[i][j]])
             }
             let sorted_temp_events = this.sort_events(temp_events)
             let starting_slot = this.get_slot(sorted_temp_events[0].start_time)
@@ -128,12 +129,12 @@ class day {
             let temp = `<div class="multi-event" style="grid-row: ${starting_slot}/${ending_slot}; grid-template-rows: repeat(${ending_slot - starting_slot}, 1fr);">`
             let filled_slots = [[]]
 
-            for (let i = 0; i < sorted_temp_events.length; i++) {
-                let event_starting_slot = this.get_slot(sorted_temp_events[i].start_time) - starting_slot
-                let event_ending_slot = this.get_slot(sorted_temp_events[i].end_time) - starting_slot
+            for (let j = 0; j < sorted_temp_events.length; j++) {
+                let event_starting_slot = this.get_slot(sorted_temp_events[j].start_time) - starting_slot
+                let event_ending_slot = this.get_slot(sorted_temp_events[j].end_time) - starting_slot
                 let column = -1;
                 for (let coll = 0; coll < filled_slots.length; coll++) {
-                    if (event_starting_slot in filled_slots[i] == false) {
+                    if (event_starting_slot in filled_slots[coll] == false) {
                         column = coll;
                         break;
                     }
