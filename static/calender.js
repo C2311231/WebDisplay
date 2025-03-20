@@ -35,38 +35,11 @@ class day {
     }
 
     sort_events(arr) {
-        let n = arr.length;
-        console.log(arr)
-        let swapped = false;
-        for (let i = 0; i < n; i++) {
-            swapped = false;
-            for (let j = 0; j < n - i - 1; j++) {
-                if (arr[j].start_time.getTime() > arr[j + 1].start_time.getTime()) {
-                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                    swapped = true;
-                }
-            }
-
-            if (swapped === false) break;
-        }
-        return arr;
+        return arr.slice().sort((a, b) => a.start_time - b.start_time);
     }
 
     sort_events_endtime(arr) {
-        let n = arr.length;
-        let swapped = false;
-        for (let i = 0; i < n; i++) {
-            swapped = false;
-            for (let j = 0; j < n - i - 1; j++) {
-                if (arr[j].end_time.getTime() > arr[j + 1].end_time.getTime()) {
-                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                    swapped = true;
-                }
-            }
-
-            if (swapped === false) break;
-        }
-        return arr;
+        return arr.slice().sort((a, b) => a.end_time - b.end_time);
     }
 
     generate_events_html() {
@@ -76,7 +49,6 @@ class day {
         for (let i = 0; i < sorted.length - 1; i++) {
             for (let j = i + 1; j < sorted.length; j++) {
                 if (sorted[j].start_time.getTime() < sorted[i].end_time.getTime()) {
-                    console.log("OVERLAP")
                     overlapping.push([i, j]); // Record overlapping pair 
                 }
 
@@ -103,16 +75,14 @@ class day {
                 condensed_overlap.push(overlapping[i])
             }
         }
-        console.log(condensed_overlap)
-
 
         let html = ""
         // Normal Events
         for (let i = 0; i < sorted.length; i++) {
-            if (i in all_multi_index == false) {
+            if (all_multi_index.has(i) == false) {
                 let starting_slot = this.get_slot(sorted[i].start_time)
-                 let ending_slot = this.get_slot(sorted[i].end_time)
-               
+                let ending_slot = this.get_slot(sorted[i].end_time)
+
                 html += `<div class="event" style="background: ${sorted[i].color}; grid-row: ${starting_slot}/${ending_slot};">${sorted[i].name}</div>`
             }
         }
@@ -126,7 +96,7 @@ class day {
             let sorted_temp_events = this.sort_events(temp_events)
             let starting_slot = this.get_slot(sorted_temp_events[0].start_time)
             let ending_slot = this.get_slot(this.sort_events_endtime(sorted_temp_events)[sorted_temp_events.length - 1].end_time)
-            let temp = `<div class="multi-event" style="grid-row: ${starting_slot}/${ending_slot}; grid-template-rows: repeat(${ending_slot - starting_slot}, 1fr);">`
+            let temp = ""
             let filled_slots = [[]]
 
             for (let j = 0; j < sorted_temp_events.length; j++) {
@@ -134,7 +104,7 @@ class day {
                 let event_ending_slot = this.get_slot(sorted_temp_events[j].end_time) - starting_slot
                 let column = -1;
                 for (let coll = 0; coll < filled_slots.length; coll++) {
-                    if (event_starting_slot in filled_slots[coll] == false) {
+                    if (filled_slots[coll].includes(event_starting_slot) == false) {
                         column = coll;
                         break;
                     }
@@ -143,22 +113,20 @@ class day {
                     filled_slots.push([])
                     column = filled_slots.length - 1
                 }
-                filled_slots[column].concat(range(event_starting_slot, event_ending_slot))
+                filled_slots[column] = filled_slots[column].concat(range(event_starting_slot, event_ending_slot - 1))
 
-
-                temp += `<div class="event" style="background: ${sorted_temp_events[i].color}; grid-row: ${event_starting_slot}/${event_ending_slot}; grid-column: ${column};">${sorted_temp_events[i].name}</div>`
+                temp += `<div class="event" style="background: ${sorted_temp_events[j].color}; grid-row: ${event_starting_slot + 1}/${event_ending_slot + 1}; grid-column: ${column + 1};">${sorted_temp_events[j].name}</div>`
             }
-        temp += "</div>"
-        html += temp
+            temp = `<div class="multi-event" style="grid-row: ${starting_slot}/${ending_slot}; grid-template-rows: repeat(${ending_slot - starting_slot}, 1fr); grid-template-columns: repeat(${filled_slots.length}, 1fr);">` + temp
+            temp += "</div>"
+            html += temp
         }
-        // Generate HTML
-        // Replace Existing
         this.html.getElementsByClassName("events")[0].innerHTML = html
     }
-    
 
-write(container) {
-    let html = `<div class="day">
+
+    write(container) {
+        let html = `<div class="day">
             <div class="day-header">
                 <h3>${this.name}</h3>
                 <p>${this.date}</p>
@@ -166,16 +134,16 @@ write(container) {
             <div class="events">                
             </div>
         </div>`
-    container.innerHTML += html;
-    this.html = container.getElementsByClassName("day")[container.getElementsByClassName("day").length - 1];
-    this.generate_events_html()
-}
+        container.innerHTML += html;
+        this.html = container.getElementsByClassName("day")[container.getElementsByClassName("day").length - 1];
+        this.generate_events_html()
+    }
 
-get_slot(time) {
-    let hours = time.getHours()
-    let min = time.getMinutes()
-    return (hours - this.starting_hour) * 4 + Math.floor(min / 15) + 1
-}
+    get_slot(time) {
+        let hours = time.getHours()
+        let min = time.getMinutes()
+        return (hours - this.starting_hour) * 4 + Math.floor(min / 15) + 1
+    }
 }
 
 class event {
@@ -193,9 +161,3 @@ class event {
 }
 
 let cal = new calender("test", CALENDER)
-
-// muli-event algorithm:
-// check each column for a opening in timeslot
-// if no opening create new column
-// if opening fill it
-// if doesn't fit in rows, extend parent
