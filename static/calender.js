@@ -20,13 +20,14 @@ class calender {
 }
 
 class day {
-    constructor(name, date) {
+    constructor(name, date, current = false) {
         this.name = name;
         this.date = date;
         this.events = []
         this.container = null;
         this.html = null;
         this.starting_hour = 5
+        this.current = current
     }
 
     add_event(event) {
@@ -126,14 +127,27 @@ class day {
 
 
     write(container) {
-        let html = `<div class="day">
-            <div class="day-header">
+        let html;
+        if (this.current){
+            html = `<div class="day">
+            <div class="day-header current">
+                <h3>${this.name}</h3>
+                <p>${this.date}</p>
+            </div>
+            <div class="events">                
+            </div>
+            </div>`
+        }
+        else {
+            html = `<div class="day">
+            <div class="day-header ">
                 <h3>${this.name}</h3>
                 <p>${this.date}</p>
             </div>
             <div class="events">                
             </div>
         </div>`
+        }
         container.innerHTML += html;
         this.html = container.getElementsByClassName("day")[container.getElementsByClassName("day").length - 1];
         this.generate_events_html()
@@ -146,7 +160,7 @@ class day {
     }
 }
 
-class event {
+class cal_event {
     constructor(name, start_time, end_time, color = "darkgrey") {
         this.name = name;
         this.start_time = start_time;
@@ -159,5 +173,20 @@ class event {
         return `<div class="event" style="background: ${this.color};">${this.name}</div>`
     }
 }
+let cal;
 
-let cal = new calender("test", CALENDER)
+let calender_id = window.location.pathname.split("/")[window.location.pathname.split("/").length-1]
+
+fetch(`/api/get/calender_data/${calender_id}`).then((response) => response.json()).then((json) => {
+    cal = new calender(json.name, CALENDER);
+    for(let i=0; i<json.days.length; i++){
+        let index = cal.days.length
+        cal.add_day(new day(json.days[i].name, json.days[i].date, json.days[i].current))
+
+        fetch(`/api/get/calender_events/${calender_id}/${json.days[i].id}`).then((response) => response.json()).then((json) => {
+            for(let j=0; j<json.events.length; j++){
+                cal.days[index].add_event(new cal_event(json.events[j].name, new Date(json.events[j].start_time), new Date(json.events[j].end_time), json.events[j].color))
+            }
+        })
+    }
+})

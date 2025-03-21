@@ -106,3 +106,8 @@ h1 {
 .multi-event .event{
     width: 100%;
 }
+
+.current p {
+    background-color: lightblue;
+    border-radius: 5px;
+}
