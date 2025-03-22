@@ -288,6 +288,14 @@ class api_v1(commons.BaseClass):
         @self.bp.route("/restart/")
         def restart():
             call("sudo reboot", shell=True)
+            
+        @self.bp.route("/get/calender_data/<id>")
+        def get_cal_data(id):
+            pass
+        
+        @self.bp.route("/get/calender_events/<id>/<day>")
+        def get_cal_events(id, day):
+            pass
 
     def get_blueprint(self):
         return self.bp
