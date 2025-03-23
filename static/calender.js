@@ -189,4 +189,4 @@ fetch(`/api/get/calender_data/${calender_id}`).then((response) => response.json(
             }
         })
     }
-})
+}) 

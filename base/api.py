@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, request, make_response, jsonify
 import json
 import copy
 from datetime import datetime
-from base import commons, peers, browser, cec, database, updater
+from base import commons, peers, browser, cec, database, updater, calander
 import os, sys
 from subprocess import call
 
@@ -25,11 +25,13 @@ class api_v1(commons.BaseClass):
         cec: cec.CecManager,
         browser_manager: browser.BrowserManager,
         peer_manager: peers.PeerManager,
+        calender_manager: calander.CalenderManager
     ) -> None:
         self.cec = cec
         self.database = database
         self.browser = browser_manager
         self.peer_manager = peer_manager
+        self.calendar_manager = calender_manager
         self.bp = Blueprint("api", __name__)
         self.register_routes()
 
@@ -291,11 +293,13 @@ class api_v1(commons.BaseClass):
             
         @self.bp.route("/get/calender_data/<id>")
         def get_cal_data(id):
-            pass
+            return make_response(json.dumps({"data": self.calendar_manager.get_calender_by_id(id).get_dict()}), 200)
         
-        @self.bp.route("/get/calender_events/<id>/<day>")
-        def get_cal_events(id, day):
-            pass
+        @self.bp.route("/get/calender_events/<id>/<day>/<month>/<year>")
+        def get_cal_events(id, day: int, month: int, year: int):
+            cal = self.calendar_manager.get_calender_by_id(id)
+            events = cal.events_on(day, month, year)
+            
 
     def get_blueprint(self):
         return self.bp
