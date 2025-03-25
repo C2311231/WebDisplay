@@ -285,21 +285,26 @@ class api_v1(commons.BaseClass):
             
         @self.bp.route("/update/nextVersion/")
         def get_next_version():
-            return make_response(json.dumps({"version": "testVersion"}), 200)
+            return make_response(json.dumps({"version": updater.fetch_next_version_from_github()}), 200)
             
         @self.bp.route("/restart/")
         def restart():
             call("sudo reboot", shell=True)
             
-        @self.bp.route("/get/calender_data/<id>")
-        def get_cal_data(id):
-            return make_response(json.dumps({"data": self.calendar_manager.get_calender_by_id(id).get_dict()}), 200)
+        @self.bp.route("/get/calender_data/<name>")
+        def get_cal_data(name):
+            return make_response(json.dumps(self.calendar_manager.get_calender(name).get_dict()), 200)
         
-        @self.bp.route("/get/calender_events/<id>/<day>/<month>/<year>")
-        def get_cal_events(id, day: int, month: int, year: int):
-            cal = self.calendar_manager.get_calender_by_id(id)
-            events = cal.events_on(day, month, year)
-            
+        @self.bp.route("/get/calender_events/<name>/<day>/<month>/<year>")
+        def get_cal_events(name, day: int, month: int, year: int):
+            print(f"{day}/{month}/{year}")
+            cal = self.calendar_manager.get_calender(name)
+            events = cal.events_on(int(day), int(month), int(year))
+            event_array = []
+            print(events)
+            for event in events:
+                event_array.append({"name": event.name, "id": event.uid, "description": event.description, "color": "grey", "start_time": round(event.begin.float_timestamp * 1000), "end_time": round(event.end.float_timestamp * 1000)})
+            return make_response(json.dumps({"events": event_array}), 200)
 
     def get_blueprint(self):
         return self.bp

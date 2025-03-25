@@ -1,5 +1,5 @@
 from flask import render_template, redirect, Flask
-from base import networking, database, browser, api, peers, cec, scheduler
+from base import networking, database, browser, api, peers, cec, scheduler, calander
 import sys
 import socket
 
@@ -9,13 +9,17 @@ db = database.Database(app=app, filepath=sys.argv[1])
 network_manager = networking.NetworkingManager(db)
 cec_manager = cec.CecManager()
 peer_manager = peers.PeerManager(network_manager, db=db)
-# initialize the app with the extension
+calander_manager = calander.CalenderManager(db)
 scheduler = scheduler.Scheduler(db, browser_manager, cec_manager)
 peer_manager.start_discovery()
 ip = network_manager.get_local_ip()
 db.write_config("ip", ip)
 db.write_config("url", f"http://{ip}:{sys.argv[2]}")
 db.write_config("port", sys.argv[2])
+
+# Testing Calander
+calander_manager.add_calender("Test", "https://calendar.google.com/calendar/ical/c_5698af4cee1cc5fb5e42fba501a9a328425d63309ed4d781d6044ab5e8696a94%40group.calendar.google.com/public/basic.ics")
+
 
 @app.route("/")
 def home():
@@ -62,7 +66,7 @@ def add_header(r):
 
 if __name__ == "__main__":
     scheduler.start()
-    api_blueprint = api.api_v1(db, cec_manager, browser_manager, peer_manager).get_blueprint()
+    api_blueprint = api.api_v1(db, cec_manager, browser_manager, peer_manager, calander_manager).get_blueprint()
     app.register_blueprint(api_blueprint, url_prefix="/api")
     app.run(host="0.0.0.0", port=sys.argv[2], debug=True)
     scheduler.stop()

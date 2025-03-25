@@ -128,7 +128,7 @@ class day {
 
     write(container) {
         let html;
-        if (this.current){
+        if (this.current) {
             html = `<div class="day">
             <div class="day-header current">
                 <h3>${this.name}</h3>
@@ -174,17 +174,44 @@ class cal_event {
     }
 }
 let cal;
-
-let calender_id = window.location.pathname.split("/")[window.location.pathname.split("/").length-1]
-
-fetch(`/api/get/calender_data/${calender_id}`).then((response) => response.json()).then((json) => {
+const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+let calender_id = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]
+let calender_name = "Test"
+fetch(`/api/get/calender_data/${calender_name}`).then((response) => response.json()).then((json) => {
     cal = new calender(json.name, CALENDER);
-    for(let i=0; i<json.days.length; i++){
+    for (let i = 1; i <= json.date_range_before; i++) {
+        console.log("Days Before")
         let index = cal.days.length
-        cal.add_day(new day(json.days[i].name, json.days[i].date, json.days[i].current))
+        let date = (new Date(Date.now() - 86400000 * i))
+        cal.add_day(new day(weekday[date.getDay()], date.toDateString(), false))
 
-        fetch(`/api/get/calender_events/${calender_id}/${json.days[i].id}`).then((response) => response.json()).then((json) => {
-            for(let j=0; j<json.events.length; j++){
+        fetch(`/api/get/calender_events/${calender_name}/${date.getDate()}/${date.getMonth()+1}/${date.getYear()}`).then((response) => response.json()).then((json) => {
+            for (let j = 0; j < json.events.length; j++) {
+                cal.days[index].add_event(new cal_event(json.events[j].name, new Date(json.events[j].start_time), new Date(json.events[j].end_time), json.events[j].color))
+            }
+        })
+    }
+
+    let index = cal.days.length
+    let date = new Date(Date.now())
+    cal.add_day(new day(weekday[date.getDay()], date.toDateString(), true))
+
+    fetch(`/api/get/calender_events/${calender_name}/${date.getDate()}/${date.getMonth()+1}/${date.getYear()}`).then((response) => response.json()).then((json) => {
+        console.log("Days Current")
+        for (let j = 0; j < json.events.length; j++) {
+            cal.days[index].add_event(new cal_event(json.events[j].name, new Date(json.events[j].start_time), new Date(json.events[j].end_time), json.events[j].color))
+        }
+    })
+
+    for (let i = 1; i <= json.date_range_after; i++) {
+        
+        let index = cal.days.length
+        let date = (new Date(Date.now() + 86400000 * i))
+        cal.add_day(new day(weekday[date.getDay()], date.toDateString(), false))
+
+        fetch(`/api/get/calender_events/${calender_name}/${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`).then((response) => response.json()).then((json) => {
+            console.log(`Days After: ${date.getDate()}: Events: ${JSON.stringify(json.events)}`)
+            for (let j = 0; j < json.events.length; j++) {
                 cal.days[index].add_event(new cal_event(json.events[j].name, new Date(json.events[j].start_time), new Date(json.events[j].end_time), json.events[j].color))
             }
         })

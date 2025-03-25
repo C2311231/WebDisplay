@@ -51,7 +51,7 @@ h1 {
     justify-self: start;
     position: absolute;
     left: 1vw;
-    height: 1px;
+    height: 2px;
     background-color: darkgrey;
     width: 98vw;
     z-index: 1;

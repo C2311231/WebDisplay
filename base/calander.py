@@ -22,7 +22,10 @@ class Calender:
         return self.ics.timeline
 
     def events_on(self, day: int, month: int, year: int) -> list[Event]:
-        return list(self.get_timeline().on(arrow.Arrow(year, month, day)))
+        events = []
+        for event in self.get_timeline().on(arrow.Arrow(year, month, day), strict=True):
+            events.append(event)
+        return events
 
     def set_date_range(self, before, after):
         self.date_range_before = before
@@ -37,7 +40,7 @@ class Calender:
             self.ics = ics_cal(data.text)
             
     def get_dict(self) -> dict:
-        return {"id": self.id, "name": self.name, "date_range_before": self.date_range_before, "date_range_after": self.date_range_after}
+        return {"id": str(self.id), "name": self.name, "date_range_before": self.date_range_before, "date_range_after": self.date_range_after}
         
         
 class MergedCalender(Calender):
