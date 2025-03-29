@@ -88,6 +88,6 @@ Other devices should automatically be detected and added to the side menu.
 - Add multi display support
 - Add user defined templates
 - Add automated tests
-- Add ICS calender support
+- Add ICS calender support (On hold)
 - Add networking config
 - Create Install Script

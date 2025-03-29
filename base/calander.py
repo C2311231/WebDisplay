@@ -6,6 +6,8 @@ import arrow
 import uuid
 from ics.timeline import Timeline
 
+# Must be reworked to support recurring events
+
 class Calender:
     def __init__(self, name, url):
         self.id = uuid.uuid4()
