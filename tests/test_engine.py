@@ -1,24 +1,26 @@
 class TestResult:
-    def __init__(self, test_name: str, result: bool, failures):
+    def __init__(self, test_name: str, result: bool, failures = None):
         self.test_name = test_name
         self.result = result
         self.failures = failures
 
 class Test:
-    def __init__(self, name: str, function, test=None):
+    def __init__(self, name: str, test=None):
         self.name = name
-        self.function = function
         self.test = test
         self.completion = 0 
         
     def run(self) -> TestResult:
-        return self.test(self.name, self.function, self.completion, self.print_status)
+        return self.test(self.name, self.set_completion, self.print_status)
+    
+    def set_completion(self, n):
+        self.completion = n
     
     def print_status(self):
         if self.completion == 100:
-            print(f"{self.name} -> |{self.completion * "="}{(100-self.completion) * "-"}| {self.completion}%")
+            print(f"{self.name} -> |{self.completion * '='}{(100-self.completion) * '-'}| {self.completion}%")
         else:
-            print(f"{self.name} -> |{self.completion * "="}{(100-self.completion) * "-"}| {self.completion}%", end="/r")
+            print(f"{self.name} -> |{self.completion * '='}{(100-self.completion) * '-'}| {self.completion}%\r", end=r"", flush=True)
 
     
 class Tester:

@@ -1,4 +1,4 @@
-import tests, test_engine
+import tests.tests as tests, tests.test_engine as test_engine
 
 engine = test_engine.Tester()
 

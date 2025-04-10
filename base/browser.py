@@ -45,8 +45,7 @@ class BrowserManager(commons.BaseClass):
                 self.driver.save_screenshot("./static/images/latestScreenShot.png")
 
             except:
-                self.init_driver()
-                self.get_screenshot()
+                print("Failed to get Screenshot")
 
     def close(self) -> None:
         if self.driver:
@@ -58,3 +57,6 @@ class BrowserManager(commons.BaseClass):
 
     def set_event(self, eventID: int) -> None:
         self.event = eventID
+
+    def __del__(self):
+        self.driver.quit()
