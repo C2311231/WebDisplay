@@ -59,4 +59,4 @@ class BrowserManager(commons.BaseClass):
         self.event = eventID
 
     def __del__(self):
-        self.driver.quit()
+        self.close()

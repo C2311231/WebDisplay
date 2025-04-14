@@ -7,5 +7,5 @@ WantedBy=default.target
 [Service]
 User=pi
 Restart=always
-ExecStart=/WebDisplay/.venv/bin/python3 /WebDisplay/main.py db.db 5000
+ExecStart=/WebDisplay/.venv/bin/python3 -u /WebDisplay/main.py db.db 5000
 WorkingDirectory=/WebDisplay/
