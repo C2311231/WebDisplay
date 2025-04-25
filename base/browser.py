@@ -27,6 +27,7 @@ class BrowserManager(commons.BaseClass):
             chrome_options.add_experimental_option("useAutomationExtension", False)
             self.driver = webdriver.Chrome(options=chrome_options)
         self.event = 0
+        self.driver.command_executor.set_timeout(1000)
 
     def open_url(self, url: commons.url) -> None:
         if self.driver:
