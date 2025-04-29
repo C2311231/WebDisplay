@@ -85,9 +85,19 @@ The web interface is available at: http://{device ip}:{port}
 Other devices should automatically be detected and added to the side menu.
 
 ## To Do
-- Add multi display support
+- Add multi display (per device) support
 - Add user defined templates
 - Add automated tests
-- Add ICS calender support (On hold)
+- Centralized management
+    - Global On/Off
+    - Group Managment
 - Add networking config
 - Create Install Script
+- Improved event scheduling
+    - Event Priorities
+    - Device Groups (Device can be a member of multiple groups)
+    - algorithmic Scheduling
+    - Day Specific overrides (For holidays or other events)
+    - Percentage Based Event Deployment with dynamic reallocation (20% show one event 80% another...)
+- Improved UI
+- Improved External API

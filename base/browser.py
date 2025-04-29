@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from base import commons
-
+from selenium.common.exceptions import TimeoutException
 
 class BrowserManager(commons.BaseClass):
     def __init__(self):
@@ -11,28 +11,36 @@ class BrowserManager(commons.BaseClass):
         self.driver = None
 
     def init_driver(self) -> None:
-
+        chrome_options = Options()
+        chrome_options.add_argument("--kiosk")  # Uncomment if needed
+        chrome_options.add_argument("--display=:0")
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-extensions')
+        chrome_options.add_argument('--disable-infobars')
+        chrome_options.add_argument('--enable-logging')
+        chrome_options.add_argument('--v=1')
+        chrome_options.add_argument('--disable-dev-shm-usage')  # helpful on small RAM devices
+        chrome_options.add_experimental_option('extensionLoadTimeout', 60000)
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        chrome_options.add_experimental_option("useAutomationExtension", False)
         try:
-            chrome_options = Options()
-            chrome_options.add_argument("--kiosk")  # Uncomment if needed
-            chrome_options.add_argument("--display=:0")
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            chrome_options.add_experimental_option("useAutomationExtension", False)
-            service = Service(executable_path=r'/usr/bin/chromedriver')
+            service = Service(executable_path=r'/usr/bin/chromedriver', log_output='/tmp/chromedriver.log')
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
         except:
-            chrome_options = Options()
-            chrome_options.add_argument("--kiosk")  # Uncomment if needed
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            chrome_options.add_experimental_option("useAutomationExtension", False)
             self.driver = webdriver.Chrome(options=chrome_options)
-        self.event = 0
-        self.driver.command_executor.set_timeout(1000)
+        if self.event != -1:
+            self.event = 0
+        self.driver.command_executor.set_timeout(10000)
+        self.driver.set_page_load_timeout(60)
+
 
     def open_url(self, url: commons.url) -> None:
         if self.driver:
             try:
                 self.driver.get(url)
+            except TimeoutException:
+                print(f"Timeout loading {url}")
+    
             except:
                 self.init_driver()
                 self.driver.get(url)
@@ -46,7 +54,8 @@ class BrowserManager(commons.BaseClass):
                 self.driver.save_screenshot("./static/images/latestScreenShot.png")
 
             except:
-                print("Failed to get Screenshot")
+                self.init_driver()
+                self.get_screenshot()
 
     def close(self) -> None:
         if self.driver:
@@ -58,6 +67,3 @@ class BrowserManager(commons.BaseClass):
 
     def set_event(self, eventID: int) -> None:
         self.event = eventID
-
-    def __del__(self):
-        self.close()
