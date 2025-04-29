@@ -1,5 +1,9 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: black;
+    background-color: #131314;
     color: white;
     height: 100vh;
     margin: 0;
@@ -9,41 +13,101 @@ h1 {
     padding: 10px;
 }
 
-#cal_head {
-    height: 8vh;
-}
-
 #calenderBody {
     display: flex;
-    margin: 0 5vw;
-    height: 92vh;
+    margin: 0 1vw;
+    height: 90%;
 }
-.cal_day {
+
+.time-slots {
+    margin-top: 7vh;
+}
+
+.time-slots ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.time-slots li {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1f1f20;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.time-slots  li::after{
+    content: "";
+    align-self:baseline;
+    justify-self: start;
+    position: absolute;
+    left: 1vw;
+    height: 2px;
+    background-color: darkgrey;
+    width: 98vw;
+    z-index: 1;
+}
+
+.days {
+    display: flex;
+    height: 100%;
     width: 100%;
-    border-right: thin solid white;
-    padding: 1rem;
-}
-#calenderBody div.cal_day:first-of-type {
-    border-left: thin solid white;
 }
 
-.cal_event * {
-    display: inline-block;
+.day {
+    width: 100%;
+    border-right: thin solid slategray;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    flex-direction: column;
 }
-.cal_event {
-    border: thin lightgrey solid;
+.days div.day:first-of-type {
+    border-left: thin solid slategray;
+}
+.day-header {
+    text-align: center;
+    height: 7vh;
+    margin-bottom: 1px;
+}
+
+.day-header p, .day-header h3 {
+    margin-top: 0rem;
+}
+
+.events {
+    display: grid;
+    flex-grow: 1;
+    grid-template-rows: repeat(64, 1fr);
+}
+
+.event {
+    font-size:xx-small;
+    background: gray;
     border-radius: 3px;
-    font-size: small;
-    padding: 2px;
-    margin-bottom: 3px;
+    padding-left: 5px;
+    border: 0.01px black solid;
 }
 
-.cal_event_time {
-    float:right;
+.multi-event {
+    display: grid;
+    flex-grow: 1;
 }
 
-.cal_day_title {
-    border-bottom: thin white solid;
-    margin-bottom: 8px;
-    padding: 3px;
+.multi-event .event{
+    width: 100%;
+}
+
+.current p {
+    background-color: lightblue;
+    border-radius: 5px;
 }

@@ -70,7 +70,7 @@ jobs:
         echo DEPLOY_COMPRESSION=none               >> config
         echo ENABLE_SSH=1                          >> config
         echo TARGET_HOSTNAME=WebDisplay              >> config
-        echo TIMEZONE_DEFAULT=Etc/UTC              >> config
+        echo TIMEZONE_DEFAULT=America/Chicago              >> config
         echo FIRST_USER_NAME=pi                    >> config
         echo FIRST_USER_PASS=pi              >> config
         echo LOCALE_DEFAULT=en_US.UTF-8            >> config

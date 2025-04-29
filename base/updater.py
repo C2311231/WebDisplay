@@ -20,6 +20,14 @@ def fetch_release_notes_from_github():
     else:
         return f"Failed to fetch release_notes.txt (status code {response.status_code})"
 
+def fetch_next_version_from_github():
+    url = "https://raw.githubusercontent.com/C2311231/WebDisplay/main/version.txt"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return f"Failed to fetch version.txt (status code {response.status_code})"
+
 
 def run_command(cmd, cwd=None):
     result = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True)

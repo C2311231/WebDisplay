@@ -16,36 +16,43 @@ class Scheduler(commons.BaseClass):
 
     def running(self) -> None:
         while self.run:
-            t = (
-                float(datetime.now().strftime("%H"))
-                + float(datetime.now().strftime("%M")) / 60
-            )
+            try:
+                t = (
+                    float(datetime.now().strftime("%H"))
+                    + float(datetime.now().strftime("%M")) / 60
+                )
 
-            wk_day = datetime.now().strftime("%A")
-            events = self.db.get_events()
-            current_event = False
-            for event in events:
-                if event["wk_day"] == wk_day:
-                    if (float(event["start_time"]) <= t) and (
-                        float(event["end_time"]) > t
-                    ):
-                        current_event = True
-                        reload_time = 60*float(self.db.config()["reload_time"])
-                        if time.time() - self.last_reload_time >= reload_time and reload_time != 0:
-                            self.last_reload_time = time.time()
-                            self.start_event(event)
-                                                        
-                        if self.browser_manager.get_event() != event["id"]:
-                            self.last_reload_time = time.time()
-                            self.start_event(event)
-            if not current_event:
-                self.last_reload_time = 9999999999999999999999999999999999999999999999999999999999999999
-                if self.browser_manager.driver != None:
-                    self.browser_manager.close()
-                    
-                if not self.turned_screen_off:
-                    self.cec.tv_off()
-                    self.turned_screen_off = True
+                wk_day = datetime.now().strftime("%A")
+                events = self.db.get_events()
+                current_event = False
+                # print(f"Event ID: {self.browser_manager.get_event()}")
+                for event in events:
+                    if event["wk_day"] == wk_day:
+                        if (float(event["start_time"]) <= t) and (
+                            float(event["end_time"]) > t
+                        ):
+                            current_event = True
+                            reload_time = 60*float(self.db.config()["reload_time"])
+                            if time.time() - self.last_reload_time >= reload_time and reload_time != 0:
+                                self.last_reload_time = time.time()
+                                self.start_event(event)
+                                                            
+                            if (self.browser_manager.get_event() != event["id"]) and self.browser_manager.get_event() >= 0:
+                                print(f"Event id is: {self.browser_manager.get_event()}, Should be: {event['id']}")
+                                self.last_reload_time = time.time()
+                                self.start_event(event)
+                        continue
+                if not current_event:
+                    self.browser_manager.set_event(0)
+                    self.last_reload_time = 9999999999999999999999999999999999999999999999999999999999999999
+                    if self.browser_manager.driver != None:
+                        self.browser_manager.close()
+                        
+                    if not self.turned_screen_off:
+                        self.cec.tv_off()
+                        self.turned_screen_off = True
+            except Exception as e:
+                print(e)
             time.sleep(2)
 
     def start(self) -> None:

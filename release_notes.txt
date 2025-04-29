@@ -1,9 +1,9 @@
-## Version 0.0.0
+## Version 0.0.2
 
 Features Added:
 - Initial release
 
 Bugs Fixed:
-
+ - Fixed bug that would cause events to error
 Notes:
 This program still contains numerous bugs, unexpected behavior may occur.
