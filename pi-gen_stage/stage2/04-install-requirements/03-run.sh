@@ -35,5 +35,8 @@ on_chroot << EOF
 EOF
 
 on_chroot << EOF
+        sudo ln -s /etc/sv/lightdm /var/service
+        sudo systemctl enable lightdm
         sed -i '/SystemMaxUse/c\SystemMaxUse=10M' /etc/systemd/journald.conf
+        sudo systemctl set-default graphical.target
 EOF
