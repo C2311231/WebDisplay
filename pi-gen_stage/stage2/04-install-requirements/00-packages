@@ -10,3 +10,4 @@ python3-pip
 libcec-dev
 openbox
 unclutter
+lightdm

@@ -10,20 +10,16 @@ on_chroot << EOF
 EOF
 
 cp files/WebDisplay.service "${ROOTFS_DIR}/etc/systemd/system"
-cp files/startx@.service "${ROOTFS_DIR}/etc/systemd/system"
 cp files/Xwrapper.config "${ROOTFS_DIR}/etc/X11/Xwrapper.config"
-cp files/.xinitrc "${ROOTFS_DIR}/home/pi/.xinitrc"
+cp files/.xprofile "${ROOTFS_DIR}/home/pi/.xprofile"
 cp files/firstboot.sh "${ROOTFS_DIR}/usr/local/sbin/firstboot.sh"
+cp files/lightdm.conf "${ROOTFS_DIR}/etc/lightdm/lightdm.conf"
 cp files/firstboot.service "${ROOTFS_DIR}/etc/systemd/system"
 on_chroot << EOF
         chown root:root /etc/systemd/system/WebDisplay.service
         chmod 644 /etc/systemd/system/WebDisplay.service
-        chmod 777 /home/pi/.xinitrc
+        chmod 777 /home/pi/.xprofile
         systemctl enable WebDisplay
-
-        chown root:root /etc/systemd/system/startx@.service
-        chmod 644 /etc/systemd/system/startx@.service
-        systemctl enable startx@pi
 
         chown root:root /etc/systemd/system/firstboot.service
         chmod 644 /etc/systemd/system/firstboot.service
