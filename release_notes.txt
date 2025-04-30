@@ -1,9 +1,8 @@
-## Version 0.0.2
+## Version 0.0.3
 
 Features Added:
-- Initial release
-
+ - RPI 5 Support
 Bugs Fixed:
- - Fixed bug that would cause events to error
+ - Fixed RPI Image Bugs
 Notes:
 This program still contains numerous bugs, unexpected behavior may occur.
