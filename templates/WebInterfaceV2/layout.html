@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{url_for('static', filename='WebInterfaceV2/layout.css')}}">
+    </head>
+    <body>
+        <div id="title_bar">
+            {% block title_bar %}{% endblock title_bar %}
+        </div>
+        <div id="main_page">
+            <div id="side_bar">
+                {% block sidebar %}{% endblock sidebar %}
+            </div>
+            <div id="main_content">
+                {% block content %}{% endblock content %}
+            </div>
+        <div>
+        <script src="{{url_for('static', filename='WebInterfaceV2/layout.js')}}" async defer></script>
+    </body>
+</html>

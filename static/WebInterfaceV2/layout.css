@@ -1,0 +1,47 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+*{
+    box-sizing: border-box;
+ }
+
+#title_bar {
+    width: 100vw;
+    min-height: 3vh;
+    height: 3rem;
+    max-height: 10vh;
+    background-color: rgb(124, 124, 159);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#title_bar * {
+    font-size: 1.25rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.device_title {
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+
+#side_bar {
+    min-width: 5vw;
+    max-width: 25vw;
+    width: 12rem;
+    background-color: rgb(101, 101, 120);
+    height: 100%;
+}
+
+#main_page {
+    height: 100%;
+}
