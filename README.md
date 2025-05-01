@@ -101,3 +101,8 @@ Other devices should automatically be detected and added to the side menu.
     - Percentage Based Event Deployment with dynamic reallocation (20% show one event 80% another...)
 - Improved UI
 - Improved External API
+- Video Events
+    - Transcode to optimal res/codec (h265 up to 4k rpi 5, h264 1080 for rest)
+    - Synchronous video events (Multiple devices in near frame perfect sync)
+    - Audio sync
+    - Video streams (RTMP, WebRTC)
