@@ -88,18 +88,18 @@ Other devices should automatically be detected and added to the side menu.
 - Add multi display (per device) support
 - Add user defined templates
 - Add automated tests
-- Centralized management
-    - Global On/Off
-    - Group Managment
-- Add networking config
-- Create Install Script
-- Improved event scheduling
-    - Event Priorities
-    - Device Groups (Device can be a member of multiple groups)
-    - algorithmic Scheduling
-    - Day Specific overrides (For holidays or other events)
-    - Percentage Based Event Deployment with dynamic reallocation (20% show one event 80% another...)
 - Improved UI
+    - Centralized management
+        - Global On/Off
+        - Group Managment
+    - Add networking config
+    - Improved event scheduling
+        - Event Priorities
+        - Device Groups (Device can be a member of multiple groups)
+        - algorithmic Scheduling
+        - Day Specific overrides (For holidays or other events)
+        - Percentage Based Event Deployment with dynamic reallocation (20% show one event 80% another...)
+- Create Install Script
 - Improved External API
 - Video Events
     - Transcode to optimal res/codec (h265 up to 4k rpi 5, h264 1080 for rest)
