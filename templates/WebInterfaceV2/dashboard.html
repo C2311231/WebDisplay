@@ -1,23 +1,27 @@
 {% extends "/WebInterfaceV2/layout.html" %}
 
+{% block page_title %}
+Web Display - Dashboard
+{% endblock page_title %}
+
+
 {% block title_bar %}
 <h1 class="program_title">Web Display</h1>
-    <h1 class="device_title">Test Screen</h1>
-    <div class="title_bar_options">
-        Options...
-    </div>
-
+<h1 class="device_title">Test Screen</h1>
+<div class="title_bar_options">
+    Options...
+</div>
 {% endblock title_bar %}
 
 {% block sidebar %}
-    <h2>Global</h2>
-    <a href="">Dashboard</a>
-    <a href="">Devices</a>
-    <a href="">Events</a>
-    <a href="">Groups</a>
-    <a href="">Monitoring</a>
-    <a href="">Global Settings</a>
-    <h2>Device</h2>
-    <a href="">Device Settings</a>
-    <a href="">Logs</a>
+<h2>Global</h2>
+<a href="/" class="selected">Dashboard</a>
+<a href="/devices">Devices</a>
+<a href="">Events</a>
+<a href="">Groups</a>
+<a href="">Monitoring</a>
+<a href="">Global Settings</a>
+<h2>Device</h2>
+<a href="">Device Settings</a>
+<a href="">Logs</a>
 {% endblock sidebar %}
