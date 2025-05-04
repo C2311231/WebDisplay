@@ -1,7 +1,7 @@
 {% extends "/WebInterfaceV2/layout.html" %}
 
 {% block page_title %}
-Web Display - Dashboard
+Web Display - Logs
 {% endblock page_title %}
 
 
@@ -15,7 +15,7 @@ Web Display - Dashboard
 
 {% block sidebar %}
 <h2>Global</h2>
-<a href="/" class="selected">Dashboard</a>
+<a href="/">Dashboard</a>
 <a href="/devices">Devices</a>
 <a href="/events">Events</a>
 <a href="/groups">Groups</a>
@@ -24,17 +24,11 @@ Web Display - Dashboard
 <h2>Device</h2>
 <a href="/device_settings">Device Settings</a>
 <a href="/device_monitoring">Monitoring</a>
-<a href="/logs">Logs</a>
+<a href="/logs" class="selected">Logs</a>
 {% endblock sidebar %}
 
 {% block content %}
-    <div class="widget_container">
-        <div style="width: 20vw;"></div>
-        <div style="width: 30vw;"></div>
-        <div style="width: 10vw;"></div>
-        <div style="width: 37vw;"></div>
-        <div style="width: 12vw;"></div>
-        <div style="width: 23vw;"></div>
+    <div class="log_container">
     </div>
 
 {% endblock content %}

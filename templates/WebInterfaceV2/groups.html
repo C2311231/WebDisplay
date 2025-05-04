@@ -1,7 +1,7 @@
 {% extends "/WebInterfaceV2/layout.html" %}
 
 {% block page_title %}
-Web Display - Devices
+Web Display - Groups
 {% endblock page_title %}
 
 
@@ -16,9 +16,9 @@ Web Display - Devices
 {% block sidebar %}
 <h2>Global</h2>
 <a href="/">Dashboard</a>
-<a href="/devices" class="selected">Devices</a>
+<a href="/devices">Devices</a>
 <a href="/events">Events</a>
-<a href="/groups">Groups</a>
+<a href="/groups" class="selected">Groups</a>
 <a href="/global_monitoring">Monitoring</a>
 <a href="/global_settings">Global Settings</a>
 <h2>Device</h2>
@@ -56,10 +56,10 @@ Web Display - Devices
             Name
         </div>
         <div class="heading">
-            Status
+            Devices
         </div>
         <div class="heading">
-            IP
+            Status
         </div>
         <div class="heading">
             Options
@@ -71,36 +71,18 @@ Web Display - Devices
                 <input type="checkbox">
             </div>
             <div class="table-cell">
-                Test Screen
+                Test Event
             </div>
             <div class="table-cell">
-                Connected
+                Test Device
             </div>
             <div class="table-cell">
-                192.192.192.192
-            </div>
-            <div class="table-cell">
-                1, 2, 3, 4
-            </div>
-        </div>
-        <div class="table-item">
-            <div class="table-cell">
-                <input type="checkbox">
-            </div>
-            <div class="table-cell">
-                Test Screen
-            </div>
-            <div class="table-cell">
-                Connected
-            </div>
-            <div class="table-cell">
-                192.192.192.192
+                Enabled
             </div>
             <div class="table-cell">
                 1, 2, 3, 4
             </div>
         </div>
-
     </div>
 </div>
 
