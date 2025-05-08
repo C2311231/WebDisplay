@@ -65,44 +65,10 @@ Web Display - Devices
             Options
         </div>
     </div>
-    <div class="table">
-        <div class="table-item">
-            <div class="table-cell">
-                <input type="checkbox">
-            </div>
-            <div class="table-cell">
-                Test Screen
-            </div>
-            <div class="table-cell">
-                Connected
-            </div>
-            <div class="table-cell">
-                192.192.192.192
-            </div>
-            <div class="table-cell">
-                1, 2, 3, 4
-            </div>
-        </div>
-        <div class="table-item">
-            <div class="table-cell">
-                <input type="checkbox">
-            </div>
-            <div class="table-cell">
-                Test Screen
-            </div>
-            <div class="table-cell">
-                Connected
-            </div>
-            <div class="table-cell">
-                192.192.192.192
-            </div>
-            <div class="table-cell">
-                1, 2, 3, 4
-            </div>
-        </div>
+    <div class="table" id="deviceTable">
 
     </div>
 </div>
 
-
+<script src="{{url_for('static', filename='/WebInterfaceV2/js/devices.js')}}"
 {% endblock content %}

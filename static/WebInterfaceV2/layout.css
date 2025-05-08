@@ -212,3 +212,22 @@ div.settings-container div.settings-group div.settings input {
     grid-column: 2;
     margin: 1rem;
 }
+
+#container1 *{
+    box-sizing: content-box;
+    margin: auto;
+    padding: auto;
+}
+
+div.table-cell.enabled {
+    color: rgba(0, 255, 0, 0.5);
+}
+
+div.table-cell.disabled {
+    color: rgba(255, 0, 0, 0.5);
+}
+
+div.table-item.disabled {
+    background-color: rgba(0, 0, 0, 0.25);
+    color: darkgray
+}
