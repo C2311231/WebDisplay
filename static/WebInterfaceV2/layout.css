@@ -18,7 +18,6 @@ html {
     min-height: 3vh;
     height: 3rem;
     max-height: 10vh;
-    background-color: rgb(124, 124, 159);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -38,7 +37,6 @@ html {
     min-width: 5vw;
     max-width: 25vw;
     width: 12rem;
-    background-color: white;
     height: 100%;
     display: flex;
     align-items: center;
@@ -52,11 +50,9 @@ html {
     padding-top: 2rem;
     font-size: small;
     font-weight: normal;
-    color: rgba(0, 0, 0, 0.4);
 }
 
 #side_bar a {
-    color: slategray;
     text-decoration: none;
     font-size: large;
     padding: 0.25rem;
@@ -67,16 +63,6 @@ html {
     margin: 2px;
 }
 
-#side_bar a.selected {
-    background-color: rgba(0, 0, 0, 0.25);
-}
-
-
-#side_bar a:hover {
-    background-color: rgba(0, 0, 0, 0.25);
-}
-
-
 #main_page {
     height: 100%;
     width: 100vw;
@@ -86,14 +72,12 @@ html {
 #main_content {
     height: 100%;
     width: 100%;
-    background-color: lightgrey;
 }
 
 
 .selection_container {
     width: 90%;
     border-radius: 10px;
-    background-color: darkgrey;
     min-height: 7rem;
     margin: auto;
     margin-top: 2rem;
@@ -107,17 +91,13 @@ div.selection_container div.tool_bar {
     margin-bottom: 1rem;
     margin-top: 1rem;
     border-radius: 10px;
-    border: 1px solid lightgray;
 }
 
 div.selection_container div.headings {
     display: flex;
     padding: 0.4rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     justify-content: space-around;
-    background-color: rgb(211, 211, 211);
     border-radius: 10px 10px 0 0;
-    border: 1px solid rgb(221, 221, 221);
     border-bottom: 0;
 }
 
@@ -129,7 +109,6 @@ div.selection_container div.headings div.heading {
 
 div.selection_container div.table {
     border-radius: 0px 0px 10px 10px;
-    border: 1px solid rgb(221, 221, 221);
     display: flex;
     flex-direction: column;
     overflow:auto;
@@ -139,13 +118,8 @@ div.selection_container div.table {
 div.selection_container div.table div.table-item {
     display: flex;
     justify-content: space-around;
-    border-top: 1px solid rgb(221, 221, 221);
     min-height: 2rem;
     align-items: center;
-}
-
-div.selection_container div.table div.table-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 div.selection_container div.table div.table-item div.table-cell {
@@ -165,7 +139,6 @@ div.widget_container {
 }
 
 div.widget_container *{
-    border: 1px solid black;
     border-radius: 10px;
     height: 20vh;
 }
@@ -180,12 +153,9 @@ div.settings-container {
 
 div.settings-container h2 {
     font-size: medium;
-    color: rgba(0, 0, 0, 0.4);
-
 }
 
 div.settings-container div.settings-group {
-    background-color: white;
     border-radius: 10px;
     padding: 1rem;
     margin: 1rem;
@@ -193,10 +163,6 @@ div.settings-container div.settings-group {
 
 div.settings-container div.settings-group h3 {
     padding: 1rem;
-}
-
-div.settings-container div.settings-group hr {
-    color: rgba(0, 0, 0, 0.25);
 }
 
 div.settings-container div.settings-group div.settings {
@@ -217,17 +183,4 @@ div.settings-container div.settings-group div.settings input {
     box-sizing: content-box;
     margin: auto;
     padding: auto;
-}
-
-div.table-cell.enabled {
-    color: rgba(0, 255, 0, 0.5);
-}
-
-div.table-cell.disabled {
-    color: rgba(255, 0, 0, 0.5);
-}
-
-div.table-item.disabled {
-    background-color: rgba(0, 0, 0, 0.25);
-    color: darkgray
 }

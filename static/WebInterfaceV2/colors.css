@@ -1,0 +1,85 @@
+#title_bar {
+    background-color: rgb(124, 124, 159);
+}
+
+#side_bar {
+    background-color: white;
+}
+
+div.table-cell.disabled {
+    color: rgba(255, 0, 0, 0.5);
+}
+
+div.table-item.disabled {
+    background-color: rgba(0, 0, 0, 0.25);
+    color: darkgray
+}
+
+div.table-cell.enabled {
+    color: rgba(0, 255, 0, 0.5);
+}
+
+div.settings-container div.settings-group hr {
+    color: rgba(0, 0, 0, 0.25);
+}
+
+div.settings-container h2 {
+    color: rgba(0, 0, 0, 0.4);
+
+}
+
+div.settings-container div.settings-group {
+    background-color: white;
+}
+
+div.selection_container div.table div.table-item {
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+div.selection_container div.table div.table-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+div.selection_container div.headings {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: rgb(211, 211, 211);
+    border: 1px solid rgb(221, 221, 221);
+}
+
+#side_bar h2 {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+#side_bar a {
+    color: slategray;
+}
+
+#main_content {
+    background-color: lightgrey;
+}
+
+
+.selection_container {
+    background-color: darkgrey;
+}
+
+#side_bar a.selected {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+
+#side_bar a:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+div.selection_container div.table {
+    border: 1px solid rgb(221, 221, 221);
+}
+
+div.selection_container div.tool_bar {
+    border: 1px solid lightgray;
+}
+
+div.widget_container *{
+    border: 1px solid black;
+}
