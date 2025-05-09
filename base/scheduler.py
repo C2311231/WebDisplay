@@ -103,3 +103,11 @@ class Scheduler(commons.BaseClass):
                 + f"/present?start={data['autoStart']}&loop={data['restart']}&delayms={int(data['delay'])*1000}"
             )
             self.browser_manager.set_event(event["id"])
+
+    def required_config() -> dict:
+        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
+        data = {
+            "reload_time": 0,
+            "url": None,
+        }
+        return data

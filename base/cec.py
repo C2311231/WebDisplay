@@ -108,3 +108,11 @@ class CecManager(commons.BaseClass):
             except:
                 return "UNKNOWN"
         return "UNKNOWN"
+    
+    def required_config() -> dict:
+        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
+        data = {
+            "number_of_displays": 1,
+            "display_asociations": "{}"
+        }
+        return data

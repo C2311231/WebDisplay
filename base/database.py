@@ -3,21 +3,6 @@ import uuid, json
 from sqlalchemy.orm import Mapped, mapped_column
 from base import commons
 from flask import Flask
-
-
-required_config = {
-    "id": str(uuid.uuid4()),
-    "web_version": "1.0",
-    "api_version": "1.0",
-    "url": "http://localhost:5000",
-    "port": "5000",
-    "encryption": "False",
-    "name": "Screen One",
-    "state": "online",
-    "platform": "linux",
-    "ip": "localhost",
-    "reload_time": "0"
-}
 db = SQLAlchemy()
 
 
@@ -50,9 +35,9 @@ class Database(commons.BaseClass):
 
     def verify_config(self) -> None:
         config = self.config()
-        for key in required_config.keys():
+        for key in self.required_config().keys():
             if key not in config.keys():
-                value = required_config[key]
+                value = self.required_config()[key]
                 self.write_config(key, value)
 
     def write_event(
@@ -225,6 +210,23 @@ class Database(commons.BaseClass):
                 peer.disabled = disabled
                 
             db.session.commit()
+
+    def required_config() -> dict:
+        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
+        data = {
+                "id": str(uuid.uuid4()),
+                "web_version": "1.0",
+                "api_version": "1.0",
+                "url": "http://localhost:5000",
+                "port": "5000",
+                "encryption": "False",
+                "name": "Screen One",
+                "state": "online",
+                "platform": "linux",
+                "ip": "localhost",
+                "reload_time": "0"
+        }
+        return data
 
 
 class Config(db.Model):

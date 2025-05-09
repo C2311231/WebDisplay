@@ -93,7 +93,22 @@ class PeerManager(commons.BaseClass):
                 device.check_connection()
 
             time.sleep(5)
-
+            
+    def required_config() -> dict:
+        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
+        data = {
+            "web_version": None,
+            "api_version": None,
+            "web_url": None,
+            "web_port": None,
+            "web_encryption": None,
+            "device_name": None,
+            "device_state": None,
+            "device_platform": None,
+            "device_id": None,
+            "device_ip": None,
+        }
+        return data
 
 class Device:
     def __init__(

@@ -5,7 +5,7 @@ class BaseClass:
 
     def required_config() -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
-        pass
+        return {}
 
 
 class address:

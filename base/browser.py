@@ -67,3 +67,8 @@ class BrowserManager(commons.BaseClass):
 
     def set_event(self, eventID: int) -> None:
         self.event = eventID
+        
+    def required_config() -> dict:
+        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
+        data = {}
+        return data

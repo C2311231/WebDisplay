@@ -308,3 +308,19 @@ class api_v1(commons.BaseClass):
 
     def get_blueprint(self):
         return self.bp
+
+    def required_config() -> dict:
+        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
+        data = {
+            "web_version": None,
+            "api_version": None,
+            "web_url": None,
+            "web_port": None,
+            "web_encryption": None,
+            "device_name": None,
+            "device_state": None,
+            "device_platform": None,
+            "device_id": None,
+            "device_ip": None,
+        }
+        return data
