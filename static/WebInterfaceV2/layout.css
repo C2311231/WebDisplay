@@ -87,6 +87,8 @@ html {
 div.selection_container div.tool_bar {
     display: flex;
     padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     gap: 1rem;
     margin-bottom: 1rem;
     margin-top: 1rem;

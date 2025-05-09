@@ -27,22 +27,32 @@ class DiscoveryEngine(commons.BaseClass):
         )  # Set TTL to 2 for local network
 
         while True:
-            init_message = {
-                "web_version": self.database.config()["web_version"],
-                "api_version": self.database.config()["api_version"],
-                "web_url": self.database.config()["url"],
-                "web_port": self.database.config()["port"],
-                "web_encryption": self.database.config()["encryption"],
-                "device_name": self.database.config()["name"],
-                "device_state": self.database.config()["state"],
-                "device_platform": self.database.config()["platform"],
-                "device_id": self.database.config()["id"],
-                "device_ip": self.database.config()["ip"],
-            }
-            message = json.dumps(init_message, indent=4).encode()
-            sock.sendto(
-                message, (str(self.discovery_multicast_address), self.discovery_port)
-            )
+            try:
+                init_message = {
+                    "web_version": self.database.config()["web_version"],
+                    "api_version": self.database.config()["api_version"],
+                    "web_url": self.database.config()["url"],
+                    "web_port": self.database.config()["port"],
+                    "web_encryption": self.database.config()["encryption"],
+                    "device_name": self.database.config()["name"],
+                    "device_state": self.database.config()["state"],
+                    "device_platform": self.database.config()["platform"],
+                    "device_id": self.database.config()["id"],
+                    "device_ip": self.database.config()["ip"],
+                }
+                message = json.dumps(init_message, indent=4).encode()
+                sock.sendto(
+                    message, (str(self.discovery_multicast_address), self.discovery_port)
+                )
+            except Exception as e:
+                print(f"An error ocured when trying to send an auto discovery message: {e}")
+                try:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+                    sock.setsockopt(
+                        socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2
+                    )  # Set TTL to 2 for local network
+                except:
+                    print("Failed to reinitialize")
             time.sleep(5)  # Send every 5 seconds
 
     def listen_for_discovery(self, callback) -> None:
