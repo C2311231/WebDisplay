@@ -9,7 +9,7 @@ Web Display - Devices
 <h1 class="program_title">Web Display</h1>
 <h1 class="device_title">Test Screen</h1>
 <div class="title_bar_options">
-    Options...
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
 </div>
 {% endblock title_bar %}
 
@@ -70,5 +70,5 @@ Web Display - Devices
     </div>
 </div>
 
-<script src="{{url_for('static', filename='/WebInterfaceV2/js/devices.js')}}"
+<script src="{{url_for('static', filename='/WebInterfaceV2/js/devices.js')}}" defer></script>
 {% endblock content %}

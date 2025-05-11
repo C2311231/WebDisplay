@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{url_for('static', filename='WebInterfaceV2/layout.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='WebInterfaceV2/dark-colors.css')}}">
+        <link rel="stylesheet" id="color-sheet" href="{{url_for('static', filename='WebInterfaceV2/dark-colors.css')}}">
     </head>
     <body>
         <div id="title_bar">
@@ -21,6 +21,6 @@
                 {% block content %}{% endblock content %}
             </div>
         <div>
-        <script src="{{url_for('static', filename='WebInterfaceV2/layout.js')}}" async defer></script>
+        <script src="{{url_for('static', filename='WebInterfaceV2/js/layout.js')}}" async defer></script>
     </body>
 </html>
