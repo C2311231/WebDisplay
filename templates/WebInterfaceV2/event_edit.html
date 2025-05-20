@@ -1,0 +1,59 @@
+{% extends "/WebInterfaceV2/layout.html" %}
+
+{% block page_title %}
+Web Display - Global Settings
+{% endblock page_title %}
+
+
+{% block title_bar %}
+<h1 class="program_title">Web Display</h1>
+<h1 class="device_title">Test Screen</h1>
+<div class="title_bar_options">
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+</div>
+{% endblock title_bar %}
+
+{% block sidebar %}
+<h2>Global</h2>
+<a href="/">Dashboard</a>
+<a href="/devices">Devices</a>
+<a href="/events">Events</a>
+<a href="/groups">Groups</a>
+<a href="/global_monitoring">Monitoring</a>
+<a href="/global_settings">Global Settings</a>
+<h2>Device</h2>
+<a href="/device_settings">Device Settings</a>
+<a href="/device_monitoring">Monitoring</a>
+<a href="/logs">Logs</a>
+{% endblock sidebar %}
+
+{% block content %}
+    <div class="settings-container">
+        <h2>Event Settings</h2>
+        <div class="settings-group">
+            <h3>General Settings</h3>
+            <hr>
+            <div class="settings">
+                <p>Name:</p>
+                <input>
+                <p>Event Color:</p>
+                <input type="color">
+                <p>Enabled:</p>
+                <input type="checkbox">
+                <p>Priority:</p>
+                <input type="number" min="-100" max="100" value="100">
+                <p>Devices / Groups:</p>
+                <select>
+                    <option value="all">All</option>
+                    <option value="none">None</option>
+                    <option value="specific">Specific</option>
+                </select>
+                <p>Operating Date Start:</p>                                                                                                                                                                                                                                                                                                                                                                                               
+                <input type="date">
+                <p>Operating Date End:</p>
+                <input type="date">
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

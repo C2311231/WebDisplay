@@ -12,6 +12,10 @@ def devices():
 def events():
     return render_template("/WebInterfaceV2/events.html")
 
+@app.route("/event-edit")
+def event_edit():
+    return render_template("/WebInterfaceV2/event_edit.html")
+
 @app.route("/groups")
 def groups():
     return render_template("/WebInterfaceV2/groups.html")
