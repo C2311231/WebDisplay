@@ -3,12 +3,16 @@ class BaseClass:
         # Run any maintenance tasks and checks (about every 5 seconds)
         pass
 
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         return {}
+    
+    def api_endpoints(self) -> list[dict]:
+        # API endpoints in format [{endpoint_type: "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)
+        return []
 
 
-class address:
+class Address:
     def __init__(self, address: str):
         split_address = address.strip().split(".")
 
@@ -40,9 +44,18 @@ class address:
         )
 
 
-class url:
+class Url:
     def __init__(self, url: str):
         self.url = url
 
     def __str__(self) -> str:
         return self.url
+
+
+class Response:
+    def __init__(self, error, status: str, message: str, code: int, data: str):
+        self.status = status
+        self.error = error
+        self.message = message
+        self.data = data
+        self.code = code

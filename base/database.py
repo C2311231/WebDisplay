@@ -26,10 +26,10 @@ class Database(commons.BaseClass):
             config = self.config()
             if parameter in config.keys():
                     setting = Config.query.filter_by(parameter=parameter).first()
-                    setting.value = value
+                    setting.value = value # type: ignore
                     db.session.commit()
             else:
-                data = Config(parameter=parameter, value=value)
+                data = Config(parameter=parameter, value=value) # type: ignore
                 db.session.add(data)
                 db.session.commit()
 
@@ -48,18 +48,18 @@ class Database(commons.BaseClass):
         
         with self.app.app_context():
             data = Events(
-                name=name,
-                color=color,
-                wk_day=wk_day,
-                start_time=start_time,
-                end_time=end_time,
-                type=type,
-                data=json.dumps(data),
-                sync_id=sync_id,
+                name=name, # type: ignore
+                color=color, # type: ignore
+                wk_day=wk_day, # type: ignore
+                start_time=start_time, # type: ignore
+                end_time=end_time, # type: ignore
+                type=type, # type: ignore
+                data=json.dumps(data), # type: ignore
+                sync_id=sync_id, # type: ignore
             )
             db.session.add(data)
             db.session.commit()
-            id = data.id
+            id = data.id # type: ignore
             return id
 
     def edit_event(
@@ -68,24 +68,24 @@ class Database(commons.BaseClass):
         with self.app.app_context():
             if sync_id:
                 event = Events.query.filter_by(sync_id=sync_id).first()
-                event.name = name
-                event.color = color
-                event.wk_day = wk_day
-                event.start_time = start_time
-                event.end_time = end_time
-                event.type = type
-                event.data = json.dumps(data)
+                event.name = name # type: ignore
+                event.color = color # type: ignore
+                event.wk_day = wk_day # type: ignore
+                event.start_time = start_time # type: ignore
+                event.end_time = end_time # type: ignore
+                event.type = type # type: ignore
+                event.data = json.dumps(data) # type: ignore
                 db.session.commit()
                 return event
             else:
                 event = Events.query.filter_by(id=id).first()
-                event.name = name
-                event.color = color
-                event.wk_day = wk_day
-                event.start_time = start_time
-                event.end_time = end_time
-                event.type = type
-                event.data = json.dumps(data)
+                event.name = name # type: ignore
+                event.color = color # type: ignore
+                event.wk_day = wk_day # type: ignore
+                event.start_time = start_time # type: ignore
+                event.end_time = end_time # type: ignore
+                event.type = type # type: ignore
+                event.data = json.dumps(data) # type: ignore
                 db.session.commit()
                 return event
 
@@ -129,17 +129,17 @@ class Database(commons.BaseClass):
     ) -> int:
         with self.app.app_context():
             data = Peers(
-                web_version=web_version,
-                api_version=api_version,
-                web_url=web_url,
-                web_port=web_port,
-                web_encryption=web_encryption,
-                device_name=device_name,
-                device_state=device_state,
-                device_platform=device_platform,
-                device_id=device_id,
-                device_ip=device_ip,
-                disabled=disabled,
+                web_version=web_version, # type: ignore
+                api_version=api_version, # type: ignore
+                web_url=web_url, # type: ignore
+                web_port=web_port, # type: ignore
+                web_encryption=web_encryption, # type: ignore
+                device_name=device_name, # type: ignore
+                device_state=device_state, # type: ignore
+                device_platform=device_platform, # type: ignore
+                device_id=device_id, # type: ignore
+                device_ip=device_ip, # type: ignore
+                disabled=disabled, # type: ignore
             )
             db.session.add(data)
             db.session.commit()
@@ -149,7 +149,7 @@ class Database(commons.BaseClass):
     def get_peer(self, id: int) -> dict:
         with self.app.app_context():
             data = Peers.query.filter_by(id=id).first()
-            return data
+            return data # type: ignore
 
     def get_peers(self) -> list[dict]:
         with self.app.app_context():
@@ -161,57 +161,57 @@ class Database(commons.BaseClass):
     def edit_peer(
         self,
         id,
-        web_version: str = None,
-        api_version: str = None,
-        web_url: str = None,
-        web_port: int = None,
-        web_encryption: bool = None,
-        device_name: str = None,
-        device_state: str = None,
-        device_platform: str = None,
-        device_id: str = None,
-        device_ip: str = None,
-        disabled: bool = None,
+        web_version: str = None, # type: ignore
+        api_version: str = None, # type: ignore
+        web_url: str = None, # type: ignore
+        web_port: int = None, # type: ignore
+        web_encryption: bool = None, # type: ignore
+        device_name: str = None, # type: ignore
+        device_state: str = None, # type: ignore
+        device_platform: str = None, # type: ignore
+        device_id: str = None, # type: ignore
+        device_ip: str = None, # type: ignore
+        disabled: bool = None, # type: ignore
     ) -> None:
         with self.app.app_context():
             peer = Peers.query.filter_by(id=id).first()
             
             if web_version != None:
-                peer.web_version = web_version
+                peer.web_version = web_version # type: ignore
 
             if api_version != None:
-                peer.api_version = api_version
+                peer.api_version = api_version # type: ignore
 
             if web_url != None:
-                peer.web_url = web_url
+                peer.web_url = web_url # type: ignore
 
             if web_encryption != None:
-                peer.web_encryption = web_encryption
+                peer.web_encryption = web_encryption # type: ignore
 
             if device_name != None:
-                peer.device_name = device_name
+                peer.device_name = device_name # type: ignore
 
             if device_state != None:
-                peer.web_version = device_state
+                peer.web_version = device_state # type: ignore
 
             if device_ip != None:
-                peer.device_ip = device_ip
+                peer.device_ip = device_ip # type: ignore
 
             if device_platform != None:
-                peer.device_platform = device_platform
+                peer.device_platform = device_platform # type: ignore
 
             if device_id != None:
-                peer.device_id = device_id
+                peer.device_id = device_id # type: ignore
 
             if web_port != None:
-                peer.web_port = web_port
+                peer.web_port = web_port # type: ignore
 
             if disabled != None:
-                peer.disabled = disabled
+                peer.disabled = disabled # type: ignore
                 
             db.session.commit()
 
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
                 "id": str(uuid.uuid4()),

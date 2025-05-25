@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, request, make_response, jsonify
 import json
 import copy
 from datetime import datetime
-from base import commons, peers, browser, cec, database, updater, calander
+from base import commons, peers, browser, cec, database, updater
 import os, sys
 from subprocess import call
 
@@ -25,13 +25,11 @@ class api_v1(commons.BaseClass):
         cec: cec.CecManager,
         browser_manager: browser.BrowserManager,
         peer_manager: peers.PeerManager,
-        calender_manager: calander.CalenderManager
     ) -> None:
         self.cec = cec
         self.database = database
         self.browser = browser_manager
         self.peer_manager = peer_manager
-        self.calendar_manager = calender_manager
         self.bp = Blueprint("api", __name__)
         self.register_routes()
 
@@ -94,8 +92,8 @@ class api_v1(commons.BaseClass):
         def api_set_config():
             if request.is_json:
                 print(request.json)
-                self.database.write_config("name", str(request.json["name"]))
-                self.database.write_config("reload_time", str(request.json["reload_time"]))
+                self.database.write_config("name", str(request.json["name"])) # type: ignore
+                self.database.write_config("reload_time", str(request.json["reload_time"])) # type: ignore
                 data = {"message": "Success", "code": "Config Updated"}
                 return make_response(jsonify(data), 200)
             data = {"message": "Failed", "code": "Request must be json"}
@@ -103,7 +101,7 @@ class api_v1(commons.BaseClass):
 
         @self.bp.route("/add/peer/", methods=["POST"])
         def api_add_peer():
-            self.peer_manager.add_device(request.json["ip"], request.json["port"])
+            self.peer_manager.add_device(request.json["ip"], request.json["port"]) # type: ignore
             data = {"message": "Success", "code": "Peer Disabled"}
             return make_response(jsonify(data), 200)
 
@@ -132,52 +130,52 @@ class api_v1(commons.BaseClass):
 
             if request.is_json:
                 ## Data Validation
-                if float(request.json["startTime"]) > float(request.json["endTime"]):
+                if float(request.json["startTime"]) > float(request.json["endTime"]): # type: ignore
                     data = {
                         "message": "Failed",
                         "code": "End Time must come after Start Time.",
                     }
                     return make_response(jsonify(data), 400)
 
-                if request.json["wkDay"] not in DAYSOFWEEK:
+                if request.json["wkDay"] not in DAYSOFWEEK: # type: ignore
                     data = {
                         "message": "Failed",
                         "code": "Weekday must be one of: " + str(DAYSOFWEEK),
                     }
                     return make_response(jsonify(data), 400)
 
-                if request.json["type"] not in EVENTTYPES:
+                if request.json["type"] not in EVENTTYPES: # type: ignore
                     data = {
                         "message": "Failed",
                         "code": "Type must be one of: " + str(EVENTTYPES),
                     }
                     return make_response(jsonify(data), 400)
 
-                if self.database.get_event(request.json["id"]) == None:
-                    if "syncID" in request.json.keys():
+                if self.database.get_event(request.json["id"]) == None: # type: ignore
+                    if "syncID" in request.json.keys(): # type: ignore
                         self.database.write_event(
-                            request.json["name"],
-                            request.json["color"],
-                            request.json["wkDay"],
-                            request.json["startTime"],
-                            request.json["endTime"],
-                            request.json["type"],
-                            request.json["data"],
-                            request.json["syncID"],
+                            request.json["name"], # type: ignore
+                            request.json["color"], # type: ignore
+                            request.json["wkDay"], # type: ignore
+                            request.json["startTime"], # type: ignore
+                            request.json["endTime"], # type: ignore
+                            request.json["type"], # type: ignore
+                            request.json["data"], # type: ignore
+                            request.json["syncID"], # type: ignore
                         )
                     else:
                         id = self.database.write_event(
-                            request.json["name"],
-                            request.json["color"],
-                            request.json["wkDay"],
-                            request.json["startTime"],
-                            request.json["endTime"],
-                            request.json["type"],
-                            request.json["data"],
+                            request.json["name"], # type: ignore
+                            request.json["color"], # type: ignore
+                            request.json["wkDay"], # type: ignore
+                            request.json["startTime"], # type: ignore
+                            request.json["endTime"], # type: ignore
+                            request.json["type"], # type: ignore
+                            request.json["data"], # type: ignore
                         )
-                        peers = request.json["data"]["peers"]
+                        peers = request.json["data"]["peers"] # type: ignore
                         print(f"created event: {id}")
-                        event = self.database.get_event(id)
+                        event = self.database.get_event(id) # type: ignore
                         for peer in self.peer_manager.devices:
                             if peer.device_id in peers and not peer.disabled:
                                 peer.sync_event(
@@ -185,48 +183,48 @@ class api_v1(commons.BaseClass):
                                 )
 
                 else:
-                    if "syncID" in request.json.keys():
+                    if "syncID" in request.json.keys(): # type: ignore
                         self.database.edit_event(
-                            request.json["id"],
-                            request.json["name"],
-                            request.json["color"],
-                            request.json["wkDay"],
-                            request.json["startTime"],
-                            request.json["endTime"],
-                            request.json["type"],
-                            request.json["data"],
-                            request.json["syncID"],
+                            request.json["id"], # type: ignore
+                            request.json["name"], # type: ignore
+                            request.json["color"], # type: ignore
+                            request.json["wkDay"], # type: ignore
+                            request.json["startTime"], # type: ignore
+                            request.json["endTime"], # type: ignore
+                            request.json["type"], # type: ignore
+                            request.json["data"], # type: ignore
+                            request.json["syncID"], # type: ignore
                         )
                     else:
-                        original_event = self.database.get_event(request.json["id"])
+                        original_event = self.database.get_event(request.json["id"]) # type: ignore
                         event = self.database.edit_event(
-                            request.json["id"],
-                            request.json["name"],
-                            request.json["color"],
-                            request.json["wkDay"],
-                            request.json["startTime"],
-                            request.json["endTime"],
-                            request.json["type"],
-                            request.json["data"],
+                            request.json["id"], # type: ignore
+                            request.json["name"], # type: ignore
+                            request.json["color"], # type: ignore
+                            request.json["wkDay"], # type: ignore
+                            request.json["startTime"], # type: ignore
+                            request.json["endTime"], # type: ignore
+                            request.json["type"], # type: ignore
+                            request.json["data"], # type: ignore
                         )
-                        peers = request.json["data"]["peers"]
-                        event = self.database.get_event(request.json["id"])
+                        peers = request.json["data"]["peers"] # type: ignore
+                        event = self.database.get_event(request.json["id"]) # type: ignore
                         for peer in self.peer_manager.devices:
                             if (
                                 peer.device_id
-                                in json.loads(original_event.data)["peers"]
+                                in json.loads(original_event.data)["peers"] # type: ignore
                                 and peer.device_id not in peers
                                 and not peer.disabled
                             ):
-                                peer.delete_event(event.sync_id)
+                                peer.delete_event(event.sync_id) # type: ignore
                             elif (
                                 peer.device_id
-                                not in json.loads(original_event.data)["peers"]
+                                not in json.loads(original_event.data)["peers"] # type: ignore
                                 and peer.device_id in peers
                                 and not peer.disabled
                             ):
                                 temp_event = copy.deepcopy(event)
-                                temp_event.id = "0"
+                                temp_event.id = "0" # type: ignore
                                 peer.sync_event(
                                     temp_event, self.database.config()["id"]
                                 )
@@ -242,9 +240,9 @@ class api_v1(commons.BaseClass):
                     )
 
                     wk_day = datetime.now().strftime("%A")
-                    if request.json["wkDay"] == wk_day:
-                        if (float(request.json["startTime"]) <= t) and (
-                            float(request.json["endTime"]) > t
+                    if request.json["wkDay"] == wk_day: # type: ignore
+                        if (float(request.json["startTime"]) <= t) and ( # type: ignore
+                            float(request.json["endTime"]) > t # type: ignore
                         ):
                             self.browser.set_event(0)
                 data = {"message": "Done", "code": "SUCCESS"}
@@ -254,13 +252,13 @@ class api_v1(commons.BaseClass):
         @self.bp.route("/remove/schedule/event/<id>")
         def api_remove_schedule_event(id: str):
             if id.isdigit():
-                self.database.delete_event(id)
+                self.database.delete_event(int(id))
             else:
                 self.database.delete_sync_event(id)
             data = {"message": "Done", "code": "SUCCESS"}
             return make_response(jsonify(data), 200)
 
-        @self.bp.route("/get/can_schedule/event/", methods=["POST"])
+        @self.bp.route("/get/can_schedule/event/", methods=["POST"]) # type: ignore
         def api_can_schedule_event():
             pass
 
@@ -290,26 +288,13 @@ class api_v1(commons.BaseClass):
         @self.bp.route("/restart/")
         def restart():
             call("sudo reboot", shell=True)
+            return "", 200
             
-        @self.bp.route("/get/calender_data/<name>")
-        def get_cal_data(name):
-            return make_response(json.dumps(self.calendar_manager.get_calender(name).get_dict()), 200)
-        
-        @self.bp.route("/get/calender_events/<name>/<day>/<month>/<year>")
-        def get_cal_events(name, day: int, month: int, year: int):
-            print(f"{day}/{month}/{year}")
-            cal = self.calendar_manager.get_calender(name)
-            events = cal.events_on(int(day), int(month), int(year))
-            event_array = []
-            print(events)
-            for event in events:
-                event_array.append({"name": event.name, "id": event.uid, "description": event.description, "color": "grey", "start_time": round(event.begin.float_timestamp * 1000), "end_time": round(event.end.float_timestamp * 1000)})
-            return make_response(json.dumps({"events": event_array}), 200)
 
     def get_blueprint(self):
         return self.bp
 
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
             "web_version": None,
