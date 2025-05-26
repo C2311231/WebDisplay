@@ -1,38 +1,26 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{title}}</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
-</head>
-
-<body>
-    <div class="topbar">
-        <div>
-            <button onclick="toggleUpdatePopup()" id="openUpdateMenuButton">Updates</button>
-            <div id="UpdatePopup">
-                <h4 id="releaseVersion">V0.0.0</h4>
-<pre id="releaseNotes">
-</pre>
-                <button id="beganUpdateButton" onclick="fetch('api/update/update/')">Began Update</button>
-            </div>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block page_title %}Web Display{% endblock page_title %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{url_for('static', filename='layout.css')}}">
+        <link rel="stylesheet" id="color-sheet" href="{{url_for('static', filename='dark-colors.css')}}">
+    </head>
+    <body>
+        <div id="title_bar">
+            {% block title_bar %}{% endblock title_bar %}
         </div>
-        <button onclick="fetch('/api/restart')">Restart</button>
-        <h1>{{name}}</h1>
-
-    </div>
-    <div class="main">
-        {% block main %}
-
-        {% endblock main %}
-    </div>
-
-
-</body>
-<script src="{{url_for('static', filename='index.js')}}" async defer></script>
-
+        <div id="main_page">
+            <div id="side_bar">
+                {% block sidebar %}{% endblock sidebar %}
+            </div>
+            <div id="main_content">
+                {% block content %}{% endblock content %}
+            </div>
+        <div>
+        <script src="{{url_for('static', filename='js/layout.js')}}" async defer></script>
+    </body>
 </html>

@@ -231,6 +231,7 @@ class Database(commons.BaseClass):
 
 class Config(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
+    device: Mapped[str] = mapped_column(default="default")
     parameter: Mapped[str] = mapped_column(unique=True)
     value: Mapped[str]
 

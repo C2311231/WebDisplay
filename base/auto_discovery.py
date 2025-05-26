@@ -8,9 +8,9 @@ from base import commons, database
 class DiscoveryEngine(commons.BaseClass):
     def __init__(
         self,
-        database: database,
+        database: database.Database,
         discovery_port: int = 5000,
-        discovery_multicast_address: commons.address = commons.address("239.143.23.9")
+        discovery_multicast_address: commons.Address = commons.Address("239.143.23.9")
     ):
         if not discovery_multicast_address.is_multicast():
             raise ValueError()
@@ -95,7 +95,7 @@ class DiscoveryEngine(commons.BaseClass):
         # Run any maintenance tasks and checks (about every 5 seconds)
         pass
 
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
             "web_version": None,

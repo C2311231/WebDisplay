@@ -1,7 +1,7 @@
-{% extends "/WebInterfaceV2/layout.html" %}
+{% extends "/layout.html" %}
 
 {% block page_title %}
-Web Display - Global Settings
+Web Display - Device Settings
 {% endblock page_title %}
 
 
@@ -20,16 +20,16 @@ Web Display - Global Settings
 <a href="/events">Events</a>
 <a href="/groups">Groups</a>
 <a href="/global_monitoring">Monitoring</a>
-<a href="/global_settings" class="selected">Global Settings</a>
+<a href="/global_settings">Global Settings</a>
 <h2>Device</h2>
-<a href="/device_settings">Device Settings</a>
+<a href="/device_settings" class="selected">Device Settings</a>
 <a href="/device_monitoring">Monitoring</a>
 <a href="/logs">Logs</a>
 {% endblock sidebar %}
 
 {% block content %}
     <div class="settings-container">
-        <h2>Global Settings</h2>
+        <h2>Device Settings</h2>
         <div class="settings-group">
             <h3>System Settings</h3>
             <hr>

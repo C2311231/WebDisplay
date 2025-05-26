@@ -8,7 +8,7 @@ class BaseClass:
         return {}
     
     def api_endpoints(self) -> list[dict]:
-        # API endpoints in format [{endpoint_type: "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)
+        # API endpoints in format [{"endpoint_type": "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)
         return []
 
 
@@ -53,7 +53,7 @@ class Url:
 
 
 class Response:
-    def __init__(self, error, status: str, message: str, code: int, data: str):
+    def __init__(self, error, status: str, message: str, code: int, data: dict):
         self.status = status
         self.error = error
         self.message = message

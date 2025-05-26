@@ -30,23 +30,23 @@ class BrowserManager(commons.BaseClass):
             self.driver = webdriver.Chrome(options=chrome_options)
         if self.event != -1:
             self.event = 0
-        self.driver.command_executor.set_timeout(10000)
+        self.driver.command_executor.set_timeout(10000) # type: ignore
         self.driver.set_page_load_timeout(60)
 
 
-    def open_url(self, url: commons.url) -> None:
+    def open_url(self, url: commons.Url) -> None:
         if self.driver:
             try:
-                self.driver.get(url)
+                self.driver.get(str(url))
             except TimeoutException:
                 print(f"Timeout loading {url}")
     
             except:
                 self.init_driver()
-                self.driver.get(url)
+                self.driver.get(str(url))
         else:
             self.init_driver()
-            self.driver.get(url)
+            self.driver.get(str(url)) # type: ignore
 
     def get_screenshot(self) -> None:
         if self.driver:
@@ -68,7 +68,7 @@ class BrowserManager(commons.BaseClass):
     def set_event(self, eventID: int) -> None:
         self.event = eventID
         
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {}
         return data
