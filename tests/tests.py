@@ -1,6 +1,6 @@
 import tests.test_engine as test_engine
 import threading, time
-from base import api, commons, database, browser, peers, scheduler, updater, networking, auto_discovery, cec, calander
+from base import api, commons, database, browser, multicast_api_endpoint, peers, scheduler, updater, networking, cec, calander
 
 def test_required_config_networking(name, completion, printing):
     printing()

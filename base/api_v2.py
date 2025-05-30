@@ -19,7 +19,7 @@ class APIv2(commons.BaseClass):
         # Example structure of request:
         # {
         #     "id": "request_id", (optional)
-        #     "type": "x", (trigger, get, post, inform)
+        #     "type": "x", (trigger, get, post, inform, delete)
         #     "version": "v2", (only v2 is currently supported)
         #     "destination": "destination_id",
         #     "source": "source_id",
@@ -57,7 +57,7 @@ class APIv2(commons.BaseClass):
         if request["version"] != "v2":  # type: ignore
             return commons.Response(True, "error", "Unrecognized version", 400, {"id": id})
 
-        if request["type"] not in ["trigger", "get", "post", "inform"]:  # type: ignore
+        if request["type"] not in ["trigger", "get", "post", "delete", "inform"]:  # type: ignore
             return commons.Response(True, "error", "Unrecognized command type", 400, {"id": id})
 
         if not isinstance(request["data"], dict):  # type: ignore

@@ -128,7 +128,160 @@ class Database(commons.BaseClass):
                 }
                 for peer in peers
             ]
+    def _api_get_events(self) -> commons.Response:
+        """API endpoint to get all events."""
+        try:
+            events = self.get_events()
+            return commons.Response(False, "success", "Events retrieved successfully", 200, {"events": events})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve events: {str(e)}", 500, {})
     
+    def _api_get_peers(self) -> commons.Response:
+        """API endpoint to get all peer devices."""
+        try:
+            peers = self.get_peers()
+            return commons.Response(False, "success", "Peers retrieved successfully", 200, {"peers": peers})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve peers: {str(e)}", 500, {})
+        
+    def _api_get_config(self, device_id: str = "0") -> commons.Response:
+        """API endpoint to get the configuration of a specific device."""
+        try:
+            config = self.get_device_config(device_id)
+            return commons.Response(False, "success", "Configuration retrieved successfully", 200, {"config": config})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve configuration: {str(e)}", 500, {})
+        
+    def _api_get_event(self, event_id: str) -> commons.Response:
+        """API endpoint to get the details of a specific event."""
+        try:
+            event = self.get_event(event_id)
+            if event:
+                return commons.Response(False, "success", "Event retrieved successfully", 200, {"event": event})
+            else:
+                return commons.Response(True, "error", "Event not found", 404, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve event: {str(e)}", 500, {})
+        
+    def _api_get_peer(self, device_id: str) -> commons.Response:
+        """API endpoint to get the details of a specific peer device."""
+        try:
+            peer = self.get_peer(device_id)
+            if peer:
+                return commons.Response(False, "success", "Peer retrieved successfully", 200, {"peer": peer})
+            else:
+                return commons.Response(True, "error", "Peer not found", 404, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve peer: {str(e)}", 500, {})
+        
+    def _api_get_config_entry(self, parameter: str, device_id: str = "0") -> commons.Response:
+        """API endpoint to get a specific configuration parameter for a specific device."""
+        try:
+            value = self.get_config_entry(parameter, device_id)
+            if value:
+                return commons.Response(False, "success", "Configuration entry retrieved successfully", 200, {"value": value})
+            else:
+                return commons.Response(True, "error", "Configuration entry not found", 404, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve configuration entry: {str(e)}", 500, {})
+        
+    def _api_get_config_check_data(self) -> commons.Response:
+        """API endpoint to get the check data for the configuration."""
+        try:
+            config = Config.query.all()
+            config = {c.parameter: c.check_data for c in config}
+            check_data = {key: value for key, value in config.items() if key == "check_data"}
+            return commons.Response(False, "success", "Configuration check data retrieved successfully", 200, {"check_data": check_data})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve configuration check data: {str(e)}", 500, {})
+        
+    def _api_get_peers_check_data(self) -> commons.Response:
+        """API endpoint to get the check data for the peers."""
+        try:
+            peers = Peers.query.all()
+            peers = {c.parameter: c.check_data for c in peers}
+            check_data = {key: value for key, value in peers.items() if key == "check_data"}
+            return commons.Response(False, "success", "Peers check data retrieved successfully", 200, {"check_data": check_data})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve peers check data: {str(e)}", 500, {})
+    
+    def _api_get_events_check_data(self) -> commons.Response:
+        """API endpoint to get the check data for the events."""
+        try:
+            events = Events.query.all()
+            events = {c.parameter: c.check_data for c in events}
+            check_data = {key: value for key, value in events.items() if key == "check_data"}
+            return commons.Response(False, "success", "Events check data retrieved successfully", 200, {"check_data": check_data})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to retrieve events check data: {str(e)}", 500, {})
+        
+    def _api_set_config(self, parameter: str, value: str, device_id: str = "0") -> commons.Response:
+        """API endpoint to set a configuration parameter for a specific device."""
+        try:
+            self.write_config(parameter, value, device_id)
+            return commons.Response(False, "success", "Configuration updated successfully", 200, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to update configuration: {str(e)}", 500, {})
+        
+    def _api_set_event(self, name: str, groups: list[str], criteria: str, action: str, color: str) -> commons.Response:
+        """API endpoint to set a new event."""
+        try:
+            self.write_event(name, groups, criteria, action, color)
+            return commons.Response(False, "success", "Event created successfully", 200, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to create event: {str(e)}", 500, {})
+        
+    def _api_set_peer(self, device_name: str, device_id: str, device_ip: str, groups: list[str]) -> commons.Response:
+        """API endpoint to set a new peer device."""
+        try:
+            self.write_peer(device_name, device_id, device_ip, groups)
+            return commons.Response(False, "success", "Peer created successfully", 200, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to create peer: {str(e)}", 500, {})
+        
+    def _api_delete_event(self, event_id: str) -> commons.Response:
+        """API endpoint to delete a specific event."""
+        try:
+            with self.app.app_context():
+                event = db.session.query(Events).filter_by(id=event_id).first()
+                if event:
+                    db.session.delete(event)
+                    db.session.commit()
+                    return commons.Response(False, "success", "Event deleted successfully", 200, {})
+                else:
+                    return commons.Response(True, "error", "Event not found", 404, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to delete event: {str(e)}", 500, {})
+        
+    def _api_delete_peer(self, device_id: str) -> commons.Response:
+        """API endpoint to delete a specific peer device."""
+        try:
+            with self.app.app_context():
+                peer = db.session.query(Peers).filter_by(device_id=device_id).first()
+                if peer:
+                    db.session.delete(peer)
+                    db.session.commit()
+                    return commons.Response(False, "success", "Peer deleted successfully", 200, {})
+                else:
+                    return commons.Response(True, "error", "Peer not found", 404, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to delete peer: {str(e)}", 500, {})
+        
+    def _api_delete_config_entry(self, parameter: str, device_id: str = "0") -> commons.Response:
+        """API endpoint to delete a specific configuration parameter for a specific device."""
+        try:
+            with self.app.app_context():
+                config = db.session.query(Config).filter_by(device=device_id, parameter=parameter).first()
+                if config:
+                    db.session.delete(config)
+                    db.session.commit()
+                    return commons.Response(False, "success", "Configuration entry deleted successfully", 200, {})
+                else:
+                    return commons.Response(True, "error", "Configuration entry not found", 404, {})
+        except Exception as e:
+            return commons.Response(True, "error", f"Failed to delete configuration entry: {str(e)}", 500, {})
+        
+        
     def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
@@ -145,3 +298,98 @@ class Database(commons.BaseClass):
                 "reload_time": "0"
         }
         return data
+    
+    def api_endpoints(self) -> list[dict]:
+        # API endpoints in format [{"endpoint_type": "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)
+        return [
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_events,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_events",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_peers,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_peers",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_config,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_config",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_event,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_event",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_peer,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_peer",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_config_entry,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_config_entry",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_config_check_data,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_config_check_data",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_peers_check_data,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_peers_check_data",
+            },
+            {
+                "endpoint_type": "get",
+                "function": self._api_get_events_check_data,
+                "endpoint_domain": "database",
+                "endpoint_name": "get_events_check_data",
+            },
+            {
+                "endpoint_type": "post",
+                "function": self._api_set_config,
+                "endpoint_domain": "database",
+                "endpoint_name": "set_config",
+            },
+            {
+                "endpoint_type": "post",
+                "function": self._api_set_event,
+                "endpoint_domain": "database",
+                "endpoint_name": "set_event",
+            },
+            {
+                "endpoint_type": "post",
+                "function": self._api_set_peer,
+                "endpoint_domain": "database",
+                "endpoint_name": "set_peer",
+            },
+            {
+                "endpoint_type": "delete",
+                "function": self._api_delete_event,
+                "endpoint_domain": "database",
+                "endpoint_name": "delete_event",
+            },
+            {
+                "endpoint_type": "delete",
+                "function": self._api_delete_peer,
+                "endpoint_domain": "database",
+                "endpoint_name": "delete_peer",
+            },
+            {
+                "endpoint_type": "delete",
+                "function": self._api_delete_config_entry,
+                "endpoint_domain": "database",
+                "endpoint_name": "delete_config_entry",
+            }
+        ]
