@@ -6,7 +6,10 @@ import requests
 import commons
 db = SQLAlchemy()
 
-
+class MetaData(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    parameter: Mapped[str] = mapped_column(unique=True)
+    value: Mapped[str]
 class Config(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     device: Mapped[list[str]]
@@ -33,6 +36,28 @@ class Config(db.Model):
     def is_for_device(self, device_name: str) -> bool:
         # Checks if the config is associated with a specific device
         return device_name in self.device if self.device else False
+
+class GlobalConfig(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    parameter: Mapped[str] = mapped_column(unique=True)
+    value: Mapped[str]
+    lastchanged: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.now(datetime.timezone.utc), onupdate=lambda: datetime.datetime.now(datetime.timezone.utc))
+    check_data: Mapped[str] = mapped_column(default=lambda: uuid.uuid4().hex, onupdate=lambda: uuid.uuid4().hex)
+    
+    def to_dict(self) -> dict:
+        # Returns a dictionary representation of the config
+        return {
+            "id": self.id,
+            "parameter": self.parameter,
+            "value": self.value,
+            "lastchanged": self.lastchanged.isoformat() if self.lastchanged else None,
+            "check_data": self.check_data,
+        }
+
+    def update_value(self, new_value: str):
+        # Updates the value of the config parameter
+        self.value = new_value
+        
 
 class Events(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

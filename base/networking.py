@@ -3,8 +3,9 @@ import subprocess
 from base import commons
 import socket
 class NetworkingManager(commons.BaseClass):
-    def __init__(self, database):
+    def __init__(self, config: dict, database):
         self.database = database
+        self.config = config
 
     def configure_wifi(self, ssid: str, psk: str) -> None:
         command = f'nmcli dev wifi connect "{ssid}" password "{psk}"'
@@ -22,7 +23,7 @@ class NetworkingManager(commons.BaseClass):
         os.system(f"nmcli con up {interface}")
         print(f"Ethernet ({interface}) configured to use DHCP.")
 
-    def configure_static(self, ip: commons.address, gateway: commons.address, dns: commons.address, interface: str) -> None:
+    def configure_static(self, ip: commons.Address, gateway: commons.Address, dns: commons.Address, interface: str) -> None:
         os.system(f"nmcli con mod {interface} ipv4.addresses {ip}/24")
         os.system(f"nmcli con mod {interface} ipv4.gateway {gateway}")
         os.system(f"nmcli con mod {interface} ipv4.dns {dns}")

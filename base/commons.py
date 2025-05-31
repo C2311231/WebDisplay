@@ -1,3 +1,6 @@
+import json
+
+
 class BaseClass:
     def tick(self) -> None:
         # Run any maintenance tasks and checks (about every 5 seconds)
@@ -6,7 +9,7 @@ class BaseClass:
     def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         return {}
-    
+
     def api_endpoints(self) -> list[dict]:
         # API endpoints in format [{"endpoint_type": "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)
         return []
@@ -59,3 +62,14 @@ class Response:
         self.message = message
         self.data = data
         self.code = code
+
+    def to_json(self) -> str:
+        return json.dumps(
+            {
+                "status": self.status,
+                "error": self.error,
+                "message": self.message,
+                "code": self.code,
+                "data": self.data,
+            }
+        )

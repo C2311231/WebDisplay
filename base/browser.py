@@ -5,10 +5,11 @@ from base import commons
 from selenium.common.exceptions import TimeoutException
 
 class BrowserManager(commons.BaseClass):
-    def __init__(self):
+    def __init__(self, config: dict):
         self.event = 0
         self.awaiting = []
         self.driver = None
+        self.config = config
 
     def init_driver(self) -> None:
         chrome_options = Options()

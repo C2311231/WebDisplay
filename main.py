@@ -2,20 +2,21 @@ from flask import render_template, Flask, request
 from base import networking, database, browser, web_v2, peers, cec, scheduler, api_v2
 import sys
 import socket
+local_config = {}
 
-browser_manager = browser.BrowserManager()
 app = Flask(__name__)
-db = database.Database(app=app, filepath=sys.argv[1])
-network_manager = networking.NetworkingManager(db)
+db = database.Database(local_config, app=app, filepath=sys.argv[1])
+browser_manager = browser.BrowserManager(local_config)
+network_manager = networking.NetworkingManager(local_config, db)
 cec_manager = cec.CecManager()
-peer_manager = peers.PeerManager(network_manager, db=db)
+peer_manager = peers.PeerManager(local_config, network_manager, db=db)
 api = api_v2.APIv2(db)
-scheduler = scheduler.Scheduler(db, browser_manager, cec_manager)
+scheduler = scheduler.Scheduler(local_config, db, browser_manager, cec_manager)
 peer_manager.start_discovery()
 ip = network_manager.get_local_ip()
-db.write_config("ip", ip)
-db.write_config("url", f"http://{ip}:{sys.argv[2]}")
-db.write_config("port", sys.argv[2])
+db.write_local_config("ip", ip)
+db.write_local_config("url", f"http://{ip}:{sys.argv[2]}")
+db.write_local_config("port", sys.argv[2])
 
 @app.route("/api/", methods=["POST"])
 def api_http_endpoint():
@@ -24,11 +25,8 @@ def api_http_endpoint():
     (Just for reference, not finished implementing yet)
     """
     api_response = api.process_request(request.data.decode("utf-8"))
-    if api_response.error:
-        return api_response.response, api_response.status_code # type: ignore
-    else:
-        return api_response.response, 200 # type: ignore
-
+    return api_response.to_json(), api_response.code # type: ignore
+    
 @app.after_request
 def add_header(r):
     """

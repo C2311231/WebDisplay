@@ -7,10 +7,11 @@ from base import commons, multicast_api_endpoint, networking, database
 
 
 class PeerManager(commons.BaseClass):
-    def __init__(self, networking: networking.NetworkingManager, db: database.Database):
+    def __init__(self, config, networking: networking.NetworkingManager, db: database.Database):
         self.discover_engine = multicast_api_endpoint.DiscoveryEngine(db)
         self.networking = networking
         self.db = db
+        self.config = config
         threading.Thread(target=self.check_device_connections, daemon=True).start()
 
     def start_discovery(self) -> None:
@@ -39,7 +40,7 @@ class PeerManager(commons.BaseClass):
     def check_device_connections(self) -> None:
         while True:
             for device in self.db.get_peers():
-                device.ping(self.db.get_config_entry("device_id"))
+                device.ping(self.db.get_device_id())
 
             time.sleep(5)
             

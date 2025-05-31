@@ -2,11 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid, json
 from base import commons
 from flask import Flask
-from .models import Config, Events, Peers, db
+from .models import Config, Events, Peers, db, MetaData, GlobalConfig
 
 
 class Database(commons.BaseClass):
-    def __init__(self, app: Flask, filepath: str="./db.db"):
+    def __init__(self, config: dict, app: Flask, filepath: str="./db.db"):
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{filepath}"
         db.init_app(app)
         self.app = app
@@ -14,21 +14,44 @@ class Database(commons.BaseClass):
         with app.app_context():
             db.create_all()
         self.verify_config()
+        self.config = config
+        config = self.get_device_config(self.get_device_id())
 
     def verify_config(self) -> None:
         config = self.get_device_config("0")
         for key in self.required_config().keys():
             if key not in config.keys():
                 value = self.required_config()[key]
-                self.write_config(key, value)
+                if key == "id":
+                    with self.app.app_context():
+                        id = MetaData(parameter="id", value=str(value))  # type: ignore
+                        db.session.add(id)
+                        db.session.commit()
+                self.write_config(key, value, self.get_device_id()) ### Possible failure if any config parameter is loaded before the id is set, ignoring for now
+                
+    def get_device_id(self) -> str:
+        """Get the device ID from the database."""
+        with self.app.app_context():
+            id = db.session.query(MetaData).filter_by(parameter="id").first()
+            if id:
+                return id.value
+            raise Exception("Device ID not found in database. Please ensure the database is initialized correctly.")
 
-    def get_config_entry(self, parameter: str, device_id: str = "0") -> str:
+    def get_config_entry(self, parameter: str, device_id: str) -> Config | None:
         """Get a specific configuration parameter for a specific device."""
         with self.app.app_context():
-            config = db.session.query(Config).filter_by(device=device_id, parameter=parameter).first()
+            return db.session.query(Config).filter_by(device=device_id, parameter=parameter).first()
+            
+    def write_local_config(self, parameter: str, value: str) -> None:
+        """Write a local configuration parameter."""
+        with self.app.app_context():
+            config = db.session.query(Config).filter_by(parameter=parameter).first()
             if config:
-                return config.value
-            return ""
+                config.value = value
+            else:
+                new_config = Config(parameter=parameter, value=value, device_id=self.get_device_id())  # type: ignore
+                db.session.add(new_config)
+                db.session.commit()
 
     def get_device_config(self, device_id: str) -> dict:
         """Get the configuration of a specific device."""
@@ -36,7 +59,7 @@ class Database(commons.BaseClass):
             config = db.session.query(Config).filter_by(device=device_id).all()
             return {c.parameter: c.value for c in config}
         
-    def write_config(self, parameter: str, value: str, device_id: str = "0") -> None:
+    def write_config(self, parameter: str, value: str, device_id: str) -> None:
         """Write a configuration parameter for a specific device."""
         with self.app.app_context():
             config = db.session.query(Config).filter_by(device=device_id, parameter=parameter).first()
@@ -277,6 +300,9 @@ class Database(commons.BaseClass):
                 "reload_time": "0"
         }
         return data
+    
+    def tick(self) -> None:
+        self.config = self.get_device_config(self.get_device_id()) # update config dict each tick
     
     def api_endpoints(self) -> list[dict]:
         # API endpoints in format [{"endpoint_type": "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)

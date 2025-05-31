@@ -6,11 +6,12 @@ from base import commons, database, browser, cec
 
 
 class Scheduler(commons.BaseClass):
-    def __init__(self, db: database.Database, browser_manager: browser.BrowserManager, cec: cec.CecManager):
+    def __init__(self, config: dict, db: database.Database, browser_manager: browser.BrowserManager, cec: cec.CecManager):
         self.db = db
         self.run = False
         self.browser_manager = browser_manager
         self.cec = cec
+        self.config = config
         self.turned_screen_off = False
         self.last_reload_time = 9999999999999999999999999999999999999999999999999999999999999999
 
@@ -32,7 +33,7 @@ class Scheduler(commons.BaseClass):
                             float(event["end_time"]) > t
                         ):
                             current_event = True
-                            reload_time = 60*float(self.db.config()["reload_time"])
+                            reload_time = 60*float(self.config["reload_time"])
                             if time.time() - self.last_reload_time >= reload_time and reload_time != 0:
                                 self.last_reload_time = time.time()
                                 self.start_event(event)
@@ -80,8 +81,7 @@ class Scheduler(commons.BaseClass):
             self.browser_manager.set_event(event["id"])
 
         elif event["type"] == "idle":
-            config = self.db.config()
-            self.browser_manager.open_url(config["url"] + "/idle")
+            self.browser_manager.open_url(self.config["url"] + "/idle")
             self.browser_manager.set_event(event["id"])
 
         elif event["type"] == "publishedSlide":
@@ -104,7 +104,7 @@ class Scheduler(commons.BaseClass):
             )
             self.browser_manager.set_event(event["id"])
 
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
             "reload_time": 0,
