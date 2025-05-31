@@ -10,7 +10,7 @@ class Database(commons.BaseClass):
         app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{filepath}"
         db.init_app(app)
         self.app = app
-
+        self.db = db
         with app.app_context():
             db.create_all()
         self.verify_config()
@@ -89,21 +89,11 @@ class Database(commons.BaseClass):
                 for event in events
             ]
             
-    def get_peer(self, device_id: str) -> dict:
+    def get_peer(self, device_id: str) -> Peers | None:
         """Get the details of a specific peer device."""
         with self.app.app_context():
-            peer = db.session.query(Peers).filter_by(device_id=device_id).first()
-            if peer:
-                return {
-                    "id": peer.id,
-                    "device_name": peer.device_name,
-                    "device_id": peer.device_id,
-                    "device_ip": peer.device_ip,
-                    "groups": peer.groups,
-                    "lastchanged": peer.lastchanged.isoformat(),
-                    "check_data": peer.check_data
-                }
-            return {}
+            return db.session.query(Peers).filter_by(device_id=device_id).first()
+            
         
     def write_peer(self, device_name: str, device_id: str, device_ip: str, groups: list[str]) -> None:
         """Write a new peer device to the database."""
@@ -112,22 +102,11 @@ class Database(commons.BaseClass):
             db.session.add(new_peer)
             db.session.commit()
     
-    def get_peers(self) -> list[dict]:
+    def get_peers(self) -> list[Peers]:
         """Get all peer devices from the database."""
         with self.app.app_context():
             peers = db.session.query(Peers).all()
-            return [
-                {
-                    "id": peer.id,
-                    "device_name": peer.device_name,
-                    "device_id": peer.device_id,
-                    "device_ip": peer.device_ip,
-                    "groups": peer.groups,
-                    "lastchanged": peer.lastchanged.isoformat(),
-                    "check_data": peer.check_data
-                }
-                for peer in peers
-            ]
+            return peers
     def _api_get_events(self) -> commons.Response:
         """API endpoint to get all events."""
         try:
@@ -288,8 +267,8 @@ class Database(commons.BaseClass):
                 "id": str(uuid.uuid4()),
                 "web_version": "1.0",
                 "api_version": "1.0",
-                "url": "http://localhost:5000",
-                "port": "5000",
+                "url": "http://localhost:80",
+                "port": "80",
                 "encryption": "False",
                 "name": "Screen One",
                 "state": "online",

@@ -2,33 +2,15 @@ import threading
 import time
 import requests
 import json
+import api_v2
 from base import commons, multicast_api_endpoint, networking, database
 
 
 class PeerManager(commons.BaseClass):
     def __init__(self, networking: networking.NetworkingManager, db: database.Database):
-        self.devices = []
         self.discover_engine = multicast_api_endpoint.DiscoveryEngine(db)
         self.networking = networking
         self.db = db
-        for peer in self.db.get_peers():
-            self.devices.append(
-                Device(
-                    peer["web_version"],
-                    peer["api_version"],
-                    peer["web_url"],
-                    peer["web_port"],
-                    peer["web_encryption"],
-                    peer["device_name"],
-                    peer["device_state"],
-                    peer["device_platform"],
-                    peer["device_id"],
-                    peer["device_ip"],
-                    self.db,
-                    id=peer["id"],
-                )
-            )
-
         threading.Thread(target=self.check_device_connections, daemon=True).start()
 
     def start_discovery(self) -> None:
@@ -39,62 +21,29 @@ class PeerManager(commons.BaseClass):
             args=(self.found_device,),
         ).start()
 
-    def found_device(self, data) -> None:
-        for device in self.devices:
-            if device.device_id == data["device_id"]:
-                device.pinged()
-                device.device_ip = data["device_ip"]
-                device.device_name = data["device_name"]
-                device.web_port = data["web_port"]
-                device.web_url = data["web_url"]
-                return
-        self.devices.append(
-            Device(
-                data["web_version"],
-                data["api_version"],
-                data["web_url"],
-                data["web_port"],
-                data["web_encryption"],
-                data["device_name"],
-                data["device_state"],
-                data["device_platform"],
-                data["device_id"],
-                data["device_ip"],
-                self.db,
-            )
-        )
-
-    def add_device(self, ip: commons.Address, port: int) -> None:
-        request = requests.get("http://" + str(ip) + ":" + str(port) + "/api/status/")
-
-        if request.ok:
-            data = request.json()
-            self.devices.append(
-                Device(
-                    data["web_version"],
-                    data["api_version"],
-                    data["web_url"],
-                    data["web_port"],
-                    data["web_encryption"],
-                    data["device_name"],
-                    data["device_state"],
-                    data["device_platform"],
-                    data["device_id"],
-                    data["device_ip"],
-                    self.db,
-                )
-            )
-            return True
-        return False
+    def found_device(self, device_id:str, device_ip: str, device_port: int) -> None:
+        peer = self.db.get_peer(device_id)
+        if peer:
+            peer.update_ip(device_ip)
+            peer.device_port = device_port
+            self.db.db.session.commit()
+        else:
+            self.add_device(commons.Address(device_ip), device_id, device_port)
+        
+    def add_device(self, ip: commons.Address, device_id: str, port: int) -> None:
+        device_name = api_v2.call_http_api(str(ip), port, "get", device_id, "database", "get_config_entry", {"parameter": "device_name"})
+        device_groups = api_v2.call_http_api(str(ip), port, "get", device_id, "database", "get_config_entry", {"parameter": "device_groups"})
+        if device_name.error == False and device_groups.error == False:
+            self.db.write_peer(device_name=device_name.data["value"], device_id=device_id, device_ip=str(ip), groups=device_groups.data["value"])
 
     def check_device_connections(self) -> None:
         while True:
-            for device in self.devices:
-                device.check_connection()
+            for device in self.db.get_peers():
+                device.ping(self.db.get_config_entry("device_id"))
 
             time.sleep(5)
             
-    def required_config() -> dict:
+    def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
             "web_version": None,

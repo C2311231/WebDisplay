@@ -1,7 +1,7 @@
 import commons
 import json
 import database
-
+import requests
 
 class APIv2(commons.BaseClass):
 
@@ -104,4 +104,33 @@ class APIv2(commons.BaseClass):
             "group_ids": json.dumps([0]),
         }
 
+
+def call_http_api(ip:str, port:int, device_id:str, endpoint_type: str, endpoint_domain:str, endpoint_name:str, data:dict) -> commons.Response:
+    """
+    Calls an HTTP API endpoint on a device.
     
+    :param ip: The IP address of the device.
+    :param port: The port number of the device's API.
+    :param device_id: The ID of the device.
+    :param endpoint_domain: The domain of the API endpoint.
+    :param endpoint_name: The name of the API endpoint.
+    :param data: The data to send to the API endpoint.
+    :return: A Response object containing the result of the API call.
+    """
+    response = requests.post(
+        f"http://{ip}:{port}/api",
+        json={
+            "type": endpoint_type,
+            "version": "v2",
+            "destination": device_id,
+            "source": "0",
+            "domain": endpoint_domain,
+            "name": endpoint_name,
+            "data": data
+        }
+    )
+    
+    if response.ok and response.json().get("code") == 200:
+        return commons.Response(False, "success", "API call successful", 200, response.json().get("data", {}))
+    else:
+        return commons.Response(True, "error", f"API call failed: {response.text}", response.status_code, {})

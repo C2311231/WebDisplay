@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 import datetime
 import uuid
 import requests
+import commons
 db = SQLAlchemy()
 
 
@@ -70,11 +71,13 @@ class Peers(db.Model):
     lastchanged: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.now(datetime.timezone.utc), onupdate=lambda: datetime.datetime.now(datetime.timezone.utc))
     check_data: Mapped[str] = mapped_column(default=lambda: uuid.uuid4().hex, onupdate=lambda: uuid.uuid4().hex)
     last_contact: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.min)
+    registered: Mapped[bool] = mapped_column(default=False)
+    device_port: Mapped[int] = mapped_column(default=80)
 
     def ping(self, source_id) -> bool:
         # This method is used to ping the peer device to check if it is online
         response = requests.post(
-            f"http://{self.device_ip}/api/",
+            f"http://{self.device_ip}:{self.device_port}/api/",
             json={
              "type": "trigger",
              "version": "v2",
@@ -87,7 +90,10 @@ class Peers(db.Model):
         )
         
         response_data = response.json()
-        return response.ok and response_data["status"] == "success"
+        if response.ok and response_data["status"] == "success":
+            self.last_contact = datetime.datetime.now(datetime.timezone.utc)
+            return True
+        return False
     
     def to_dict(self) -> dict:
         # Returns a dictionary representation of the peer
@@ -100,6 +106,8 @@ class Peers(db.Model):
             "lastchanged": self.lastchanged.isoformat(),
             "check_data": self.check_data,
             "last_contact": self.last_contact.isoformat() if self.last_contact else None,
+            "registered": self.registered,
+            "device_port": self.device_port,
         }
 
     def update_ip(self, new_ip: str):
@@ -109,3 +117,31 @@ class Peers(db.Model):
     def is_in_group(self, group: str) -> bool:
         # Checks if the peer belongs to a specific group
         return group in self.groups if self.groups else False
+    
+    def call_http_api(self, endpoint_type: str, endpoint_domain:str, endpoint_name:str, data:dict) -> commons.Response:
+        """
+        Calls an HTTP API endpoint on a device.
+        
+        :param endpoint_domain: The domain of the API endpoint.
+        :param endpoint_name: The name of the API endpoint.
+        :param data: The data to send to the API endpoint.
+        :return: A Response object containing the result of the API call.
+        """
+        response = requests.post(
+            f"http://{self.device_ip}:{self.device_port}/api",
+            json={
+                "type": endpoint_type,
+                "version": "v2",
+                "destination": self.device_id,
+                "source": "0",
+                "domain": endpoint_domain,
+                "name": endpoint_name,
+                "data": data
+            }
+        )
+        
+        if response.ok and response.json().get("code") == 200:
+            self.last_contact = datetime.datetime.now(datetime.timezone.utc)
+            return commons.Response(False, "success", "API call successful", 200, response.json().get("data", {}))
+        else:
+            return commons.Response(True, "error", f"API call failed: {response.text}", response.status_code, {})
