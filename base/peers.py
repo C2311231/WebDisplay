@@ -8,7 +8,7 @@ from base import commons, multicast_api_endpoint, networking, database
 
 class PeerManager(commons.BaseClass):
     def __init__(self, config, networking: networking.NetworkingManager, db: database.Database):
-        self.discover_engine = multicast_api_endpoint.DiscoveryEngine(db)
+        self.discover_engine = multicast_api_endpoint.DiscoveryEngine(config, db)
         self.networking = networking
         self.db = db
         self.config = config
@@ -32,15 +32,15 @@ class PeerManager(commons.BaseClass):
             self.add_device(commons.Address(device_ip), device_id, device_port)
         
     def add_device(self, ip: commons.Address, device_id: str, port: int) -> None:
-        device_name = api_v2.call_http_api(str(ip), port, "get", device_id, "database", "get_config_entry", {"parameter": "device_name"})
-        device_groups = api_v2.call_http_api(str(ip), port, "get", device_id, "database", "get_config_entry", {"parameter": "device_groups"})
+        device_name = api_v2.call_http_api(self.config["device_id"], str(ip), port, "get", device_id, "database", "get_config_entry", {"parameter": "device_name"})
+        device_groups = api_v2.call_http_api(self.config["device_id"], str(ip), port, "get", device_id, "database", "get_config_entry", {"parameter": "device_groups"})
         if device_name.error == False and device_groups.error == False:
             self.db.write_peer(device_name=device_name.data["value"], device_id=device_id, device_ip=str(ip), groups=device_groups.data["value"])
 
     def check_device_connections(self) -> None:
         while True:
             for device in self.db.get_peers():
-                device.ping(self.db.get_device_id())
+                device.ping(self.config["device_id"])
 
             time.sleep(5)
             

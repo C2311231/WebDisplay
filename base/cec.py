@@ -40,7 +40,9 @@ except:
 
 
 class CecManager(commons.BaseClass):
-    def __init__(self):
+    def __init__(self, config: dict) -> None:
+        """Initializes the CEC manager."""
+        self.config = config
         try:
             cec.init() # type: ignore
             self.devices = cec.list_devices() # type: ignore

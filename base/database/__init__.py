@@ -52,6 +52,8 @@ class Database(commons.BaseClass):
                 new_config = Config(parameter=parameter, value=value, device_id=self.get_device_id())  # type: ignore
                 db.session.add(new_config)
                 db.session.commit()
+                
+            config = self.get_device_config(self.get_device_id())
 
     def get_device_config(self, device_id: str) -> dict:
         """Get the configuration of a specific device."""

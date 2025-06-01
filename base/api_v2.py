@@ -5,9 +5,10 @@ import requests
 
 class APIv2(commons.BaseClass):
 
-    def __init__(self, db: database.Database) -> None:
+    def __init__(self, local_config: dict, db: database.Database) -> None:
         self.endpoints = []
         self.db = db
+        self.config = local_config
         self.add_endpoints(self.api_endpoints())
 
     def add_endpoints(self, endpoints: list[dict]) -> None:
@@ -63,7 +64,7 @@ class APIv2(commons.BaseClass):
         if not isinstance(request["data"], dict):  # type: ignore
             return commons.Response(True, "error", "Invalid data format", 400, {"id": id})
 
-        if request["destination"] != self.db.config()["device_id"] and request["destination"] not in json.loads(self.db.config()["group_ids"]):  # type: ignore
+        if request["destination"] != self.config["device_id"] and request["destination"] not in json.loads(self.config["group_ids"]):  # type: ignore
             return commons.Response(True, "error", "Unintended destination", 0, {"id": id})
 
         for endpoint in self.endpoints:
@@ -105,7 +106,7 @@ class APIv2(commons.BaseClass):
         }
 
 
-def call_http_api(ip:str, port:int, device_id:str, endpoint_type: str, endpoint_domain:str, endpoint_name:str, data:dict) -> commons.Response:
+def call_http_api(local_id: str, ip:str, port:int, device_id:str, endpoint_type: str, endpoint_domain:str, endpoint_name:str, data:dict) -> commons.Response:
     """
     Calls an HTTP API endpoint on a device.
     
@@ -123,7 +124,7 @@ def call_http_api(ip:str, port:int, device_id:str, endpoint_type: str, endpoint_
             "type": endpoint_type,
             "version": "v2",
             "destination": device_id,
-            "source": "0",
+            "source": local_id,
             "domain": endpoint_domain,
             "name": endpoint_name,
             "data": data

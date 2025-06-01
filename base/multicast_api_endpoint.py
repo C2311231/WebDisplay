@@ -8,13 +8,14 @@ from base import commons, database
 class DiscoveryEngine(commons.BaseClass):
     def __init__(
         self,
+        config: dict,
         database: database.Database,
         discovery_port: int = 5000,
         discovery_multicast_address: commons.Address = commons.Address("239.143.23.9")
     ):
         if not discovery_multicast_address.is_multicast():
             raise ValueError()
-
+        self.config = config
         self.discovery_port = discovery_port
         self.discovery_multicast_address = discovery_multicast_address
         self.database = database
