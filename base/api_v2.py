@@ -1,6 +1,5 @@
-import commons
+from base import commons, database
 import json
-import database
 import requests
 
 class APIv2(commons.BaseClass):

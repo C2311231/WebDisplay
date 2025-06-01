@@ -1,13 +1,13 @@
 console.log("Script loaded"); // Put this at the top of the file
 
 function toggleDarkMode() {
-    if (document.getElementById("color-sheet").getAttribute("href") === "/static/WebInterfaceV2/dark-colors.css") {
-        document.getElementById("color-sheet").setAttribute("href", "/static/WebInterfaceV2/colors.css");
+    if (document.getElementById("color-sheet").getAttribute("href") === "/static/dark-colors.css") {
+        document.getElementById("color-sheet").setAttribute("href", "/static/colors.css");
         document.cookie = "dark_mode=false; path=/";
         setCookie("dark_mode", "false", 999); // Set cookie
     }
     else {
-        document.getElementById("color-sheet").setAttribute("href", "/static/WebInterfaceV2/dark-colors.css");
+        document.getElementById("color-sheet").setAttribute("href", "/static/dark-colors.css");
         setCookie("dark_mode", "true", 999); // Set cookie
     }
 
@@ -47,7 +47,7 @@ if (!colorSheet) {
 }
 
 if (darkMode === "true") {
-    colorSheet.setAttribute("href", "/static/WebInterfaceV2/dark-colors.css");
+    colorSheet.setAttribute("href", "/static/dark-colors.css");
 } else if (darkMode === "false") {
-    colorSheet.setAttribute("href", "/static/WebInterfaceV2/colors.css");
+    colorSheet.setAttribute("href", "/static/colors.css");
 }

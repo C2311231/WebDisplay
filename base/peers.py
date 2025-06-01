@@ -2,25 +2,25 @@ import threading
 import time
 import requests
 import json
-import api_v2
-from base import commons, multicast_api_endpoint, networking, database
+from base import commons, multicast_api_endpoint, networking, database, api_v2
 
 
 class PeerManager(commons.BaseClass):
     def __init__(self, config, networking: networking.NetworkingManager, db: database.Database):
-        self.discover_engine = multicast_api_endpoint.DiscoveryEngine(config, db)
+        #self.discover_engine = multicast_api_endpoint.DiscoveryEngine(config, db)
         self.networking = networking
         self.db = db
         self.config = config
         threading.Thread(target=self.check_device_connections, daemon=True).start()
 
     def start_discovery(self) -> None:
-        threading.Thread(target=self.discover_engine.send_discovery, daemon=True).start()
-        threading.Thread(
-            target=self.discover_engine.listen_for_discovery,
-            daemon=True,
-            args=(self.found_device,),
-        ).start()
+        pass
+        # threading.Thread(target=self.discover_engine.send_discovery, daemon=True).start()
+        # threading.Thread(
+        #     target=self.discover_engine.listen_for_discovery,
+        #     daemon=True,
+        #     args=(self.found_device,),
+        # ).start()
 
     def found_device(self, device_id:str, device_ip: str, device_port: int) -> None:
         peer = self.db.get_peer(device_id)

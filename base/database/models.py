@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 import datetime
 import uuid
 import requests
-import commons
+from base import commons
 db = SQLAlchemy()
 
 class MetaData(db.Model):
@@ -12,7 +12,7 @@ class MetaData(db.Model):
     value: Mapped[str]
 class Config(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    device: Mapped[list[str]]
+    device: Mapped[str] # json list with groups and device ids that it applies to
     parameter: Mapped[str] = mapped_column(unique=True)
     value: Mapped[str]
     lastchanged: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.now(datetime.timezone.utc), onupdate=lambda: datetime.datetime.now(datetime.timezone.utc))
@@ -62,7 +62,7 @@ class GlobalConfig(db.Model):
 class Events(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    groups: Mapped[list[str]]
+    groups: Mapped[str] # json list of device ids or group names that this event applies to
     criteria: Mapped[str]
     action: Mapped[str]
     color: Mapped[str]
@@ -92,7 +92,7 @@ class Peers(db.Model):
     device_name: Mapped[str]
     device_id: Mapped[str] = mapped_column(unique=True)
     device_ip: Mapped[str]
-    groups: Mapped[list[str]]
+    groups: Mapped[str] # json list of device ids or group names that this peer belongs to
     lastchanged: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.now(datetime.timezone.utc), onupdate=lambda: datetime.datetime.now(datetime.timezone.utc))
     check_data: Mapped[str] = mapped_column(default=lambda: uuid.uuid4().hex, onupdate=lambda: uuid.uuid4().hex)
     last_contact: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.min)

@@ -13,26 +13,31 @@ class Database(commons.BaseClass):
         self.db = db
         with app.app_context():
             db.create_all()
-        self.verify_config()
         self.config = config
-        config = self.get_device_config(self.get_device_id())
-
-    def verify_config(self) -> None:
-        config = self.get_device_config("0")
-        for key in self.required_config().keys():
-            if key not in config.keys():
-                value = self.required_config()[key]
-                if key == "id":
-                    with self.app.app_context():
-                        id = MetaData(parameter="id", value=str(value))  # type: ignore
+                
+    def write_local_config_if_not_exists(self, config: dict) -> None:
+        """Write local configuration parameters if they do not already exist."""
+        with self.app.app_context():
+            local_device_id = config["device_id"] if not db.session.query(MetaData).filter_by(parameter="device_id").first() else db.session.query(MetaData).filter_by(parameter="device_id").first().value # type: ignore
+            for parameter, value in config.items():
+                existing_config = db.session.query(Config).filter_by(parameter=parameter, device=local_device_id).first()
+                if not existing_config:
+                    if parameter == "device_id":
+                        id = MetaData(parameter="device_id", value=str(value))  # type: ignore
                         db.session.add(id)
                         db.session.commit()
-                self.write_config(key, value, self.get_device_id()) ### Possible failure if any config parameter is loaded before the id is set, ignoring for now
-                
+                    new_config = Config(parameter=parameter, value=value, device=local_device_id) # type: ignore
+                    db.session.add(new_config)
+                    db.session.commit()
+    
+    def initialize_local_config(self) -> None:
+        """Initialize local configuration parameters in the database."""
+        self.config = self.get_device_config(self.get_device_id())
+    
     def get_device_id(self) -> str:
         """Get the device ID from the database."""
         with self.app.app_context():
-            id = db.session.query(MetaData).filter_by(parameter="id").first()
+            id = db.session.query(MetaData).filter_by(parameter="device_id").first()
             if id:
                 return id.value
             raise Exception("Device ID not found in database. Please ensure the database is initialized correctly.")
@@ -49,7 +54,7 @@ class Database(commons.BaseClass):
             if config:
                 config.value = value
             else:
-                new_config = Config(parameter=parameter, value=value, device_id=self.get_device_id())  # type: ignore
+                new_config = Config(parameter=parameter, value=value, device=self.get_device_id())  # type: ignore
                 db.session.add(new_config)
                 db.session.commit()
                 
@@ -289,7 +294,7 @@ class Database(commons.BaseClass):
     def required_config(self) -> dict:
         # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
         data = {
-                "id": str(uuid.uuid4()),
+                "device_id": str(uuid.uuid4()),
                 "web_version": "1.0",
                 "api_version": "1.0",
                 "url": "http://localhost:80",
@@ -304,7 +309,7 @@ class Database(commons.BaseClass):
         return data
     
     def tick(self) -> None:
-        self.config = self.get_device_config(self.get_device_id()) # update config dict each tick
+        self.config = self.initialize_local_config() # update config dict each tick
     
     def api_endpoints(self) -> list[dict]:
         # API endpoints in format [{"endpoint_type": "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)

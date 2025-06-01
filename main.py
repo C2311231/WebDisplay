@@ -11,8 +11,23 @@ network_manager = networking.NetworkingManager(local_config, db)
 cec_manager = cec.CecManager(local_config)
 peer_manager = peers.PeerManager(local_config, network_manager, db=db)
 api = api_v2.APIv2(local_config, db)
-scheduler = scheduler.Scheduler(local_config, db, browser_manager, cec_manager)
+event_scheduler = scheduler.Scheduler(local_config, db, browser_manager, cec_manager)
 peer_manager.start_discovery()
+modules = [browser_manager, db, network_manager, cec_manager, peer_manager, api, event_scheduler]
+# Build the local default configuration from all modules
+required_configurations = {}
+for module in modules:
+    mod_requirements = module.required_config()
+    for key, value in mod_requirements.items():
+        if key not in required_configurations and value != None:
+            required_configurations[key] = value
+db.write_local_config_if_not_exists(required_configurations)
+db.initialize_local_config()
+# Register the API endpoints
+for module in modules:
+    api_endpoints = module.api_endpoints()
+    api.add_endpoints(api_endpoints)
+
 ip = network_manager.get_local_ip()
 db.write_local_config("ip", ip)
 db.write_local_config("url", f"http://{ip}:{sys.argv[2]}")
@@ -42,8 +57,8 @@ def add_header(r):
 
 
 if __name__ == "__main__":
-    scheduler.start()
+    event_scheduler.start()
     web_v2_blueprint = web_v2.get_blueprint()
     app.register_blueprint(web_v2_blueprint, url_prefix="/")
     app.run(host="0.0.0.0", port=int(sys.argv[2]), debug=False)
-    scheduler.stop()
+    event_scheduler.stop()
