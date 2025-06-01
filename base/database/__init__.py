@@ -32,7 +32,7 @@ class Database(commons.BaseClass):
     
     def initialize_local_config(self) -> None:
         """Initialize local configuration parameters in the database."""
-        self.config = self.get_device_config(self.get_device_id())
+        self.config.update(self.get_device_config(self.get_device_id())) # type: ignore
     
     def get_device_id(self) -> str:
         """Get the device ID from the database."""
@@ -188,7 +188,7 @@ class Database(commons.BaseClass):
         try:
             value = self.get_config_entry(parameter, device_id)
             if value:
-                return commons.Response(False, "success", "Configuration entry retrieved successfully", 200, {"value": value})
+                return commons.Response(False, "success", "Configuration entry retrieved successfully", 200, {"value": value.to_dict()})
             else:
                 return commons.Response(True, "error", "Configuration entry not found", 404, {})
         except Exception as e:
@@ -198,8 +198,7 @@ class Database(commons.BaseClass):
         """API endpoint to get the check data for the configuration."""
         try:
             config = Config.query.all()
-            config = {c.parameter: c.check_data for c in config}
-            check_data = {key: value for key, value in config.items() if key == "check_data"}
+            check_data = [c.check_data for c in config]
             return commons.Response(False, "success", "Configuration check data retrieved successfully", 200, {"check_data": check_data})
         except Exception as e:
             return commons.Response(True, "error", f"Failed to retrieve configuration check data: {str(e)}", 500, {})

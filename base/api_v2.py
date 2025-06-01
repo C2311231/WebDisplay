@@ -29,6 +29,7 @@ class APIv2(commons.BaseClass):
         # }
         id = -1
         # Check if the request is a valid JSON string
+        
         try:
             request = json.loads(request.strip())
         except json.JSONDecodeError:
@@ -73,7 +74,7 @@ class APIv2(commons.BaseClass):
                 and endpoint["endpoint_type"] == request["type"]  # type: ignore
             ):
                 # Call the function associated with the endpoint
-                response = endpoint(**request["data"])  # type: ignore
+                response = endpoint["function"](**request["data"])  # type: ignore
                 
                 # Check if the response is a valid Response object
                 if isinstance(response, commons.Response):
