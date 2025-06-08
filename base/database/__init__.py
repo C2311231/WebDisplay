@@ -308,7 +308,7 @@ class Database(commons.BaseClass):
         return data
     
     def tick(self) -> None:
-        self.config = self.initialize_local_config() # update config dict each tick
+        self.initialize_local_config() # update config dict each tick
     
     def api_endpoints(self) -> list[dict]:
         # API endpoints in format [{"endpoint_type": "endpoint_type", "function": function, "endpoint_domain": "domain", "endpoint_name": "name"}] (function must return a response object)
@@ -317,90 +317,90 @@ class Database(commons.BaseClass):
                 "endpoint_type": "get",
                 "function": self._api_get_events,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_events",
+                "endpoint_name": "events",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_peers,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_peers",
+                "endpoint_name": "peers",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_config,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_config",
+                "endpoint_name": "config",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_event,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_event",
+                "endpoint_name": "event",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_peer,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_peer",
+                "endpoint_name": "peer",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_config_entry,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_config_entry",
+                "endpoint_name": "config_entry",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_config_check_data,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_config_check_data",
+                "endpoint_name": "config_check_data",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_peers_check_data,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_peers_check_data",
+                "endpoint_name": "peers_check_data",
             },
             {
                 "endpoint_type": "get",
                 "function": self._api_get_events_check_data,
                 "endpoint_domain": "database",
-                "endpoint_name": "get_events_check_data",
+                "endpoint_name": "events_check_data",
             },
             {
                 "endpoint_type": "post",
                 "function": self._api_set_config,
                 "endpoint_domain": "database",
-                "endpoint_name": "set_config",
+                "endpoint_name": "config_entry",
             },
             {
                 "endpoint_type": "post",
                 "function": self._api_set_event,
                 "endpoint_domain": "database",
-                "endpoint_name": "set_event",
+                "endpoint_name": "event",
             },
             {
                 "endpoint_type": "post",
                 "function": self._api_set_peer,
                 "endpoint_domain": "database",
-                "endpoint_name": "set_peer",
+                "endpoint_name": "peer",
             },
             {
                 "endpoint_type": "delete",
                 "function": self._api_delete_event,
                 "endpoint_domain": "database",
-                "endpoint_name": "delete_event",
+                "endpoint_name": "event",
             },
             {
                 "endpoint_type": "delete",
                 "function": self._api_delete_peer,
                 "endpoint_domain": "database",
-                "endpoint_name": "delete_peer",
+                "endpoint_name": "peer",
             },
             {
                 "endpoint_type": "delete",
                 "function": self._api_delete_config_entry,
                 "endpoint_domain": "database",
-                "endpoint_name": "delete_config_entry",
+                "endpoint_name": "config_entry",
             }
         ]

@@ -130,12 +130,3 @@ class NetworkingManager(commons.BaseClass):
             return local_ip
         except Exception:
             return "Unable to determine local IP"
-
-    # if __name__ == "__main__":
-    #     # Start both send and listen threads
-    #     threading.Thread(target=send_discovery, daemon=True).start()
-    #     threading.Thread(target=listen_for_discovery, daemon=True).start()
-
-    #     # Keep the main thread alive
-    #     while True:
-    #         time.sleep(1)

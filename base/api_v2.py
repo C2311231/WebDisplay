@@ -64,7 +64,7 @@ class APIv2(commons.BaseClass):
         if not isinstance(request["data"], dict):  # type: ignore
             return commons.Response(True, "error", "Invalid data format", 400, {"id": id})
 
-        if request["destination"] != self.config["device_id"] and request["destination"] not in json.loads(self.config["group_ids"]):  # type: ignore
+        if request["destination"] != self.config["device_id"] and request["destination"] not in json.loads(self.config["group_ids"]) and request["destination"] != "0":  # type: ignore
             return commons.Response(True, "error", "Unintended destination", 0, {"id": id})
 
         for endpoint in self.endpoints:

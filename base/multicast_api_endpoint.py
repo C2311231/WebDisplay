@@ -19,6 +19,7 @@ class DiscoveryEngine(commons.BaseClass):
         self.discovery_port = discovery_port
         self.discovery_multicast_address = discovery_multicast_address
         self.database = database
+        self.api_send_id = 0
         
     def send_discovery(self) -> None:
         """Send discovery message periodically."""
@@ -30,17 +31,21 @@ class DiscoveryEngine(commons.BaseClass):
         while True:
             try:
                 init_message = {
-                    "web_version": self.database.config()["web_version"],
-                    "api_version": self.database.config()["api_version"],
-                    "web_url": self.database.config()["url"],
-                    "web_port": self.database.config()["port"],
-                    "web_encryption": self.database.config()["encryption"],
-                    "device_name": self.database.config()["name"],
-                    "device_state": self.database.config()["state"],
-                    "device_platform": self.database.config()["platform"],
-                    "device_id": self.database.config()["id"],
-                    "device_ip": self.database.config()["ip"],
+                    "id": self.api_send_id,
+                    "type": "inform",
+                    "version": "v2",
+                    "destination": "0",  # 0 means all devices
+                    "source": self.config["device_id"],
+                    "domain": "peer_manager",
+                    "name": "discovery",
+                    "data": {
+                        "device_name": self.config["name"],
+                        "device_id": self.config["device_id"],
+                        "device_ip": self.config["ip"],
+                        "device_port": self.config["port"],
+                    }
                 }
+                self.api_send_id += 1
                 message = json.dumps(init_message, indent=4).encode()
                 sock.sendto(
                     message, (str(self.discovery_multicast_address), self.discovery_port)
@@ -56,7 +61,7 @@ class DiscoveryEngine(commons.BaseClass):
                     print("Failed to reinitialize")
             time.sleep(5)  # Send every 5 seconds
 
-    def listen_for_discovery(self, callback) -> None:
+    def listen_for_api_commands(self) -> None:
         """Listen for discovery messages."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -66,29 +71,12 @@ class DiscoveryEngine(commons.BaseClass):
         mreq = struct.pack("4sL", group, socket.INADDR_ANY)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
-        init_message = {
-            "web_version": self.database.config()["web_version"],
-            "api_version": self.database.config()["api_version"],
-            "web_url": self.database.config()["url"],
-            "web_port": self.database.config()["port"],
-            "web_encryption": self.database.config()["encryption"],
-            "device_name": self.database.config()["name"],
-            "device_state": self.database.config()["state"],
-            "device_platform": self.database.config()["platform"],
-            "device_id": self.database.config()["id"],
-            "device_ip": self.database.config()["ip"],
-        }
-
         while True:
-            data, address = sock.recvfrom(1024)
+            data, address = sock.recvfrom(2048)
 
             try:
                 data = json.loads(data.decode())
-                if data["device_id"] == self.database.config()["id"]:
-                    continue
-                if data.keys() == init_message.keys():
-
-                    callback(data)
+                
             except ValueError:
                 print(f"Invalid Message from {address}")
 
