@@ -41,7 +41,11 @@ def api_http_endpoint():
     """
     api_response = api.process_request(request.data.decode("utf-8"))
     return api_response.to_json(), api_response.code # type: ignore
-    
+
+@app.route("/api/get_device_id")
+def api_http_device_id():
+    return local_config["device_id"]
+
 @app.after_request
 def add_header(r):
     """
@@ -60,5 +64,5 @@ if __name__ == "__main__":
     event_scheduler.start()
     web_v2_blueprint = web_v2.get_blueprint()
     app.register_blueprint(web_v2_blueprint, url_prefix="/")
-    app.run(host="0.0.0.0", port=int(sys.argv[2]), debug=False)
+    app.run(host="0.0.0.0", port=int(sys.argv[2]), debug=True)
     event_scheduler.stop()

@@ -1,5 +1,5 @@
 console.log("Script loaded"); // Put this at the top of the file
-
+fetch("/api/get_device_id").then((response) => response.text()).then((text) => window.connected_device_id = text)
 function toggleDarkMode() {
     if (document.getElementById("color-sheet").getAttribute("href") === "/static/dark-colors.css") {
         document.getElementById("color-sheet").setAttribute("href", "/static/colors.css");
@@ -50,4 +50,31 @@ if (darkMode === "true") {
     colorSheet.setAttribute("href", "/static/dark-colors.css");
 } else if (darkMode === "false") {
     colorSheet.setAttribute("href", "/static/colors.css");
+}
+
+
+window.request_server_data = function(type, domain, name, data={}){
+    console.log(
+        JSON.stringify({
+            "type": type,
+            "version": "v2",
+            "destination": window.connected_device_id,
+            "source": "web_direct",
+            "domain": domain,
+            "name": name,
+            "data": data
+        }
+    ))
+    return fetch("/api", {
+        method: "POST",
+        body: JSON.stringify({
+            "type": type,
+            "version": "v2",
+            "destination": window.connected_device_id,
+            "source": "web_direct",
+            "domain": domain,
+            "name": name,
+            "data": data
+        })
+    }).then((response) => response.json()).then(data => {return data})
 }

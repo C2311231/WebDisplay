@@ -149,7 +149,7 @@ class Database(commons.BaseClass):
         """API endpoint to get all peer devices."""
         try:
             peers = self.get_peers()
-            return commons.Response(False, "success", "Peers retrieved successfully", 200, {"peers": peers})
+            return commons.Response(False, "success", "Peers retrieved successfully", 200, {"peers": [peer.to_dict() for peer in peers]})
         except Exception as e:
             return commons.Response(True, "error", f"Failed to retrieve peers: {str(e)}", 500, {})
         
