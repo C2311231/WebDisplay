@@ -134,15 +134,19 @@ div.widget_container {
     display: flex;
     height: 100%;
     width: 100%;
-    gap: 2rem;
+    gap: 1rem;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding: 2rem;
+    padding: 3rem;
 }
 
 div.widget_container *{
     border-radius: 10px;
-    height: 20vh;
+}
+
+div.widget_container * canvas {
+    width: 100%;
+    height: 100%;
 }
 
 div.settings-container {

@@ -16,7 +16,6 @@ Simple project to remotely manage and control a web browser for digital signage
 #### Upcoming Features
 - Multiple Display Support
 - Networking Configuration
-- ICS Calender Support
 - User Defined Templates
 
 ## Documentation
@@ -89,6 +88,7 @@ Other devices should automatically be detected and added to the side menu.
 - Add user defined templates
 - Add automated tests
 - Improved UI
+    - Tooltips / Setting Descriptions
     - Centralized management
         - Global On/Off
         - Group Managment

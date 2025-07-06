@@ -111,3 +111,113 @@ class Scheduler(commons.BaseClass):
             "url": None,
         }
         return data
+    
+# 
+# Event Criteria System
+# 
+
+# {
+#     criterias = [
+        # {
+        #     "type": "before_date",
+        #     "date": "7/5/25"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "before_time",
+        #     "time": "10:30"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "before_day",
+        #     "day_of_month": "5"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "before_weekday",
+        #     "weekday": "Friday"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "before_month",
+        #     "month": "March"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "during_date",
+        #     "date": "7/5/25"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "during_weekday",
+        #     "weekday": "Friday"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "during_time",
+        #     "time": "10:30"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "during_day",
+        #     "day_of_month": "5"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "during_month",
+        #     "month": "March"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "after_date",
+        #     "date": "7/5/25"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "after_time",
+        #     "time": "10:30"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "after_weekday",
+        #     "weekday": "Friday"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "after_day",
+        #     "day_of_month": "5"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "after_month",
+        #     "month": "March"
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "or_group",
+        #     "criteria": [...]
+        #     "inverted": False
+        # }
+        
+        # {
+        #     "type": "before_nth_iteration",
+        #     "iteration": 5
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "after_nth_iteration",
+        #     "iteration": 5
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "during_nth_iteration",
+        #     "iteration": 5
+        #     "inverted": False
+        # }
+        # {
+        #     "type": "every_nth_iteration",
+        #     "iteration": 5
+        #     "inverted": False
+        # }
+#     ]
+# }
