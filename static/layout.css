@@ -190,3 +190,14 @@ div.settings-container div.settings-group div.settings input {
     margin: auto;
     padding: auto;
 }
+
+.criteria-group {
+    width: 100%;
+    padding: 2rem;
+}
+
+.criteria-item {
+    padding: 1rem;
+    background-color: #292929;
+    margin: 5px;
+}
