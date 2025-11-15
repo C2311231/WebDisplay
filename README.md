@@ -17,7 +17,7 @@ Simple project to remotely manage and control a web browser for digital signage
 - CEC Support (Control Screen Power)
 - Live Screenshots
 - Easy Updating
-- Easy Multi-device Management
+- Easy Multi-device Management (Multi-device syncing is experimental and may not work reliably.)
 - Multi-device Events
 - Premade Raspberry Pi Image
 
