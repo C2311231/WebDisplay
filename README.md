@@ -1,9 +1,16 @@
 
 # WebDisplay
+
 > **Work in progress**
 
 Simple project to remotely manage and control a web browser for digital signage
-#### Features
+
+## Status
+
+🚧 Due to other ongoing projects and lack of time this project it temporarily on hold
+
+### Features
+
 - Display Google Slides
 - Display Websites
 - Event Scheduling
@@ -13,7 +20,9 @@ Simple project to remotely manage and control a web browser for digital signage
 - Easy Multi-device Management
 - Multi-device Events
 - Premade Raspberry Pi Image
-#### Upcoming Features
+
+### Upcoming Features
+
 - Multiple Display Support
 - Networking Configuration
 - ICS Calender Support
@@ -22,6 +31,7 @@ Simple project to remotely manage and control a web browser for digital signage
 ## Documentation
 
 ### Getting Started
+
 #### Debian Based Install
 
 Install dependencies:
@@ -46,6 +56,7 @@ Create virtual env and install python requirements
     deactivate
 
 #### (Optional) Run on boot
+
 Create system service
 
     sudo nano /etc/systemd/system/WebDisplay.service
@@ -69,35 +80,43 @@ Enable Service
     sudo systemctl enable WebDisplay
 
 #### Raspberry PI Install
-1. Download and install Raspberry Pi Imager: https://www.raspberrypi.com/software/
-1. Download the image artifact from the most recent successful build: https://github.com/C2311231/WebDisplay/actions/workflows/main.yml
+
+1. Download and install Raspberry Pi Imager: <https://www.raspberrypi.com/software/>
+1. Download the image artifact from the most recent successful build: <https://github.com/C2311231/WebDisplay/actions/workflows/main.yml>
 1. Run Raspberry Pi Imager and select the desired device, then chose custom image then select the downloaded image, then pick your desired storage device and click next.
 1. It should provide the option to configure user information and wifi, if you are using wifi you can configure it here, and change the default password if you would like (Username may not be changed).
 1. Flash the micro sd card and install it into the RPI.
 1. Boot the RPI, and it should automatically complete the rest of the setup after a few minutes.
 1. It should now be accessible at http://{device ip}:5000.
+
 #### Windows Install (Coming Soon)
+
 ### Usage
-#### Running Manually:
+
+#### Running Manually
+
     /{path/to/WebDisplay/directory}/.venv/bin/python3 /{path/to/WebDisplay/directory}/main.py db.db {port}
-#### Accessing the Web Interface:
+
+#### Accessing the Web Interface
+
 The web interface is available at: http://{device ip}:{port}  
 Other devices should automatically be detected and added to the side menu.
 
 ## To Do
+
 - Add multi display (per device) support
 - Add user defined templates
 - Add automated tests
 - Centralized management
-    - Global On/Off
-    - Group Managment
+  - Global On/Off
+  - Group management
 - Add networking config
 - Create Install Script
 - Improved event scheduling
-    - Event Priorities
-    - Device Groups (Device can be a member of multiple groups)
-    - algorithmic Scheduling
-    - Day Specific overrides (For holidays or other events)
-    - Percentage Based Event Deployment with dynamic reallocation (20% show one event 80% another...)
+  - Event Priorities
+  - Device Groups (Device can be a member of multiple groups)
+  - algorithmic Scheduling
+  - Day Specific overrides (For holidays or other events)
+  - Percentage Based Event Deployment with dynamic reallocation (20% show one event 80% another...)
 - Improved UI
 - Improved External API
