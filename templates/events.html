@@ -68,7 +68,7 @@ Web Display - Events
             Options
         </div>
     </div>
-    <div class="table">
+    <div class="table" id="eventTable">
         <div class="table-item">
             <div class="table-cell">
                 <input type="checkbox">
@@ -92,5 +92,6 @@ Web Display - Events
     </div>
 </div>
 
+<script src="{{url_for('static', filename='/js/events.js')}}" defer></script>
 
 {% endblock content %}
