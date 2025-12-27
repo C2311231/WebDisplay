@@ -134,15 +134,19 @@ div.widget_container {
     display: flex;
     height: 100%;
     width: 100%;
-    gap: 2rem;
+    gap: 1rem;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding: 2rem;
+    padding: 3rem;
 }
 
 div.widget_container *{
     border-radius: 10px;
-    height: 20vh;
+}
+
+div.widget_container * canvas {
+    width: 100%;
+    height: 100%;
 }
 
 div.settings-container {
@@ -185,4 +189,15 @@ div.settings-container div.settings-group div.settings input {
     box-sizing: content-box;
     margin: auto;
     padding: auto;
+}
+
+.criteria-group {
+    width: 100%;
+    padding: 2rem;
+}
+
+.criteria-item {
+    padding: 1rem;
+    background-color: #292929;
+    margin: 5px;
 }

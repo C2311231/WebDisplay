@@ -68,8 +68,6 @@ class Events(db.Model):
     color: Mapped[str]
     priority: Mapped[int]
     enabled: Mapped[bool]
-    startdate: Mapped[str]
-    enddate: Mapped[str]
     lastchanged: Mapped[datetime.datetime] = mapped_column(default=lambda: datetime.datetime.now(datetime.timezone.utc), onupdate=lambda: datetime.datetime.now(datetime.timezone.utc))
     check_data: Mapped[str] = mapped_column(default=lambda: uuid.uuid4().hex, onupdate=lambda: uuid.uuid4().hex)
     
@@ -83,8 +81,6 @@ class Events(db.Model):
             "action": self.action,
             "color": self.color,
             "priority": self.priority,
-            "startdate": self.startdate,
-            "enddate": self.enddate,
             "enabled": self.enabled,
             "lastchanged": self.lastchanged.isoformat() if self.lastchanged else None,
             "check_data": self.check_data,

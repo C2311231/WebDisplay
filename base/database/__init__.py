@@ -85,10 +85,10 @@ class Database(commons.BaseClass):
                 return event.to_dict()
             return {}
     
-    def write_event(self, name: str, groups: list[str], criteria: str, action: str, color: str, priority: int, enabled: bool, startdate: str, enddate: str) -> None:
+    def write_event(self, name: str, groups: list[str], priority: int, enabled: bool, criteria: str, action: str, color: str) -> None:
         """Write a new event to the database."""
         with self.app.app_context():
-            new_event = Events(name=name, groups=groups, criteria=criteria, action=action, color=color, priority=priority, enabled=enabled, startdate=startdate, enddate=enddate) # type: ignore
+            new_event = Events(name=name, groups=groups, criteria=criteria, priority=priority, enabled=enabled, action=action, color=color) # type: ignore
             db.session.add(new_event)
             db.session.commit()
     
@@ -213,10 +213,10 @@ class Database(commons.BaseClass):
         except Exception as e:
             return commons.Response(True, "error", f"Failed to update configuration: {str(e)}", 500, {})
         
-    def _api_set_event(self, name: str, groups: list[str], criteria: str, action: str, color: str, priority: int, enabled: bool, startdate: str, enddate: str) -> commons.Response:
+    def _api_set_event(self, name: str, groups: list[str], priority: int, enabled: bool, criteria: str, action: str, color: str) -> commons.Response:
         """API endpoint to set a new event."""
         try:
-            self.write_event(name, groups, criteria, action, color, priority, enabled, startdate, enddate)
+            self.write_event(name, groups, priority, enabled, criteria, action, color)
             return commons.Response(False, "success", "Event created successfully", 200, {})
         except Exception as e:
             return commons.Response(True, "error", f"Failed to create event: {str(e)}", 500, {})
