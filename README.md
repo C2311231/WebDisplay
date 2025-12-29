@@ -1,5 +1,5 @@
 
-# WebDisplay
+# WebDisplay V2.0
 > **Work in progress**
 
 Simple project to remotely manage and control a web browser for digital signage

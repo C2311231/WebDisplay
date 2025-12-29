@@ -1,7 +1,10 @@
 from flask import render_template, Flask, request
-from base import networking, database, browser, web_v2, peers, cec, scheduler, api_v2
+from base import database, browser, peers, cec, scheduler
 import sys
 import socket
+
+from core.modules import web_v2
+from core.modules import api_v2, networking
 local_config = {}
 
 app = Flask(__name__)
