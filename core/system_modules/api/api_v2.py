@@ -1,4 +1,4 @@
-import commons, database
+import commons, core.system_modules.database.database as database
 import json
 import requests
 

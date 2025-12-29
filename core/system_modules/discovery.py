@@ -2,9 +2,9 @@ import threading
 import time
 import requests
 import json
-import commons, database
+import commons, core.system_modules.database.database as database
 import networking
-import api_v2, multicast_api_endpoint
+import core.system_modules.api.api_v2 as api_v2, multicast_api_endpoint
 
 
 class DiscoveryManager(commons.BaseClass):

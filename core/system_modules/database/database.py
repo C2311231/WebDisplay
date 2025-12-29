@@ -1,0 +1,28 @@
+from core.system_modules.database.setting import Setting
+
+
+class DBManager:
+    def __init__(self):
+        self.settings = []
+        self.required_settings = []
+        pass
+    
+    ## Registers a global setting in the database
+    ## @param setting_name: Name of the setting
+    ## @param default_value: Default value of the setting
+    ## @param type: Type of the setting (string, int, bool, float, json, etc.)
+    ## @param description: Description of the setting
+    def register_global_setting(self, setting_name: str, default_value: str, type: str, description: str, validation_data: dict, user_facing: bool) -> None:
+        if type not in ["string", "int", "bool", "float", "json"]:
+            raise ValueError(f"Invalid setting type ({type}) for {setting_name} with default value {default_value}")
+        self.settings.append(Setting(setting_name, default_value, type, description, validation_data, user_facing))
+    
+    def register_required_setting(self, setting_name: str) -> None:
+        self.required_settings.append(setting_name)
+        
+    def validate_required_settings(self) -> None:
+        for setting in self.required_settings:
+            for registered_setting in self.settings:
+                if setting == registered_setting.setting_name:
+                    break
+                raise ValueError(f"Required setting {setting} not registered in database manager")
