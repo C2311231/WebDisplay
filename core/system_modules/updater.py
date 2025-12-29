@@ -4,6 +4,7 @@ import subprocess
 import datetime
 import requests
 import core.module
+import system
 # Configuration
 
 REPO_URL = 'https://github.com/C2311231/WebDisplay.git'
@@ -15,7 +16,9 @@ BRANCH = 'main'
 class UpdateManager(core.module.module):
     """Class to manage updates for the WebDisplay application."""
     
-    def __init__(self, repo_url: str = REPO_URL, content_url: str = CONTENT_URL,  local_dir: str = LOCAL_DIR, archive_dir:str = ARCHIVE_DIR, branch: str = BRANCH):
+    def __init__(self, system: system.system, repo_url: str = REPO_URL, content_url: str = CONTENT_URL,  local_dir: str = LOCAL_DIR, archive_dir:str = ARCHIVE_DIR, branch: str = BRANCH):
+        self.system = system
+        self.api_registar: core.api.api_register = system.get_module("api_register")  # type: ignore
         self.repo_url = repo_url
         self.local_dir = local_dir
         self.archive_dir = archive_dir
@@ -138,19 +141,12 @@ class UpdateManager(core.module.module):
         print("Update complete.")
         exit(0)
         
-    def api_endpoints(self) -> list[dict]:
-        return [
-            {
-                "endpoint_type": "trigger",
-                "function": self.run_update,
-                "endpoint_domain": "updater",
-                "endpoint_name": "update",
-            },
-        ]
+    def register_api_endpoints(self) -> None:
+        self.api_registar.register_endpoint("updater", 1, "update", self.run_update, "Updates to the latest version")
 
 def register(system_manager):
-    return "updater", UpdateManager()
+    return "updater", UpdateManager(system_manager)
         
-if __name__ == '__main__':
-    updater = UpdateManager()
-    updater.run_update()
+# if __name__ == '__main__':
+#     updater = UpdateManager()
+#     updater.run_update()

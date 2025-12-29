@@ -6,3 +6,6 @@ class Setting:
         self.description = description
         self.validation_data = validation_data
         self.user_facing = user_facing
+        
+        # TODO load this from the config database
+        self.value = default_value

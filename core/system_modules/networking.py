@@ -3,9 +3,12 @@ import subprocess
 import core.module
 import socket
 import commons
+import system
+
 class NetworkingManager(core.module.module):
-    def __init__(self):
-        pass
+    def __init__(self, system: system.system):
+        self.system = system
+        self.settings_manager: settings_manager.SettingsManager = system.get_module("settings_manager") # type: ignore
 
     def configure_wifi(self, ssid: str, psk: str) -> None:
         command = f'nmcli dev wifi connect "{ssid}" password "{psk}"'
@@ -103,21 +106,11 @@ class NetworkingManager(core.module.module):
     def update(self, delta_time: float) -> None:
         pass
 
-    def required_config(self) -> dict:
-        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
-        data = {
-            "web_version": None,
-            "api_version": None,
-            "web_url": None,
-            "web_port": None,
-            "web_encryption": None,
-            "device_name": None,
-            "device_state": None,
-            "device_platform": None,
-            "device_id": None,
-            "device_ip": None,
-        }
-        return data
+    #TODO request ip, url, encription, etc from there modules
+    def required_config(self) -> None:
+        self.settings_manager.register_required_settings("web_version", "api_version", "web_url", "web_port", "web_encryption",
+            "device_name", "device_state", "device_platform", "device_id", "device_ip",
+        )
 
     def get_local_ip(self):
         try:
@@ -131,4 +124,4 @@ class NetworkingManager(core.module.module):
             return "Unable to determine local IP"
         
 def register(system_manager):
-    return "networking", NetworkingManager()
+    return "networking", NetworkingManager(system_manager)

@@ -3,20 +3,15 @@ import struct
 import json
 import time
 import commons
-
-
-class DiscoveryEngine(commons.BaseClass):
-    def __init__(
-        self,
-        config: dict,
-        discovery_port: int = 5000,
-        discovery_multicast_address: commons.Address = commons.Address("239.143.23.9")
-    ):
-        if not discovery_multicast_address.is_multicast():
-            raise ValueError()
-        self.config = config
-        self.discovery_port = discovery_port
-        self.discovery_multicast_address = discovery_multicast_address
+from system import system
+import database.settings_manager as settings_manager
+import module
+class DiscoveryEngine(module.module):
+    def __init__(self, system: system):
+        self.system = system
+        self.settings_manager: settings_manager.SettingsManager = system.get_module("settings_manager") # type: ignore
+        self.discovery_port = 5000 #TODO load this from config
+        self.discovery_multicast_address = commons.Address("239.143.23.9") #TODO load this from config
         self.api_send_id = 0
         
     def send_discovery(self) -> None:
@@ -33,14 +28,14 @@ class DiscoveryEngine(commons.BaseClass):
                     "type": "inform",
                     "version": "v2",
                     "destination": "0",  # 0 means all devices
-                    "source": self.config["device_id"],
+                    "source": self.settings_manager.get_setting("device_id").value,
                     "domain": "peer_manager",
                     "name": "discovery",
                     "data": {
-                        "device_name": self.config["name"],
-                        "device_id": self.config["device_id"],
-                        "device_ip": self.config["ip"],
-                        "device_port": self.config["port"],
+                        "device_name": self.settings_manager.get_setting("device_name").value,
+                        "device_id": self.settings_manager.get_setting("device_id").value,
+                        "device_ip": self.settings_manager.get_setting("device_ip").value,
+                        "device_port": self.settings_manager.get_setting("device_port").value,
                     }
                 }
                 self.api_send_id += 1
@@ -78,26 +73,14 @@ class DiscoveryEngine(commons.BaseClass):
             except ValueError:
                 print(f"Invalid Message from {address}")
 
-    def tick(self) -> None:
-        # Run any maintenance tasks and checks (about every 5 seconds)
+    def update(self, delta_time: float) -> None:
         pass
 
-    def required_config(self) -> dict:
-        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
-        data = {
-            "web_version": None,
-            "api_version": None,
-            "web_url": None,
-            "web_port": None,
-            "web_encryption": None,
-            "device_name": None,
-            "device_state": None,
-            "device_platform": None,
-            "device_id": None,
-            "device_ip": None,
-        }
-        return data
+    def register_required_config(self) -> None:
+        # TODO source ip data from networking module
+        self.settings_manager.register_required_settings("web_version", "api_version", "web_url", "web_port", "web_encryption", "device_name", 
+                                                         "device_state", "device_platform", "device_id", "device_ip")
     
     
 def register(system_manager):
-    return "discovery_engine", DiscoveryEngine()
+    return "discovery_engine", DiscoveryEngine(system_manager)
