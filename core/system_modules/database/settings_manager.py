@@ -1,9 +1,10 @@
-from setting import Setting
-import system
-import module
+from .setting import Setting
+import core.system
+import core.module
+
 ## TODO Add Validation to the settings types, storage methods, and validation_data
-class SettingsManager(module.module):
-    def __init__(self, system_manager: system.system):
+class SettingsManager(core.module.module):
+    def __init__(self, system_manager: core.system.system):
         self.system_manager = system_manager
         self.settings = []
         self.required_settings = []

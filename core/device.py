@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column
-
-db = SQLAlchemy()
+from core.system_modules.database.extentions import db # TODO Find a way to validate this module exists (Or just make a system requried module handler)
 
 class Device(db.Model):
     __tablename__ = "device"

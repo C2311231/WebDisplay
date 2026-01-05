@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template
 
+from core import module
+
 bp = Blueprint("web_v2", __name__)
 
 @bp.route("/")

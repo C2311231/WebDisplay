@@ -1,7 +1,7 @@
-import module
-import api_command
+import core.module
+import core.system_modules.api.api_command as api_command
 
-class APIRegistry(module.module):
+class APIRegistry(core.module.module):
     def __init__(self):
         self.commands = []
 

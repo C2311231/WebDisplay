@@ -4,7 +4,7 @@ import subprocess
 import datetime
 import requests
 import core.module
-import system
+import core.system
 # Configuration
 
 REPO_URL = 'https://github.com/C2311231/WebDisplay.git'
@@ -16,9 +16,9 @@ BRANCH = 'main'
 class UpdateManager(core.module.module):
     """Class to manage updates for the WebDisplay application."""
     
-    def __init__(self, system: system.system, repo_url: str = REPO_URL, content_url: str = CONTENT_URL,  local_dir: str = LOCAL_DIR, archive_dir:str = ARCHIVE_DIR, branch: str = BRANCH):
+    def __init__(self, system: core.system.system, repo_url: str = REPO_URL, content_url: str = CONTENT_URL,  local_dir: str = LOCAL_DIR, archive_dir:str = ARCHIVE_DIR, branch: str = BRANCH):
         self.system = system
-        self.api_registar: core.api.api_register = system.get_module("api_register")  # type: ignore
+        system.require_modules("api_registry")
         self.repo_url = repo_url
         self.local_dir = local_dir
         self.archive_dir = archive_dir
@@ -26,6 +26,7 @@ class UpdateManager(core.module.module):
         self.content_url = content_url
         
     def start(self):
+        self.api_registar: core.api.api_register = self.system.get_module("api_registry")  # type: ignore
         return super().start()
     
     def shutdown(self):

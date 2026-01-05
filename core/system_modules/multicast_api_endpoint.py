@@ -2,18 +2,22 @@ import socket
 import struct
 import json
 import time
-import commons
-from system import system
-import database.settings_manager as settings_manager
-import module
-class DiscoveryEngine(module.module):
+import core.commons as commons
+from core.system import system
+import core.system_modules.database.settings_manager as settings_manager
+import core.module
+class DiscoveryEngine(core.module.module):
     def __init__(self, system: system):
         self.system = system
-        self.settings_manager: settings_manager.SettingsManager = system.get_module("settings_manager") # type: ignore
+        system.require_modules("settings_manager")
         self.discovery_port = 5000 #TODO load this from config
         self.discovery_multicast_address = commons.Address("239.143.23.9") #TODO load this from config
         self.api_send_id = 0
         
+    def start(self) -> None:
+        self.settings_manager: settings_manager.SettingsManager = self.system.get_module("settings_manager") # type: ignore
+
+    
     def send_discovery(self) -> None:
         """Send discovery message periodically."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)

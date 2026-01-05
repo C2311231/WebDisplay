@@ -2,13 +2,17 @@ import os
 import subprocess
 import core.module
 import socket
-import commons
-import system
+import core.commons as commons
+import core.system as system
+import core.system_modules.database.settings_manager as settings_manager
 
 class NetworkingManager(core.module.module):
     def __init__(self, system: system.system):
         self.system = system
-        self.settings_manager: settings_manager.SettingsManager = system.get_module("settings_manager") # type: ignore
+        system.require_modules("settings_manager")
+        
+    def start(self) -> None:
+        self.settings_manager: settings_manager.SettingsManager = self.system.get_module("settings_manager") # type: ignore
 
     def configure_wifi(self, ssid: str, psk: str) -> None:
         command = f'nmcli dev wifi connect "{ssid}" password "{psk}"'

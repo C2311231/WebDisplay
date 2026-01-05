@@ -1,19 +1,18 @@
-import threading
-import time
-import requests
-import json
-import commons, core.system_modules.database.database as database
-import networking
+import core.system_modules.database.database as database
 import core.system_modules.api.api_v2 as api_v2
-import system
-import database.settings_manager as settings_manager
+import core.system
+import core.system_modules.database.settings_manager as settings_manager
+import core.module as module
 
-class DiscoveryManager(commons.BaseClass):
-    def __init__(self, system: system.system):
+class DiscoveryManager(module.module):
+    def __init__(self, system: core.system.system):
         self.system = system
-        self.settings_manager: settings_manager.SettingsManager = system.get_module("settings_manager") # type: ignore
+        system.require_modules("settings_manager", "networking")
+    
+    def start(self) -> None:
+        self.settings_manager: settings_manager.SettingsManager = self.system.get_module("settings_manager") # type: ignore
         #self.discover_engine = multicast_api_endpoint.DiscoveryEngine(config, db)
-        self.networking = system.get_module("networking")
+        self.networking = self.system.get_module("networking")
 #        threading.Thread(target=self.check_device_connections, daemon=True).start()
 
     # def start_discovery(self) -> None:
