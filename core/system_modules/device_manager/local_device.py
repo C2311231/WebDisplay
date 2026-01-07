@@ -1,15 +1,15 @@
-import device
+import core.system_modules.device_manager.device as device
 import pkgutil
 import importlib
 import device_modules
 
 class LocalDevice(device.Device):
+    modules = {}
     __mapper_args__ = {
         "polymorphic_identity": "local",
     }
     
     def __init__(self, system):
-        self.modules = {}
         self.system = system
         self.load_modules()
         

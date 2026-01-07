@@ -17,17 +17,30 @@ class web_module(module_base.module):
         self.api: api_registry.ApiRegistry = self.system.get_module("api_registry")  # type: ignore
         self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
         self.register_routes()
-        
-        # Register the API endpoint
-        self.app.add_url_rule(
-            "/api",
-            endpoint="api",
-            view_func=self.api_http_endpoint,
-            methods=["POST"]
-        )
         self.run_app()
         
     def register_routes(self) -> None:
+        @self.app.after_request
+        def add_header(r):
+            """
+            Add headers to both force latest IE rendering engine or Chrome Frame,
+            and also to cache the rendered page for 10 minutes.
+            (Fixes a caching issue)
+            """
+            r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            r.headers["Pragma"] = "no-cache"
+            r.headers["Expires"] = "0"
+            r.headers["Cache-Control"] = "public, max-age=0"
+            return r
+        @self.app.route("/api/", methods=["POST"])
+        def api_http_endpoint(self):
+            """
+            API HTTP endpoint for processing requests.
+            (Just for reference, not finished implementing yet)
+            """
+            api_response = self.api.process_request(request.data.decode("utf-8"))
+            return api_response.to_json(), api_response.code # type: ignore
+
         bp = routes.get_blueprint()
         self.app.register_blueprint(bp, url_prefix="/")
         
@@ -39,15 +52,6 @@ class web_module(module_base.module):
         
     def _threaded_run(self, host: str = "0.0.0.0", port: int = 5000) -> None:
         self.app.run(host=host, port=port)
-        
-    def api_http_endpoint(self):
-        """
-        API HTTP endpoint for processing requests.
-        (Just for reference, not finished implementing yet)
-        """
-        api_response = self.api.process_request(request.data.decode("utf-8"))
-        return api_response.to_json(), api_response.code # type: ignore
-        
         
 def register(system: system.system) -> tuple[str, module_base.module]:
     module_id = "web_app"

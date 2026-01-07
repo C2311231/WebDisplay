@@ -8,17 +8,22 @@ class SettingsManager(core.module.module):
         self.system_manager = system_manager
         self.settings = []
         self.required_settings = []
-        pass
+        system_manager.require_modules("database_manager")
+        
+    def start(self):
+        self.validate_required_settings()
+        self.db = self.system_manager.get_module("database_manager").get_database()  # type: ignore
+        super().start()
     
     ## Registers a global setting in the database
     ## @param setting_name: Name of the setting
     ## @param default_value: Default value of the setting
     ## @param type: Type of the setting (string, int, bool, float, json, etc.)
     ## @param description: Description of the setting
-    def register_global_setting(self, setting_name: str, default_value: str, type: str, description: str, validation_data: dict, user_facing: bool) -> None:
+    def register_global_setting(self, domain: str, version: str,setting_name: str, default_value: str, type: str, description: str, validation_data: dict, user_facing: bool) -> None:
         if type not in ["string", "int", "bool", "float", "json"]:
             raise ValueError(f"Invalid setting type ({type}) for {setting_name} with default value {default_value}")
-        self.settings.append(Setting(setting_name, default_value, type, description, validation_data, user_facing))
+        self.settings.append(Setting(self.db, domain, version, setting_name=setting_name, default_value=default_value, type=type, description=description, validation_data=validation_data, user_facing=user_facing))
     
     def register_required_setting(self, setting_name: str) -> None:
         self.required_settings.append(setting_name)
