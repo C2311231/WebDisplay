@@ -32,14 +32,14 @@ class DiscoveryEngine(core.module.module):
                     "type": "inform",
                     "version": "v2",
                     "destination": "0",  # 0 means all devices
-                    "source": self.settings_manager.get_setting("device_id").value,
+                    "source": self.settings_manager.get_setting("device_id").get_value(),
                     "domain": "peer_manager",
                     "name": "discovery",
                     "data": {
-                        "device_name": self.settings_manager.get_setting("device_name").value,
-                        "device_id": self.settings_manager.get_setting("device_id").value,
-                        "device_ip": self.settings_manager.get_setting("device_ip").value,
-                        "device_port": self.settings_manager.get_setting("device_port").value,
+                        "device_name": self.settings_manager.get_setting("device_name").get_value(),
+                        "device_id": self.settings_manager.get_setting("device_id").get_value(),
+                        "device_ip": self.settings_manager.get_setting("device_ip").get_value(),
+                        "device_port": self.settings_manager.get_setting("device_port").get_value(),
                     }
                 }
                 self.api_send_id += 1
