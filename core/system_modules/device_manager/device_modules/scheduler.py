@@ -6,7 +6,7 @@ import commons, core.system_modules.database.database, browser, cec
 import module
 
 class Scheduler(module.module):
-    def __init__(self, config: dict, db: system_modules.database.Database, browser_manager: browser.BrowserManager, cec: cec.CecManager):
+    def __init__(self, config: dict, db: core.system_modules.database.Database, browser_manager: browser.BrowserManager, cec: cec.CecManager):
         self.db = db
         self.run = False
         self.browser_manager = browser_manager

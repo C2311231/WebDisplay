@@ -10,7 +10,6 @@ class system:
         self.modules = {}
         self._last_update_time = time.time()
         self.required_modules = []
-        self.devices = []
         self.running = True
         
     def register_module(self, module):
@@ -78,9 +77,6 @@ class system:
             if module_id not in self.modules:
                 raise ValueError(f"Required module {module_id} not loaded in system.")
             
-    def add_device(self, device):
-        self.devices.append(device)
-        
     def core_loop(self):
         while self.running:
             #print("Core Loop Tick")

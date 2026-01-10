@@ -2,16 +2,18 @@ import core.system_modules.device_manager.device as device
 import pkgutil
 import importlib
 import device_modules
-
+import time
 class LocalDevice(device.Device):
     modules = {}
     __mapper_args__ = {
         "polymorphic_identity": "local",
     }
     
-    def __init__(self, system):
+    def __init__(self, system, **kwargs):
         self.system = system
         self.load_modules()
+        self.required_modules = []
+        super().__init__(**kwargs)
         
     def load_modules(self):
         for _, module_name, _ in pkgutil.iter_modules(device_modules.__path__):
@@ -42,4 +44,31 @@ class LocalDevice(device.Device):
     def module_exists(self, module_id: str) -> bool:
         return module_id in self.modules
     
+    def update_modules(self):
+        for module_id, module in self.modules.items():
+            if hasattr(module, "update"):
+                module.update(time.time()-self._last_update_time)
+            self._last_update_time = time.time()
     
+    def start_modules(self):
+        for module_id, module in self.modules.items():
+            if hasattr(module, "start"):
+                module.start()
+                
+    def shutdown_modules(self):
+        for module_id, module in self.modules.items():
+            if hasattr(module, "shutdown"):
+                module.shutdown()
+                
+                
+    def require_module(self, module_id: str):
+        self.required_modules.append(module_id)
+
+    def require_modules(self, *module_ids: str):
+        for module_id in module_ids:
+            self.require_module(module_id)
+            
+    def validate_required_modules(self):
+        for module_id in self.required_modules:
+            if module_id not in self.modules:
+                raise ValueError(f"Required module {module_id} not loaded in system.")

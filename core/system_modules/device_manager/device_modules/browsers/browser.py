@@ -1,16 +1,28 @@
+import selenium
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from base import commons
+from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
-
-class BrowserManager(commons.BaseClass):
+import core.commons as commons
+import time
+class Browser:
     def __init__(self, config: dict):
-        self.event = 0
-        self.awaiting = []
         self.driver = None
         self.config = config
+        self.in_use = False
+        self.cleanup_timer = time.time()
+        
+    def is_in_use(self) -> bool:
+        return self.in_use
 
+    def set_in_use(self, in_use: bool) -> None:
+        self.in_use = in_use
+        if not in_use:
+            self.cleanup_timer = time.time()
+
+    # TODO Add propererror handling and recovery for driver issues
+    # TODO Load browser on desired screen
+    # TODO Add audio desitination handling
     def init_driver(self) -> None:
         chrome_options = Options()
         chrome_options.add_argument("--kiosk")  # Uncomment if needed
@@ -24,6 +36,8 @@ class BrowserManager(commons.BaseClass):
         chrome_options.add_experimental_option('extensionLoadTimeout', 60000)
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option("useAutomationExtension", False)
+        
+        # TODO improve handling of chromedriver path
         try:
             service = Service(executable_path=r'/usr/bin/chromedriver', log_output='/tmp/chromedriver.log')
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -49,10 +63,10 @@ class BrowserManager(commons.BaseClass):
             self.init_driver()
             self.driver.get(str(url)) # type: ignore
 
-    def get_screenshot(self) -> None:
+    def get_screenshot(self) -> str | None:
         if self.driver:
             try:
-                self.driver.save_screenshot("./static/images/latestScreenShot.png")
+                return self.driver.get_screenshot_as_base64()
 
             except:
                 self.init_driver()
@@ -62,14 +76,3 @@ class BrowserManager(commons.BaseClass):
         if self.driver:
             self.driver.quit()
             self.driver = None
-
-    def get_event(self) -> int:
-        return self.event
-
-    def set_event(self, eventID: int) -> None:
-        self.event = eventID
-        
-    def required_config(self) -> dict:
-        # Required configuration data in database in format {parameter: default} (None results in defaulting to parameters set by other classes, if none are set an error will be thrown)
-        data = {}
-        return data
