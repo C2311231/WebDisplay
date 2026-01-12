@@ -1,11 +1,14 @@
-
+import core.system as system
+import core.system_modules.device_manager.device as device
+import core.system_modules.device_manager.device_modules.screens as device_manager_screen
 # TODO Store Content in Database
+
 class Content:
-    def __init__(self, system, device_manager):
-        self.device_manager = device_manager
+    def __init__(self, system: system.system, device: device.Device):
+        self.device = device
         self.system = system
         
-    def display(self, screen):
+    def start_content(self, screen: device_manager_screen.Screen):
         pass
     
     def stop_display(self):

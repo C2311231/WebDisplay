@@ -1,8 +1,10 @@
-## Version 0.0.3
+## Version 0.1.0
+
+### Full Rewrite
 
 Features Added:
- - RPI 5 Support
+
 Bugs Fixed:
- - Fixed RPI Image Bugs
+
 Notes:
-This program still contains numerous bugs, unexpected behavior may occur.
+This program may still contains numerous bugs, unexpected behavior may occur.

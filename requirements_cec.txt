@@ -1,2 +1,2 @@
-cec == 0.2.8
+git+https://github.com/C2311231/python-cec.git
 -r requirements.txt
