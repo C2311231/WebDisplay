@@ -1,3 +1,16 @@
+"""
+System Module
+
+Part of WebDisplay
+System
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import pkgutil
 import importlib
 import core.system_modules

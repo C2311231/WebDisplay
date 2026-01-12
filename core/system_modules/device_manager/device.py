@@ -1,7 +1,19 @@
+"""
+Device Module Device Base Class
+
+Part of WebDisplay
+System device_manager Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import inspect
 from core.system_modules.database.extentions import db # TODO Find a way to validate this module exists (Or just make a system requried module handler)
 from sqlalchemy.ext.mutable import MutableDict
 

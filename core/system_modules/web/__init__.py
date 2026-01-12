@@ -1,3 +1,16 @@
+"""
+Web Module Manager
+
+Part of WebDisplay
+System Web Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.system as system
 import core.module as module_base
 from flask import Flask, request

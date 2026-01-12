@@ -1,3 +1,16 @@
+"""
+Database Module Settings Manager
+
+Part of WebDisplay
+System Database Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 from sqlalchemy import func
 from .setting import Setting
 import core.system

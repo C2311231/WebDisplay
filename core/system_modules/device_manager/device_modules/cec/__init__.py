@@ -1,3 +1,16 @@
+"""
+CEC Module Manager
+
+Part of WebDisplay
+Device CEC Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import glob
 import core.module as device_module
 import core.system as system

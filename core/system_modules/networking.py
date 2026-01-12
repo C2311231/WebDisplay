@@ -1,3 +1,16 @@
+"""
+Networking Module Manager
+
+Part of WebDisplay
+System Networking Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import os
 import subprocess
 import core.module

@@ -1,3 +1,20 @@
+"""
+CEC Module Class
+
+Part of WebDisplay
+Device CEC Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Manages CEC functionality for a specific HDMI port on supported devices.
+- Requires libcec to be installed on the host system.
+- Requires proper permissions to access /dev/cec* devices on Linux systems.
+- Requires custom fork of python-cec with multi-adapter support: https://github.com/C2311231/python-cec
+"""
+
 venderDecoder = {
     0x000039: "TOSHIBA",
     0x0000F0: "SAMSUNG",
@@ -30,8 +47,7 @@ venderDecoder = {
     0: "UNKNOWN",
 }
 
-#cec = None  # clears problems in ide (no affect on code)
-from core import commons, system
+from core import system
 from core.system_modules.device_manager.device_modules.screens.screen import Screen
 from core.system_modules.device_manager.device import Device
 
@@ -39,7 +55,9 @@ try:
     import cec  # type: ignore
 except:
     pass
-# TODO Add in proper error handling and recovery
+
+# TODO Add in proper error handling and failure recovery
+# # type: ignore is present to suppress ide warnings when cec library is not installed 
 class CecDevice():
     def __init__(self, system: system.system, device: Device, screen: Screen, adapter) -> None:
         self.system = system

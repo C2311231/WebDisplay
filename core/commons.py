@@ -1,3 +1,16 @@
+"""
+Common Classes and Functions
+
+Part of WebDisplay
+System
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Actively being phased out
+"""
 import json
 
 

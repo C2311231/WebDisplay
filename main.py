@@ -1,3 +1,16 @@
+"""
+Webdisplay Main Program File
+
+Part of WebDisplay
+Entrypoint
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.system as system
 system_manager = system.system()
 system_manager.load_modules()

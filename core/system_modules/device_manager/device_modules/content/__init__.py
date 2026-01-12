@@ -1,7 +1,23 @@
+"""
+Content Module Manager
+
+Part of WebDisplay
+Device Content Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.module as device_module
 import core.system as system
 from core.system_modules.device_manager.device_modules.content.content import Content
 from core.system_modules.database.base_setting import SettingBase
+
+# TODO Create a way to register different content types and their settings
+
 
 class ContentManager(device_module.module):
     def __init__(self, device_module: device_module.module, system: system.system):

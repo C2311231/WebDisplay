@@ -1,5 +1,21 @@
+"""
+Database Module Setting Model
+
+Part of WebDisplay
+System Database Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Represents a setting stored in the database.
+- Validation and other features added in BaseSetting.
+"""
+
 from core.system_modules.database.extentions import db
 import datetime
+
 class dbSetting(db.Model):
     __tablename__ = "setting"
     id = db.Column(db.Integer, primary_key=True)

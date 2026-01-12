@@ -1,3 +1,16 @@
+"""
+Updater Module Manager
+
+Part of WebDisplay
+System Updater Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import os
 import shutil
 import subprocess

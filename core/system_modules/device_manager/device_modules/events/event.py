@@ -1,8 +1,24 @@
+"""
+Events Module Event Class
+
+Part of WebDisplay
+Device Events Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.system as system
 import core.system_modules.device_manager.device as device
 import core.system_modules.device_manager.device_modules.screens.screen as screen
 import core.system_modules.device_manager.device_modules.content.content as content
 from datetime import datetime
+
+# TODO Turn Criteria into its own class for better structure and validation
+# TODO Use Criteria classes to dynamicaly generate ui and serialize/deserialize criteria
 
 class Event:
     def __init__(self, system: system.system, device: device.Device, screen: screen.Screen, content: content.Content, priority: int, criteria: dict):
@@ -15,6 +31,22 @@ class Event:
         self.last_occurence = None
         self.overide = False
         self.itterations = 0
+        self.enabled = True
+        
+    def is_active(self) -> bool:
+        return self.evaluate_criteria() or self.overide
+        
+    def is_enabled(self) -> bool:
+        return self.enabled
+    
+    def is_overide(self) -> bool:
+        return self.overide
+    
+    def enable(self) -> None:
+        self.enabled = True
+        
+    def disable(self) -> None:
+        self.enabled = False
         
     def trigger(self, manual_overide: bool) -> None:
         self.last_occurence = datetime.now()

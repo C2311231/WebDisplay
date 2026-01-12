@@ -1,6 +1,17 @@
-from flask import Blueprint, render_template
+"""
+Web Module Routes
 
-from core import module
+Part of WebDisplay
+System Web Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
+from flask import Blueprint, render_template
 
 bp = Blueprint("web_v2", __name__)
 

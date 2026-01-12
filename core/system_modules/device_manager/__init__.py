@@ -1,3 +1,16 @@
+"""
+Device Manager Module
+
+Part of WebDisplay
+System device_manager Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.module as module
 import core.system as system
 import core.system_modules.device_manager.local_device as local_device

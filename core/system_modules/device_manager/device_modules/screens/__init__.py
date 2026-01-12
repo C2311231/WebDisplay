@@ -1,3 +1,16 @@
+"""
+Screen Module Manager
+
+Part of WebDisplay
+Device Screen Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.module as device_module
 import core.system as system
 from core.system_modules.device_manager.device_modules.screens.screen import Screen

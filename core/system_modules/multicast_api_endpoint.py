@@ -1,3 +1,17 @@
+"""
+Multicast API Endpoint Module
+
+Part of WebDisplay
+System Multicast API Endpoint Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Manages multicast access to the API.
+"""
+
 import socket
 import struct
 import json
@@ -6,6 +20,8 @@ import core.commons as commons
 from core.system import system
 import core.system_modules.database.settings_manager as settings_manager
 import core.module
+
+# TODO Reimplement Discovery Module
 class DiscoveryEngine(core.module.module):
     def __init__(self, system: system):
         self.system = system

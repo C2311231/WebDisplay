@@ -1,3 +1,17 @@
+"""
+Browser Module Class
+
+Part of WebDisplay
+Device Browser Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Manages and represents a web browser instance for a device.
+"""
+
 import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -5,6 +19,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
 import core.commons as commons
 import time
+
 class Browser:
     def __init__(self, config: dict):
         self.driver = None

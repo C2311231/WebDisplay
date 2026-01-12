@@ -1,3 +1,16 @@
+"""
+API legacy implmentation
+
+Part of WebDisplay
+legacy code (for reference only)
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.commons as commons, core.system_modules.database.database as database
 import json
 import requests

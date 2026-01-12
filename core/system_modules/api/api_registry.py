@@ -1,3 +1,17 @@
+"""
+API registry manager
+
+Part of WebDisplay
+System API Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Manages the registration and retrieval of API commands.
+"""
+
 import core.module
 import core.system_modules.api.api_command as api_command
 

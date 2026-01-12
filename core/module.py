@@ -1,3 +1,16 @@
+"""
+Module Interface
+
+Part of WebDisplay
+Systems
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import abc
 
 

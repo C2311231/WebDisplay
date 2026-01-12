@@ -1,3 +1,16 @@
+"""
+API command class
+
+Part of WebDisplay
+System API Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 class APICommand():
      def __init__(self, capability: str, capability_version: int, name: str, handler, description: str, example: str):
         self.capability = capability

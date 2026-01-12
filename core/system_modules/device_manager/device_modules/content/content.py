@@ -1,6 +1,20 @@
+"""
+Content Module Base Class
+
+Part of WebDisplay
+Device Content Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.system as system
 import core.system_modules.device_manager.device as device
 import core.system_modules.device_manager.device_modules.screens as device_manager_screen
+
 # TODO Store Content in Database
 
 class Content:

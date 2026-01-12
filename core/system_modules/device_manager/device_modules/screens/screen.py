@@ -1,7 +1,20 @@
+"""
+Screen Module Screen Class
+
+Part of WebDisplay
+Device Screen Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.system
 import core.system_modules.device_manager.device as device
+
 class Screen():
-    
     # TODO Store these settings in the database
     def __init__(self, system: core.system.system, device: device.Device, screen_name: str, screen_id: str, input: str, resolution_x: int, resolution_y: int, volume: float, sound_device: str, screen_type: str, scale: float):
         self.system = system

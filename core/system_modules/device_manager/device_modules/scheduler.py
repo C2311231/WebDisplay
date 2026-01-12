@@ -1,3 +1,16 @@
+"""
+Scheduler Class Legacy Code
+
+Part of WebDisplay
+legacy Scheduler (kept for reference)
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import threading
 import time
 from datetime import datetime

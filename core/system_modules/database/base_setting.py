@@ -1,3 +1,18 @@
+"""
+Database Setting Base Class
+
+Part of WebDisplay
+System Database Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Base class for database settings
+- Provides methods for serialization, deserialization, and validation
+"""
+
 from core.system import system
 from core.system_modules.database.dbsetting import dbSetting
 from flask_sqlalchemy import SQLAlchemy
@@ -25,3 +40,5 @@ class SettingBase():
             self.db_setting = dbSetting(domain=self.domain, setting_name=self.setting_name, value=value, version=self.version) # type: ignore
         else:
             self.db_setting.value = value
+            
+    ## TODO Add validation, serialization, and deserialization methods later

@@ -1,3 +1,18 @@
+"""
+Database Module Setting Class
+
+Part of WebDisplay
+System Database Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+- Database storing implementation of SettingBase class.
+"""
+#TODO Remove code duplication from base class
+
 from core.system import system
 from core.system_modules.database.dbsetting import dbSetting
 from core.system_modules.database import base_setting

@@ -1,9 +1,23 @@
+"""
+Discovery Module Manager
+
+Part of WebDisplay
+System Discovery Module
+
+License: MIT license
+
+Author: C2311231
+
+Notes:
+"""
+
 import core.system_modules.database.database as database
 import core.system_modules.api.api_v2 as api_v2
 import core.system
 import core.system_modules.database.settings_manager as settings_manager
 import core.module as module
 
+# TODO Reimplement Discovery Module
 class DiscoveryManager(module.module):
     def __init__(self, system: core.system.system):
         self.system = system
@@ -47,19 +61,6 @@ class DiscoveryManager(module.module):
     #         time.sleep(5)
             
     ## TODO Move all networking related config requirements to source from networking module
-    def register_required_config(self) -> None:
-        self.settings_manager.register_required_settings(
-            "web_version",
-            "api_version",
-            "web_url",
-            "web_port",
-            "web_encryption",
-            "device_name",
-            "device_state",
-            "device_platform",
-            "device_id",
-            "device_ip",
-            )
 
 def register(system_manager):
     return "discovery", DiscoveryManager(system_manager)
