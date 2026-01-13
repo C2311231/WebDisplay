@@ -13,7 +13,7 @@ Notes:
 
 import core.module as device_module
 import core.system as system
-from core.system_modules.device_manager.device_modules.content.content import Content
+from core.system_modules.device_manager.device_modules.content.content.content import Content
 from core.system_modules.database.base_setting import SettingBase
 
 # TODO Create a way to register different content types and their settings
