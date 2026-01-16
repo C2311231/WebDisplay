@@ -123,12 +123,6 @@ class NetworkingManager(core.module.module):
     def update(self, delta_time: float) -> None:
         pass
 
-    #TODO request ip, url, encription, etc from there modules
-    def required_config(self) -> None:
-        self.settings_manager.register_required_settings("web_version", "api_version", "web_url", "web_port", "web_encryption",
-            "device_name", "device_state", "device_platform", "device_id", "device_ip",
-        )
-
     def get_local_ip(self):
         try:
             # Connect to an external server (Google's DNS) to determine the local IP

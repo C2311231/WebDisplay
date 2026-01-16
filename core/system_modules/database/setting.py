@@ -41,3 +41,8 @@ class Setting(base_setting.SettingBase):
         else:
             self.db_setting.value = value
         self.database_manager.get_session().commit()
+        
+    def push_to_db(self):
+        if self.db_setting is None:
+            self.db_setting = dbSetting(domain=self.domain, setting_name=self.setting_name, value=self.default_value, version=self.version) # type: ignore
+            self.database_manager.get_session().add(self.db_setting)

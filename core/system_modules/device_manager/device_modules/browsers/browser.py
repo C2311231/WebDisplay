@@ -67,19 +67,19 @@ class Browser:
         self.driver.set_page_load_timeout(60)
 
 
-    def open_url(self, url: commons.Url) -> None:
+    def open_url(self, url: str) -> None:
         if self.driver:
             try:
-                self.driver.get(str(url))
+                self.driver.get(url)
             except TimeoutException:
                 print(f"Timeout loading {url}")
     
             except:
                 self.init_driver()
-                self.driver.get(str(url))
+                self.driver.get(url)
         else:
             self.init_driver()
-            self.driver.get(str(url)) # type: ignore
+            self.driver.get(url) # type: ignore
 
     def get_screenshot(self) -> str | None:
         if self.driver:

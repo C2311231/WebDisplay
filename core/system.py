@@ -35,7 +35,7 @@ class system:
         self.modules[module_id] = module
     
     def shutdown(self):
-        self.runnuing = False
+        self.running = False
     
     def load_modules(self):
         for _, module_name, _ in pkgutil.iter_modules(core.system_modules.__path__):

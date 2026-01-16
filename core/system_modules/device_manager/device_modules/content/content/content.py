@@ -13,34 +13,49 @@ Notes:
 
 import json
 import core.system as system
-import core.system_modules.device_manager.device as device
+import core.system_modules.device_manager.local_device as local_device
 import core.system_modules.device_manager.device_modules.screens as device_manager_screen
-
+from core.system_modules.device_manager.device_modules.browsers import BrowserManager
 # TODO Store Content in Database
 
+class ContentContext:
+    def __init__(self, screen: device_manager_screen.Screen, context: dict = {}) -> None:
+        self.screen = screen
+        self.context = context
+        
+    def get_screen(self):
+        return self.screen
+    
+    def get_context(self):
+        return self.context
+    
+    def add_context(self, key, value):
+        self.context[key] = value
+
 class Content:
-    def __init__(self, system: system.system, device: device.Device):
+    def __init__(self, system: system.system, device: local_device.LocalDevice):
         self.device = device
         self.system = system
         
-    def start_content(self, screen: device_manager_screen.Screen):
+    def start_content(self, screen: device_manager_screen.Screen) -> ContentContext:
+        return ContentContext(screen)
+    
+    def stop_display(self, content_context: ContentContext):
         pass
     
-    def stop_display(self):
-        pass
-    
-    def get_status(self) -> dict:
+    def get_status(self, content_context: ContentContext) -> dict:
         return {}
     
-    def update_content(self, content_data: dict):
+    def update_content(self, content_data: dict, content_context: ContentContext):
         pass
     
-    def preview(self) -> str:
+    def preview(self, content_context: ContentContext) -> str:
         return ""
     
 class ContentURL(Content):
-    def __init__(self, system: system.system, device: device.Device, url: str):
+    def __init__(self, system: system.system, device: local_device.LocalDevice, url: str):
         super().__init__(system, device)
+        self.browser_manager: BrowserManager = self.device.get_module("browser_manager") # type: ignore
         
         if not url.startswith("http"):
             self.url  = "http://" + url
@@ -48,25 +63,41 @@ class ContentURL(Content):
             self.url = url
         
     def start_content(self, screen: device_manager_screen.Screen):
-        pass
+        context = ContentContext(screen)
+        browser = self.browser_manager.requestBrowser()
+        context.add_context("browser", browser)
+        browser.init_driver()
+        browser.set_position(screen.x, screen.y)
+        screen.lock()
+        browser.open_url(self.url)
+        return context
         
-    def stop_display(self):
-        pass
+    def stop_display(self, content_context: ContentContext):
+        browser = content_context.get_context()["browser"]
+        self.browser_manager.returnBrowser(browser)
+        content_context.get_screen().release()
         
-    def get_status(self):
+    def get_status(self, content_context: ContentContext):
         return {"type": "url", "url": self.url}
         
-    def update_content(self, content_data: dict):
+    def update_content(self, content_data: dict, content_context: ContentContext):
         if "url" in content_data:
             self.url = content_data["url"]
+            content_context.get_context()["browser"].open_url(self.url)
             
-    def preview(self):
+    def preview(self, content_context: ContentContext):
         return f"Previewing URL Content: {self.url}"
     
 class ContentPublishedGoogleSlide(Content):
-    def __init__(self, system: system.system, device: device.Device, slide_id: str):
+    def __init__(self, system: system.system, device: local_device.LocalDevice, slide_id: str, autostart: bool, loop: bool, delay: float):
         super().__init__(system, device)
         self.slide_id = slide_id
+        self.autostart = autostart
+        self.loop = loop
+        self.delay = delay
+        self.browser_manager: BrowserManager = self.device.get_module("browser_manager") # type: ignore
+        
+        self.url = "https://docs.google.com/presentation/d/e/" + slide_id +  f"/pub?start={autostart}&loop={loop}&delayms={delay * 1000}"
         
         # Old Implementation for reference
         # data = json.loads(event["data"])
@@ -79,25 +110,42 @@ class ContentPublishedGoogleSlide(Content):
         #     self.browser_manager.set_event(event["id"])
         
     def start_content(self, screen: device_manager_screen.Screen):
-        pass
+        context = ContentContext(screen)
+        browser = self.browser_manager.requestBrowser()
+        context.add_context("browser", browser)
+        browser.init_driver()
+        browser.set_position(screen.x, screen.y)
+        screen.lock()
+        browser.open_url(self.url)
+        return context
         
-    def stop_display(self):
-        pass
+    def stop_display(self, content_context: ContentContext):
+        browser = content_context.get_context()["browser"]
+        self.browser_manager.returnBrowser(browser)
+        content_context.get_screen().release()
         
-    def get_status(self):
+    def get_status(self, content_context: ContentContext):
         return {"type": "published_google_slide", "slide_id": self.slide_id}
         
-    def update_content(self, content_data: dict):
+    def update_content(self, content_data: dict, content_context: ContentContext):
         if "slide_id" in content_data:
             self.slide_id = content_data["slide_id"]
+            self.url = "https://docs.google.com/presentation/d/e/" + self.slide_id +  f"/pub?start={self.autostart}&loop={self.loop}&delayms={self.delay * 1000}"
+            content_context.get_context()["browser"].open_url(self.url)
             
-    def preview(self):
+    def preview(self, content_context: ContentContext):
         return f"Previewing Published Google Slide Content: {self.slide_id}"
     
 class ContentViewingGoogleSlide(Content):
-    def __init__(self, system: system.system, device: device.Device, slide_id: str):
+    def __init__(self, system: system.system, device: local_device.LocalDevice, slide_id: str, autostart: bool, loop: bool, delay: float):
         super().__init__(system, device)
         self.slide_id = slide_id
+        self.autostart = autostart
+        self.loop = loop
+        self.delay = delay
+        self.browser_manager: BrowserManager = self.device.get_module("browser_manager") # type: ignore
+
+        self.url = "https://docs.google.com/presentation/d/" + slide_id + f"/present?start={self.autostart}&loop={self.loop}&delayms={self.delay * 1000}"
         
         # Old Implementation for reference
         # data = json.loads(event["data"])
@@ -110,19 +158,30 @@ class ContentViewingGoogleSlide(Content):
         # self.browser_manager.set_event(event["id"])
         
     def start_content(self, screen: device_manager_screen.Screen):
-        pass
+        context = ContentContext(screen)
+        browser = self.browser_manager.requestBrowser()
+        context.add_context("browser", browser)
+        browser.init_driver()
+        browser.set_position(screen.x, screen.y)
+        screen.lock()
+        browser.open_url(self.url)
+        return context
         
-    def stop_display(self):
-        pass
+    def stop_display(self, content_context: ContentContext):
+        browser = content_context.get_context()["browser"]
+        self.browser_manager.returnBrowser(browser)
+        content_context.get_screen().release()
         
-    def get_status(self):
+    def get_status(self, content_context: ContentContext):
         return {"type": "viewing_google_slide", "slide_id": self.slide_id}
         
-    def update_content(self, content_data: dict):
+    def update_content(self, content_data: dict, content_context: ContentContext):
         if "slide_id" in content_data:
             self.slide_id = content_data["slide_id"]
+            self.url = "https://docs.google.com/presentation/d/" + self.slide_id +  f"/present?start={self.autostart}&loop={self.loop}&delayms={self.delay * 1000}"
+            content_context.get_context()["browser"].open_url(self.url)
             
-    def preview(self):
+    def preview(self, content_context: ContentContext):
         return f"Previewing Viewing Google Slide Content: {self.slide_id}"
     
     

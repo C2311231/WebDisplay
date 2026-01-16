@@ -18,9 +18,12 @@ import core.system_modules.api.api_command as api_command
 class APIRegistry(core.module.module):
     def __init__(self):
         self.commands = []
+        self.capabilities = []
 
     def register_command(self, capability: str, capability_version: int, name: str, handler, description: str, example: str = "") -> None:
         self.commands.append(api_command.APICommand(capability, capability_version, name, handler, description, example))
+        if capability not in self.capabilities:
+            self.capabilities.append(capability)
         
     def get_commands(self) -> list[api_command.APICommand]:
         return self.commands
@@ -30,6 +33,9 @@ class APIRegistry(core.module.module):
             if command.capability == capability and command.name == name and command.capability_version == capability_version:
                 return command
         return None
+    
+    def get_capabilities(self):
+        return self.capabilities
     
 def register(system_manager):
     api_registry = APIRegistry()

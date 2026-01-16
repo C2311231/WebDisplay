@@ -22,9 +22,7 @@ class ScreenManager(device_module.module):
         self.device_module = device_module
         self.system = system
         self.screens = []
-        print(get_monitors())
-        self.monitors = get_monitors()
-        print("HelloWorld")
+        self.monitors = get_monitors()[0]
         
     def start(self):
         super().start()

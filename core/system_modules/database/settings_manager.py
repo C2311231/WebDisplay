@@ -17,6 +17,7 @@ import core.system
 import core.module
 from .setting import dbSetting
 from .database import DBManager
+import uuid
 
 ## TODO Add Validation to the settings types, storage methods, and validation_data
 class SettingsManager(core.module.module):
@@ -29,6 +30,9 @@ class SettingsManager(core.module.module):
     def start(self):
         self.validate_required_settings()
         self.database_manager: DBManager = self.system_manager.get_module("database_manager") # type: ignore
+        
+        self.device_id = self.register_setting(domain = "system", version = "V1", setting_name= "device_id", default_value= str(uuid.uuid4()), type= "string", description = "UUID for system identification", validation_data = {}, user_facing = False)
+        self.device_id.push_to_db() # Ensure device id is stored in db for future starts (If not already)
         super().start()
     
     ## Registers a global setting in the database
@@ -36,10 +40,12 @@ class SettingsManager(core.module.module):
     ## @param default_value: Default value of the setting
     ## @param type: Type of the setting (string, int, bool, float, json, enum, etc.)
     ## @param description: Description of the setting
-    def register_global_setting(self, domain: str, version: str,setting_name: str, default_value: str, type: str, description: str, validation_data: dict, user_facing: bool) -> None:
-        if type not in ["string", "int", "bool", "float", "json"]:
+    def register_setting(self, domain: str, version: str,setting_name: str, default_value: str, type: str, description: str, validation_data: dict, user_facing: bool) -> Setting:
+        if type not in ["string", "int", "bool", "float", "ip", "json"]:
             raise ValueError(f"Invalid setting type ({type}) for {setting_name} with default value {default_value}")
-        self.settings.append(Setting(self.database_manager, domain, version, setting_name=setting_name, default_value=default_value, value_type=type, description=description, validation_data=validation_data, user_facing=user_facing))
+        setting = Setting(self.database_manager, domain, version, setting_name=setting_name, default_value=default_value, value_type=type, description=description, validation_data=validation_data, user_facing=user_facing)
+        self.settings.append(setting)
+        return setting
     
     def register_required_setting(self, setting_name: str) -> None:
         self.required_settings.append(setting_name)
@@ -55,9 +61,9 @@ class SettingsManager(core.module.module):
                     break
                 raise ValueError(f"Required setting {setting} not registered in database manager")
             
-    def get_setting(self, setting_name: str) -> Setting:
+    def get_setting(self, domain:str, setting_name: str) -> Setting:
         for setting in self.settings:
-            if setting.setting_name == setting_name:
+            if setting.setting_name == setting_name and setting.domain == domain:
                 return setting
         raise ValueError(f"Setting {setting_name} not found in database manager")
     
