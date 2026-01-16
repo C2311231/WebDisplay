@@ -26,13 +26,13 @@ class BrowserManager(device_module.module):
     def getBrowsers(self) -> list[Browser]:
         return self.browsers
     
-    def requestBrowser(self, config: dict) -> Browser:
+    def requestBrowser(self) -> Browser:
         for browser in self.browsers:
             if not browser.is_in_use():
                 browser.set_in_use(True)
                 return browser
             
-        browser = Browser(config)
+        browser = Browser()
         self.browsers.append(browser)
         browser.set_in_use(True)
         browser.init_driver()
@@ -48,3 +48,6 @@ class BrowserManager(device_module.module):
                 if time.time() - browser.cleanup_timer > 5:
                     browser.close()
                     self.browsers.remove(browser)
+                    
+def register(system, device):
+    return "browser_manager", BrowserManager(device, system)

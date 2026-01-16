@@ -14,7 +14,6 @@ Notes:
 import json
 import core.system as system
 import core.system_modules.device_manager.device as device
-from core.system_modules.device_manager.device_modules.events import event
 import core.system_modules.device_manager.device_modules.screens as device_manager_screen
 
 # TODO Store Content in Database
@@ -125,3 +124,10 @@ class ContentViewingGoogleSlide(Content):
             
     def preview(self):
         return f"Previewing Viewing Google Slide Content: {self.slide_id}"
+    
+    
+def register_content_types(content_manager):
+    content_manager.register_content_type("url", [])
+    content_manager.register_content_type("published_google_slide", [])
+    content_manager.register_content_type("viewing_google_slide", [])
+    

@@ -29,5 +29,16 @@ class Screen():
         self.sound_device = sound_device
         self.screen_type = screen_type
         self.active = False
+        self.locked = False
         
+    def set_active(self, active: bool) -> None:
+        self.active = active
+        
+    def is_active(self) -> bool:
+        return self.active
     
+    def lock(self) -> None:
+        self.locked = True
+        
+    def release(self) -> None:
+        self.locked = False

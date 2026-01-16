@@ -40,7 +40,7 @@ class LocalDevice(device.Device):
                 if module_id in self.modules:
                     raise ValueError(f"Module with id {module_id} is already registered.")
 
-                if not isinstance(module, Module):
+                if not isinstance(module, Module.module):
                     raise TypeError(f"{module_id} does not inherit module")
 
                 self.modules[module_id] = module

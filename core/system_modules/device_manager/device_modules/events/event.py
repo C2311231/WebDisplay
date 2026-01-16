@@ -50,7 +50,7 @@ class Event:
     def disable(self) -> None:
         self.enabled = False
         
-    def trigger(self, manual_overide: bool) -> None:
+    def trigger(self, manual_overide: bool = False) -> None:
         self.last_occurence = datetime.now()
         self.overide = manual_overide
         self.itterations += 1

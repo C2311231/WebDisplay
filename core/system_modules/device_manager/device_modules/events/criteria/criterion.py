@@ -10,14 +10,18 @@ Author: C2311231
 
 Notes:
 """
-
+from __future__ import annotations
 import core.system as system
 import core.system_modules.device_manager.device as device
-import core.system_modules.device_manager.device_modules.events.event as event
 from datetime import datetime
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import core.system_modules.device_manager.device_modules.events.event as event
+
 class Criterion:
-    def __init__(self, system: system.system, device: device.Device, event: event.Event) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event") -> None:
         self.name = "base_criterion"
         self.device = device
         self.system = system
@@ -39,7 +43,7 @@ class Criterion:
         }
     
 class AlwaysCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, value) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", value) -> None:
         super().__init__(system, device, event)
         self.name = "Always"
         self.value = value
@@ -63,7 +67,7 @@ class AlwaysCriterion(Criterion):
     
     
 class AllCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, criteria: list[Criterion]) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", criteria: list[Criterion]) -> None:
         super().__init__(system, device, event)
         self.name = "All"
         self.criteria = criteria
@@ -87,7 +91,7 @@ class AllCriterion(Criterion):
         }
         
 class AnyCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, criteria: list[Criterion]) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", criteria: list[Criterion]) -> None:
         super().__init__(system, device, event)
         self.name = "Any"
         self.criteria = criteria
@@ -111,7 +115,7 @@ class AnyCriterion(Criterion):
         }
         
 class NotCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, criterion: Criterion) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", criterion: Criterion) -> None:
         super().__init__(system, device, event)
         self.name = "Not"
         self.criterion = criterion
@@ -135,7 +139,7 @@ class NotCriterion(Criterion):
         }
         
 class DateRangeCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, start_date: str, end_date: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", start_date: str, end_date: str) -> None:
         super().__init__(system, device, event)
         self.name = "Date Range"
         self.start_date = start_date
@@ -165,7 +169,7 @@ class DateRangeCriterion(Criterion):
         }
         
 class TimeRangeCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, start_time: str, end_time: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", start_time: str, end_time: str) -> None:
         super().__init__(system, device, event)
         self.name = "Time Range"
         self.start_time = start_time
@@ -195,7 +199,7 @@ class TimeRangeCriterion(Criterion):
         }
         
 class DayOfWeekCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, day: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", day: str) -> None:
         super().__init__(system, device, event)
         self.name = "Days of Week"
         self.day = day
@@ -222,7 +226,7 @@ class DayOfWeekCriterion(Criterion):
         }
         
 class BeforeTimeCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, before_time: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", before_time: str) -> None:
         super().__init__(system, device, event)
         self.name = "Before Time"
         self.before_time = before_time
@@ -248,7 +252,7 @@ class BeforeTimeCriterion(Criterion):
         }
         
 class AfterTimeCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, after_time: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", after_time: str) -> None:
         super().__init__(system, device, event)
         self.name = "After Time"
         self.after_time = after_time
@@ -274,7 +278,7 @@ class AfterTimeCriterion(Criterion):
         }
         
 class ScreenActiveCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event") -> None:
         super().__init__(system, device, event)
         self.name = "Screen Active"
 
@@ -296,7 +300,7 @@ class ScreenActiveCriterion(Criterion):
         return {}
     
 class BeforeDateCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, before_date: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", before_date: str) -> None:
         super().__init__(system, device, event)
         self.name = "Before Date"
         self.before_date = before_date
@@ -322,7 +326,7 @@ class BeforeDateCriterion(Criterion):
         }
         
 class AfterDateCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, after_date: str) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", after_date: str) -> None:
         super().__init__(system, device, event)
         self.name = "After Date"
         self.after_date = after_date
@@ -348,7 +352,7 @@ class AfterDateCriterion(Criterion):
         }
         
 class BeforeWeekdayCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, before_weekday: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", before_weekday: int) -> None:
         super().__init__(system, device, event)
         self.name = "Before Weekday"
         self.before_weekday = before_weekday
@@ -375,7 +379,7 @@ class BeforeWeekdayCriterion(Criterion):
         }
         
 class AfterWeekdayCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, after_weekday: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", after_weekday: int) -> None:
         super().__init__(system, device, event)
         self.name = "After Weekday"
         self.after_weekday = after_weekday
@@ -402,7 +406,7 @@ class AfterWeekdayCriterion(Criterion):
         }
         
 class DurringWeekdayCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, weekday: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", weekday: int) -> None:
         super().__init__(system, device, event)
         self.name = "Durring Weekday"
         self.weekday = weekday
@@ -429,7 +433,7 @@ class DurringWeekdayCriterion(Criterion):
         }
         
 class DurringMonthCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, month: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", month: int) -> None:
         super().__init__(system, device, event)
         self.name = "Durring Month"
         self.month = month
@@ -456,7 +460,7 @@ class DurringMonthCriterion(Criterion):
         }
         
 class DurringDateCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, date: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", date: int) -> None:
         super().__init__(system, device, event)
         self.name = "Durring Date"
         self.date = date
@@ -482,7 +486,7 @@ class DurringDateCriterion(Criterion):
         }
 
 class DurringDayCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, day: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", day: int) -> None:
         super().__init__(system, device, event)
         self.name = "Durring Day"
         self.day = day
@@ -508,7 +512,7 @@ class DurringDayCriterion(Criterion):
         }
         
 class BeforeMonthCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, before_month: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", before_month: int) -> None:
         super().__init__(system, device, event)
         self.name = "Before Month"
         self.before_month = before_month
@@ -535,7 +539,7 @@ class BeforeMonthCriterion(Criterion):
         }
         
 class AfterMonthCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, after_month: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", after_month: int) -> None:
         super().__init__(system, device, event)
         self.name = "After Month"
         self.after_month = after_month
@@ -562,7 +566,7 @@ class AfterMonthCriterion(Criterion):
         }
         
 class AfterDayCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, after_day: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", after_day: int) -> None:
         super().__init__(system, device, event)
         self.name = "After Day"
         self.after_day = after_day
@@ -588,7 +592,7 @@ class AfterDayCriterion(Criterion):
         }
         
 class BeforeDayCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, before_day: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", before_day: int) -> None:
         super().__init__(system, device, event)
         self.name = "Before Day"
         self.before_day = before_day
@@ -614,7 +618,7 @@ class BeforeDayCriterion(Criterion):
         }
         
 class SinceLastOccurenceCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, since_seconds: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", since_seconds: int) -> None:
         super().__init__(system, device, event)
         self.name = "Since Last Occurence"
         self.since_seconds = since_seconds
@@ -642,7 +646,7 @@ class SinceLastOccurenceCriterion(Criterion):
         }
         
 class BeforeNthIterationCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, before_nth: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", before_nth: int) -> None:
         super().__init__(system, device, event)
         self.name = "Before Nth Iteration"
         self.before_nth = before_nth
@@ -670,7 +674,7 @@ class BeforeNthIterationCriterion(Criterion):
 # Only possibly useful if combined with other criteria or used with manual triggers
 
 class AfterNthIterationCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, after_nth: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", after_nth: int) -> None:
         super().__init__(system, device, event)
         self.name = "After Nth Iteration"
         self.after_nth = after_nth
@@ -694,7 +698,7 @@ class AfterNthIterationCriterion(Criterion):
         }
         
 class NthIterationCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, nth: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", nth: int) -> None:
         super().__init__(system, device, event)
         self.name = "Nth Iteration"
         self.nth = nth
@@ -718,7 +722,7 @@ class NthIterationCriterion(Criterion):
         }
         
 class EveryNthIterationCriterion(Criterion):
-    def __init__(self, system: system.system, device: device.Device, event: event.Event, every_nth: int) -> None:
+    def __init__(self, system: system.system, device: device.Device, event: "event.Event", every_nth: int) -> None:
         super().__init__(system, device, event)
         self.name = "Every Nth Iteration"
         self.every_nth = every_nth

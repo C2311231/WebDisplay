@@ -13,6 +13,8 @@ Notes:
 
 import core.module as device_module
 import core.system as system
+# TODO find a way to get more data on specific ports in use
+from screeninfo import get_monitors
 from core.system_modules.device_manager.device_modules.screens.screen import Screen
 
 class ScreenManager(device_module.module):
@@ -20,6 +22,9 @@ class ScreenManager(device_module.module):
         self.device_module = device_module
         self.system = system
         self.screens = []
+        print(get_monitors())
+        self.monitors = get_monitors()
+        print("HelloWorld")
         
     def start(self):
         super().start()

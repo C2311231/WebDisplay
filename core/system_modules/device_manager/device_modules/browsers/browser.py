@@ -21,9 +21,8 @@ import core.commons as commons
 import time
 
 class Browser:
-    def __init__(self, config: dict):
+    def __init__(self):
         self.driver = None
-        self.config = config
         self.in_use = False
         self.cleanup_timer = time.time()
         
@@ -34,6 +33,10 @@ class Browser:
         self.in_use = in_use
         if not in_use:
             self.cleanup_timer = time.time()
+            
+    def set_position(self, x: int, y: int) -> None:
+        if self.driver:
+            self.driver.set_window_position(x, y)
 
     # TODO Add propererror handling and recovery for driver issues
     # TODO Load browser on desired screen
