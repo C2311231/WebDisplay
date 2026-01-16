@@ -15,7 +15,6 @@ Notes:
 
 from core.system import system
 from core.system_modules.database.dbsetting import dbSetting
-from flask_sqlalchemy import SQLAlchemy
 
 
 class SettingBase():

@@ -16,7 +16,7 @@ from .setting import Setting
 import core.system
 import core.module
 from .setting import dbSetting
-
+from .database import DBManager
 
 ## TODO Add Validation to the settings types, storage methods, and validation_data
 class SettingsManager(core.module.module):
@@ -28,7 +28,7 @@ class SettingsManager(core.module.module):
         
     def start(self):
         self.validate_required_settings()
-        self.db = self.system_manager.get_module("database_manager").get_database()  # type: ignore
+        self.database_manager: DBManager = self.system_manager.get_module("database_manager") # type: ignore
         super().start()
     
     ## Registers a global setting in the database
@@ -39,7 +39,7 @@ class SettingsManager(core.module.module):
     def register_global_setting(self, domain: str, version: str,setting_name: str, default_value: str, type: str, description: str, validation_data: dict, user_facing: bool) -> None:
         if type not in ["string", "int", "bool", "float", "json"]:
             raise ValueError(f"Invalid setting type ({type}) for {setting_name} with default value {default_value}")
-        self.settings.append(Setting(self.db, domain, version, setting_name=setting_name, default_value=default_value, value_type=type, description=description, validation_data=validation_data, user_facing=user_facing))
+        self.settings.append(Setting(self.database_manager, domain, version, setting_name=setting_name, default_value=default_value, value_type=type, description=description, validation_data=validation_data, user_facing=user_facing))
     
     def register_required_setting(self, setting_name: str) -> None:
         self.required_settings.append(setting_name)
@@ -80,7 +80,7 @@ class SettingsManager(core.module.module):
     def get_unique_subdomains(self, domain_prefix: str) -> list[str]:
         prefix_len = len(domain_prefix)
         query = (
-            self.db.session.query(
+            self.database_manager.get_session().query(
                 func.substr(
                     dbSetting.domain,
                     prefix_len + 1,  # start after prefix

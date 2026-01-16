@@ -25,12 +25,11 @@ class system:
         self.required_modules = []
         self.running = True
         
-    def register_module(self, module):
-        module_id, module = module.register(self)
+    def register_module(self, module_id, module):
         if module_id in self.modules:
             raise ValueError(f"Module with id {module_id} is already registered.")
 
-        if not isinstance(module, module):
+        if not isinstance(module, module_base.module):
             raise TypeError(f"{module_id} does not inherit module")
 
         self.modules[module_id] = module
@@ -69,8 +68,16 @@ class system:
     
     def start_modules(self):
         for module_id, module in self.modules.items():
+            if hasattr(module, "preload"):
+                module.preload()
+
+        for module_id, module in self.modules.items():
             if hasattr(module, "start"):
                 module.start()
+                
+        for module_id, module in self.modules.items():
+            if hasattr(module, "post_start"):
+                module.post_start()
                 
     def shutdown_modules(self):
         for module_id, module in self.modules.items():

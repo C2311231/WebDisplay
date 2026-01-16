@@ -18,6 +18,7 @@ import core.system_modules.web.routes as routes
 import threading
 import os
 import core.system_modules.api.api_registry as api_registry
+import core.system_modules.database.database as database_module
 
 base_dir = os.path.dirname(__file__)
 
@@ -27,6 +28,7 @@ class web_module(module_base.module):
         system.require_modules("api_registry")
                                        
     def start(self) -> None:
+        self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
         self.api: api_registry.ApiRegistry = self.system.get_module("api_registry")  # type: ignore
         self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
         self.register_routes()

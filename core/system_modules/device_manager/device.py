@@ -12,25 +12,23 @@ Notes:
 """
 
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import String, Integer, JSON, DateTime, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from core.system_modules.database.extentions import db # TODO Find a way to validate this module exists (Or just make a system requried module handler)
 from sqlalchemy.ext.mutable import MutableDict
 
-class Device(db.Model):
+class Device(db):
     __tablename__ = "device"
-    
-
     
     id: Mapped[int] = mapped_column(primary_key=True)
     device_id: Mapped[str] = mapped_column(unique=True, nullable=False, index=True)
-    device_type: Mapped[str] = mapped_column(db.String(20), nullable=False)  # discriminator
+    device_type: Mapped[str] = mapped_column(String(20), nullable=False)  # discriminator
     device_name: Mapped[str] = mapped_column(nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime, nullable=True)
-    version = db.Column(db.String(32), nullable=True)
-    enabled = db.Column(db.Boolean, nullable=False, default=True)
-    extra_config = db.Column(MutableDict.as_mutable(db.JSON), default=dict)
+    created_at = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    last_seen = mapped_column(DateTime, nullable=True)
+    version = mapped_column(String(32), nullable=True)
+    enabled = mapped_column(Boolean, nullable=False, default=True)
+    extra_config = mapped_column(MutableDict.as_mutable(JSON), default=dict)
     
     
     __mapper_args__ = {

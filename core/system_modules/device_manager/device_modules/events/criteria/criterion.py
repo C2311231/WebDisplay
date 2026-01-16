@@ -744,33 +744,33 @@ class EveryNthIterationCriterion(Criterion):
 
 # TODO Eventually migrate to a registry system for criteria so other modules can add criteria dynamically
 
-def get_all_available_criteria() -> list[type[Criterion]]:
-    return [
-        AlwaysCriterion,
-        AllCriterion,
-        AnyCriterion,
-        NotCriterion,
-        DateRangeCriterion,
-        TimeRangeCriterion,
-        DayOfWeekCriterion,
-        BeforeTimeCriterion,
-        AfterTimeCriterion,
-        ScreenActiveCriterion,
-        BeforeDateCriterion,
-        AfterDateCriterion,
-        BeforeWeekdayCriterion,
-        AfterWeekdayCriterion,
-        DurringWeekdayCriterion,
-        DurringMonthCriterion,
-        DurringDateCriterion,
-        DurringDayCriterion,
-        BeforeMonthCriterion,
-        AfterMonthCriterion,
-        BeforeDayCriterion,
-        AfterDayCriterion,
-        SinceLastOccurenceCriterion,
-        BeforeNthIterationCriterion,
-        AfterNthIterationCriterion,
-        NthIterationCriterion,
-        EveryNthIterationCriterion
-    ]
+def get_all_available_criteria() -> dict[str, type[Criterion]]:
+    return {
+        "always": AlwaysCriterion,
+        "all": AllCriterion,
+        "any": AnyCriterion,
+        "not": NotCriterion,
+        "date_range": DateRangeCriterion,
+        "time_range": TimeRangeCriterion,
+        "day_of_week": DayOfWeekCriterion,
+        "before_time": BeforeTimeCriterion,
+        "after_time": AfterTimeCriterion,
+        "screen_active": ScreenActiveCriterion,
+        "before_date": BeforeDateCriterion,
+        "after_date": AfterDateCriterion,
+        "before_weekday": BeforeWeekdayCriterion,
+        "after_weekday": AfterWeekdayCriterion,
+        "durring_weekday": DurringWeekdayCriterion,
+        "durring_month": DurringMonthCriterion,
+        "durring_date": DurringDateCriterion,
+        "durring_day": DurringDayCriterion,
+        "before_month": BeforeMonthCriterion,
+        "after_month": AfterMonthCriterion,
+        "before_day": BeforeDayCriterion,
+        "after_day": AfterDayCriterion,
+        "since_last_occurence": SinceLastOccurenceCriterion,
+        "before_nth_iteration": BeforeNthIterationCriterion,
+        "after_nth_iteration": AfterNthIterationCriterion,
+        "nth_iteration": NthIterationCriterion,
+        "every_nth_iteration": EveryNthIterationCriterion
+    }

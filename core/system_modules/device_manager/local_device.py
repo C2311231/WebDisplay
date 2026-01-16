@@ -14,7 +14,8 @@ Notes:
 import core.system_modules.device_manager.device as device
 import pkgutil
 import importlib
-import device_modules
+import core.system_modules.device_manager.device_modules as device_modules
+import core.module as Module
 import time
 
 class LocalDevice(device.Device):
@@ -39,7 +40,7 @@ class LocalDevice(device.Device):
                 if module_id in self.modules:
                     raise ValueError(f"Module with id {module_id} is already registered.")
 
-                if not isinstance(module, module):
+                if not isinstance(module, Module):
                     raise TypeError(f"{module_id} does not inherit module")
 
                 self.modules[module_id] = module
@@ -49,7 +50,7 @@ class LocalDevice(device.Device):
                 
     def get_module(self, module_id: str):
         if module_id not in self.modules:
-            raise KeyError(f"Module with id {module_id} not found.")
+            raise KeyError(f"Module with id {module_id} not found on device.")
         return self.modules.get(module_id)
     
     def get_all_modules(self):
@@ -85,4 +86,4 @@ class LocalDevice(device.Device):
     def validate_required_modules(self):
         for module_id in self.required_modules:
             if module_id not in self.modules:
-                raise ValueError(f"Required module {module_id} not loaded in system.")
+                raise ValueError(f"Required module {module_id} not loaded in device.")

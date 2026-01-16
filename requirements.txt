@@ -1,4 +1,4 @@
 Flask == 3.1.1
-Flask-SQLAlchemy == 3.1.1
+sqlalchemy == 2.0.45
 requests == 2.32.4
 selenium == 4.33.0
