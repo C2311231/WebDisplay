@@ -29,7 +29,7 @@ class SettingBase():
         
         ## TODO Add migration and validation capabilities later
 
-    def get_value(self) -> str | None:
+    def get_value(self) -> str | bool | int | float | None:
         if self.db_setting is None:
             return self.default_value
         return self.db_setting.value

@@ -18,3 +18,5 @@ Transition to a more object orentated system.
         Etc.
                     
     Create API wrappers so that api calls can be easily made through multicast or http.
+
+    Add in support for local video playback using mpv

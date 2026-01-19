@@ -47,6 +47,7 @@ class web_module(module_base.module):
             r.headers["Expires"] = "0"
             r.headers["Cache-Control"] = "public, max-age=0"
             return r
+        
         @self.app.route("/api/", methods=["POST"])
         def api_http_endpoint(self):
             """

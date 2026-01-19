@@ -53,7 +53,8 @@ class DiscoveryEngine(core.module.module):
                 "type": "discover",
                 "id": self.settings_manager.get_setting("system", "id").get_value(),
                 "ver": 1,
-                "api": f"http://{self.networking.get_local_ip()}:{5000}/api",
+                "http": f"http://{self.networking.get_local_ip()}:{5000}/api",
+                "ws": f"ws://{self.networking.get_local_ip()}:{5000}/ws",
                 "caps": self.api_registery.get_capabilities(),
                 "ts": str(datetime.now())
                 }
