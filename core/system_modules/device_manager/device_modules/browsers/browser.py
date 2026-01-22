@@ -17,7 +17,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
-import core.commons as commons
 import time
 
 class Browser:

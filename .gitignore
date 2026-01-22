@@ -2,3 +2,4 @@ instance/
 .conda/
 __pycache__/
 .vscode/
+*.db

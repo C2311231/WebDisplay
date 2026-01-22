@@ -15,7 +15,6 @@ import os
 import subprocess
 import core.module
 import socket
-import core.commons as commons
 import core.system as system
 import core.system_modules.database.settings_manager as settings_manager
 
@@ -43,7 +42,7 @@ class NetworkingManager(core.module.module):
         os.system(f"nmcli con up {interface}")
         print(f"Ethernet ({interface}) configured to use DHCP.")
 
-    def configure_static(self, ip: commons.Address, gateway: commons.Address, dns: commons.Address, interface: str) -> None:
+    def configure_static(self, ip: str, gateway: str, dns: str, interface: str) -> None:
         os.system(f"nmcli con mod {interface} ipv4.addresses {ip}/24")
         os.system(f"nmcli con mod {interface} ipv4.gateway {gateway}")
         os.system(f"nmcli con mod {interface} ipv4.dns {dns}")
@@ -52,51 +51,18 @@ class NetworkingManager(core.module.module):
         print(f"Ethernet ({interface}) configured with static IP: {ip}")
 
     def get_interfaces(self) -> list[dict]:
-        # result = subprocess.run(["nmcli", "device", "status"], stdout=subprocess.PIPE, text=True)
-        # lines = result.stdout.splitlines()[1:]  # Skip the first line (header)
-
-        # interfaces = []
-        # for line in lines:
-        #     parts = line.split()
-        #     interface = {
-        #         "name": parts[0],
-        #         "type": parts[1],
-        #         "state": parts[2],
-        #         "data": get_interface_details(parts[0])
-        #     }
-        #     interfaces.append(interface)
-        interfaces = [
-            {
-                "name": "eth0",
-                "type": "Ethernet",
-                "state": "online",
-                "data": {
-                    "ip_address": "987.123.123.321",
-                    "dns": "1.1.1.1",
-                    "gateway": "987.123.123.1",
-                },
-            },
-            {
-                "name": "eth1",
-                "type": "Ethernet",
-                "state": "online",
-                "data": {
-                    "ip_address": "987.123.123.321",
-                    "dns": "1.1.1.1",
-                    "gateway": "987.123.123.1",
-                },
-            },
-            {
-                "name": "wlps1",
-                "type": "WiFi",
-                "state": "online",
-                "data": {
-                    "ip_address": "987.123.123.321",
-                    "dns": "1.1.1.1",
-                    "gateway": "987.123.123.1",
-                },
-            },
-        ]
+        result = subprocess.run(["nmcli", "device", "status"], stdout=subprocess.PIPE, text=True)
+        lines = result.stdout.splitlines()[1:]  # Skip the first line (header)
+        interfaces = []
+        for line in lines:
+            parts = line.split()
+            interface = {
+                "name": parts[0],
+                "type": parts[1],
+                "state": parts[2],
+                "data": self.get_interface_details(parts[0])
+            }
+            interfaces.append(interface)
         return interfaces
 
     def get_interface_details(self, interface) -> dict:
