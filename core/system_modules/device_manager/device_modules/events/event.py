@@ -18,9 +18,6 @@ import core.system_modules.device_manager.device_modules.content.content.content
 import core.system_modules.device_manager.device_modules.events.criteria.criterion as criteria
 from datetime import datetime
 
-# TODO Turn Criteria into its own class for better structure and validation
-# TODO Use Criteria classes to dynamicaly generate ui and serialize/deserialize criteria
-
 class Event:
     def __init__(self, system: system.system, device: device.Device, name: str, screen: screen.Screen, content: content.Content, priority: int, criteria: list[criteria.Criterion]):
         self.system = system
@@ -54,10 +51,10 @@ class Event:
         self.last_occurence = datetime.now()
         self.overide = manual_overide
         self.itterations += 1
-        self.content.start_content(self.screen)
+        self.context = self.content.start_content(self.screen)
         
     def stop(self) -> None:
-        self.content.stop_display()
+        self.content.stop_display(self.context)
         self.overide = False
         
     def evaluate_criteria(self) -> bool:

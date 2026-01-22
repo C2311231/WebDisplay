@@ -67,7 +67,7 @@ class ContentURL(Content):
         browser = self.browser_manager.requestBrowser()
         context.add_context("browser", browser)
         browser.init_driver()
-        browser.set_position(screen.x, screen.y)
+        browser.set_position(screen.get_x(), screen.get_y())
         screen.lock()
         browser.open_url(self.url)
         return context
@@ -114,7 +114,7 @@ class ContentPublishedGoogleSlide(Content):
         browser = self.browser_manager.requestBrowser()
         context.add_context("browser", browser)
         browser.init_driver()
-        browser.set_position(screen.x, screen.y)
+        browser.set_position(screen.get_x(), screen.get_y())
         screen.lock()
         browser.open_url(self.url)
         return context
@@ -162,7 +162,7 @@ class ContentViewingGoogleSlide(Content):
         browser = self.browser_manager.requestBrowser()
         context.add_context("browser", browser)
         browser.init_driver()
-        browser.set_position(screen.x, screen.y)
+        browser.set_position(screen.get_x(), screen.get_y())
         screen.lock()
         browser.open_url(self.url)
         return context

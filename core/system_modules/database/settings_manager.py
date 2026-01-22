@@ -19,7 +19,6 @@ from .setting import dbSetting
 from .database import DBManager
 import uuid
 
-## TODO Add Validation to the settings types, storage methods, and validation_data
 class SettingsManager(core.module.module):
     def __init__(self, system_manager: core.system.system):
         self.system_manager = system_manager

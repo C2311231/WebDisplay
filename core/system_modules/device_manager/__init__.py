@@ -31,8 +31,7 @@ class DeviceManager(module.module):
             dev.load_modules()
         super().start()
         
-        #TODO Remove this after testing
-        local_device.LocalDevice(self.system, id=1, device_id="test", device_name="TestDevice")
+        # local_device.LocalDevice(self.system, id=1, device_id="test", device_name="TestDevice")
         
         
     def register_device(self, device: device.Device) -> None:

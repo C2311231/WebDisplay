@@ -745,9 +745,6 @@ class EveryNthIterationCriterion(Criterion):
             "every_nth": self.every_nth
         }
 
-
-# TODO Eventually migrate to a registry system for criteria so other modules can add criteria dynamically
-
 def get_all_available_criteria() -> dict[str, type[Criterion]]:
     return {
         "always": AlwaysCriterion,

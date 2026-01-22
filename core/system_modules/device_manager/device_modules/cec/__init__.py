@@ -21,8 +21,8 @@ class CecManager(device_module.module):
         self.device_module = device_module
         self.system = system
         self.cec_devices: list[CecDevice] = []
-        self.cec_ports = glob.glob("/dev/cec*") # TODO add windows support
-
+        self.cec_ports = glob.glob("/dev/cec*")
+        
     def get_cec_ports(self) -> list[str]:
         return self.cec_ports
     

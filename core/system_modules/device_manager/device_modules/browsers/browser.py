@@ -39,7 +39,6 @@ class Browser:
             self.driver.set_window_position(x, y)
 
     # TODO Add propererror handling and recovery for driver issues
-    # TODO Load browser on desired screen
     # TODO Add audio desitination handling
     def init_driver(self) -> None:
         chrome_options = Options()

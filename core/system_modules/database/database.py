@@ -16,13 +16,20 @@ from .extentions import db, BaseModel
 from core.module import module
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
+import argparse
 
 class DBManager(module):
     def __init__(self):
         self.db = db
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--db_path", type=str, help="Path to the sqlite DB file")
+        args = parser.parse_args()
         
-        ## TODO load this from config, environment variable or argument
-        self.DATABASE_URL = "sqlite:///webdisplay.db"
+        if args.db_path is not None:
+            self.DATABASE_URL = f"sqlite:///{args.db_path}"
+        
+        else:
+            self.DATABASE_URL = "sqlite:///webdisplay.db"
 
         self.engine = create_engine(
             self.DATABASE_URL,
