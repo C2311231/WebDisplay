@@ -12,7 +12,7 @@ Notes:
 """
 
 class APICommand():
-     def __init__(self, capability: str, capability_version: int, name: str, handler, description: str, example: str):
+     def __init__(self, capability: str, capability_version: int, name: str, handler, parameters: dict, description: str, example: str):
         self.capability = capability
         self.capability_version = capability_version
         self.name = name

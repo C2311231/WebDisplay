@@ -1,13 +1,14 @@
 git
-policykit-1
-rfkill
-chromium rpi-chromium-mods libwidevinecdm0
-gldriver-test
-vulkan-tools mesa-vulkan-drivers
-xserver-xorg xinit
-chromium-chromedriver
-python3-pip
-libcec-dev
-openbox
+rfkill 
+chromium rpi-chromium-mods libwidevinecdm0 
+gldriver-test 
+vulkan-tools 
+mesa-vulkan-drivers 
+xserver-xorg 
+xinit 
+polkitd 
+chromium-driver 
+python3-pip 
+libcec-dev 
+openbox 
 unclutter
-lightdm
