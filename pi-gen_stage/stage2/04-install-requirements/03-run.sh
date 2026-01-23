@@ -11,14 +11,14 @@ EOF
 
 cp files/WebDisplay.service "${ROOTFS_DIR}/etc/systemd/system"
 cp files/Xwrapper.config "${ROOTFS_DIR}/etc/X11/Xwrapper.config"
-cp files/.xprofile "${ROOTFS_DIR}/home/pi/.xprofile"
+cp files/.xsession "${ROOTFS_DIR}/home/pi/.xsession"
 cp files/firstboot.sh "${ROOTFS_DIR}/usr/local/sbin/firstboot.sh"
 cp files/lightdm.conf "${ROOTFS_DIR}/etc/lightdm/lightdm.conf"
 cp files/firstboot.service "${ROOTFS_DIR}/etc/systemd/system"
 on_chroot << EOF
         chown root:root /etc/systemd/system/WebDisplay.service
         chmod 644 /etc/systemd/system/WebDisplay.service
-        chmod 777 /home/pi/.xprofile
+        chmod 777 /home/pi/.xsession
         systemctl enable WebDisplay
 
         chown root:root /etc/systemd/system/firstboot.service
