@@ -1,8 +1,7 @@
 import os
 import subprocess
 from base import commons
-
-
+import socket
 class NetworkingManager(commons.BaseClass):
     def __init__(self, database):
         self.database = database
@@ -119,6 +118,17 @@ class NetworkingManager(commons.BaseClass):
             "device_ip": None,
         }
         return data
+
+    def get_local_ip(self):
+        try:
+            # Connect to an external server (Google's DNS) to determine the local IP
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+            return local_ip
+        except Exception:
+            return "Unable to determine local IP"
 
     # if __name__ == "__main__":
     #     # Start both send and listen threads
