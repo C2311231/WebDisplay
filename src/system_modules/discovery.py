@@ -28,24 +28,25 @@ from src.system_modules.device_manager import DeviceManager
 class DiscoveryEngine(src.module.module):
     def __init__(self, system: system):
         self.system = system
-        system.require_modules("settings_manager", "networking_manager", "api_registery")
+        system.require_modules("settings_manager", "networking", "api_registry")
         self.api_send_id = 0
         self.last_send_time = time.time()
         self.remotes = {}
         
     def start(self) -> None:
         self.settings_manager: settings_manager.SettingsManager = self.system.get_module("settings_manager") # type: ignore
-        self.networking: NetworkingManager = self.system.get_module("networing_module") # type: ignore
+        self.networking: NetworkingManager = self.system.get_module("networking") # type: ignore
         self.api_registery: APIRegistry = self.system.get_module("api_registry") # type: ignore
         self.device_manager: DeviceManager = self.system.get_module("device_manager") # type: ignore
         
         self.discovery_port = self.settings_manager.register_setting(domain="discovery", version="V1", setting_name="Discovery Port", default_value="5000", type="int", description="Port to be used for multicast discovery. (Must be the same across all devices)", validation_data={}, user_facing=True)
         self.discovery_multicast_address = self.settings_manager.register_setting(domain="discovery", version="V1", setting_name="Discovery Multicast Address", default_value="239.143.23.9", type="ip", description="Address to be used for multicast discovery. (Must be the same across all devices)", validation_data={"multicast": True}, user_facing=True)
     
+        print(self.discovery_port.get_value())
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
         self.sock.setblocking(False)
-        self.sock.bind(("", self.discovery_port.get_value()))
+        self.sock.bind(("0.0.0.0", self.discovery_port.get_value())) # TODO adjust to only bind to private ip ranges for security
         
         group = socket.inet_aton(str(self.discovery_multicast_address.get_value()))
         mreq = struct.pack("4sL", group, socket.INADDR_ANY)

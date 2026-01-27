@@ -32,7 +32,7 @@ class APIRegistry(src.module.module):
         return self.capabilities[name]
     
     def get_capabilities(self):
-        return self.capabilities.keys()
+        return list(self.capabilities.keys())
     
     def parse_json_command(self, data: str):
         try:

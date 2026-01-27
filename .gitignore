@@ -1,5 +1,6 @@
 instance/
 .conda/
+.venv/
 __pycache__/
 .vscode/
 *.db

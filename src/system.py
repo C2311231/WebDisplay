@@ -97,7 +97,7 @@ class system:
             if module_id not in self.modules:
                 raise ValueError(f"Required module {module_id} not loaded in system.")
             
-    def src_loop(self):
+    def main_loop(self):
         while self.running:
             #print("src Loop Tick")
             self.update_modules()

@@ -60,26 +60,26 @@ class SettingBase():
         if data == None:
             raise ValueError("Data must not be None")
         
-        data = data.strip(data)
+        data = data.strip()
         
         if self.type not in ["string", "int", "bool", "float", "ip", "json", "enum"]:
             raise ValueError(f"Invalid Type: {self.type}")
         
         if self.type == "string":
-            if self.validation_data["max_length"] < len(data):
+            if "max_value" in self.validation_data and self.validation_data["max_length"] < len(data):
                 raise ValueError("Exceeds max string length")
             
-            elif self.validation_data["min_length"] > len(data):
+            elif "min_value" in self.validation_data and self.validation_data["min_length"] > len(data):
                 raise ValueError("Below minimum string length")
             
         elif self.type == "int":
             if not data.lstrip("+-").isdigit():
                 raise ValueError("Data must be an Integer")
             
-            elif self.validation_data["max_value"] < int(data):
+            elif "max_value" in self.validation_data and self.validation_data["max_value"] < int(data):
                 raise ValueError("Integer too large")
         
-            elif self.validation_data["min_value"] > int(data):
+            elif "min_value" in self.validation_data and self.validation_data["min_value"] > int(data):
                 raise ValueError("Integer too small")
             
         elif self.type == "bool":
@@ -90,10 +90,10 @@ class SettingBase():
             if not data.lstrip("+-").replace(".", "").isdigit():
                 raise ValueError("Data must be a float")
             
-            elif self.validation_data["max_value"] < float(data):
+            elif "max_value" in self.validation_data and self.validation_data["max_value"] < float(data):
                 raise ValueError("Float too large")
         
-            elif self.validation_data["min_value"] > float(data):
+            elif "min_value" in self.validation_data and self.validation_data["min_value"] > float(data):
                 raise ValueError("Float too small")
             
         elif self.type == "ip":

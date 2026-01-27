@@ -13,7 +13,7 @@ Notes:
 
 import src.system as system
 import src.module as module_base
-from flask import Flask, request
+from flask import Flask, request, Blueprint
 import src.system_modules.web.routes as routes
 import threading
 import os
@@ -26,6 +26,7 @@ class web_module(module_base.module):
     def __init__(self, system: system.system):
         self.system = system
         system.require_modules("api_registry")
+        self.web_modules = {}
                                        
     def start(self) -> None:
         self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
@@ -33,6 +34,11 @@ class web_module(module_base.module):
         self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
         self.register_routes()
         self.run_app()
+        
+    def register_web_module(self, module_name: str, absolute_files_path: str, entry_file_name: str) -> None:
+        bp = Blueprint(module_name, __name__, static_folder=os.path.abspath(absolute_files_path), static_url_path = f"/modules/{module_name}")
+        self.web_modules[module_name] = f"/modules/{module_name}/{entry_file_name}"
+        self.app.register_blueprint(bp)
         
     def register_routes(self) -> None:
         @self.app.after_request

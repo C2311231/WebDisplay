@@ -30,7 +30,7 @@ class SettingsManager(src.module.module):
         self.validate_required_settings()
         self.database_manager: DBManager = self.system_manager.get_module("database_manager") # type: ignore
         
-        self.device_id = self.register_setting(domain = "system", version = "V1", setting_name= "device_id", default_value= str(uuid.uuid4()), type= "string", description = "UUID for system identification", validation_data = {}, user_facing = False)
+        self.device_id = self.register_setting(domain = "system", version = "V1", setting_name= "id", default_value= str(uuid.uuid4()), type= "string", description = "UUID for system identification", validation_data = {}, user_facing = False)
         self.device_id.push_to_db() # Ensure device id is stored in db for future starts (If not already)
         super().start()
     
