@@ -28,12 +28,13 @@ class web_module(module_base.module):
         system.require_modules("api_registry")
         self.web_modules = {}
                                        
-    def start(self) -> None:
+    def start(self, cancel_run = False) -> None:
         self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
         self.api: api_registry.ApiRegistry = self.system.get_module("api_registry")  # type: ignore
         self.app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"), static_folder=os.path.join(base_dir, "static"))
         self.register_routes()
-        self.run_app()
+        if not cancel_run:
+            self.run_app()
         
     def register_web_module(self, module_name: str, absolute_files_path: str, entry_file_name: str) -> None:
         bp = Blueprint(module_name, __name__, static_folder=os.path.abspath(absolute_files_path), static_url_path = f"/modules/{module_name}")
@@ -72,8 +73,8 @@ class web_module(module_base.module):
     def run_app(self, host: str = "0.0.0.0", port: int = 5000) -> None:
         threading.Thread(target=self._threaded_run, args=(host, port), daemon=True).start()
         
-    def _threaded_run(self, host: str = "0.0.0.0", port: int = 5000) -> None:
-        self.app.run(host=host, port=port)
+    def _threaded_run(self, host: str = "0.0.0.0", port: int = 5000, debug=False) -> None:
+        self.app.run(host=host, port=port, debug=debug)
         
 def register(system: system.system) -> tuple[str, module_base.module]:
     module_id = "web_app"

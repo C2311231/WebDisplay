@@ -1,27 +1,60 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="{{url_for('static', filename='js/layout.js')}}" async defer></script>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{% block page_title %}Web Display{% endblock page_title %}</title>
+        <title>Web Display</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{url_for('static', filename='layout.css')}}">
-        <link rel="stylesheet" id="color-sheet" href="{{url_for('static', filename='dark-colors.css')}}">
     </head>
     <body>
-        <div id="title_bar">
-            {% block title_bar %}{% endblock title_bar %}
+        <div class="web-app">
+            <header class="app-header">
+                <div class="header-left">
+                    WebDisplay
+                    <button id="toggleSidebar">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="3" rx="1" fill="currentColor"/>
+                            <rect x="3" y="10.5" width="18" height="3" rx="1" fill="currentColor"/>
+                            <rect x="3" y="17" width="18" height="3" rx="1" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="header-center">
+                    Center
+                </div>
+                <div class="header-right">
+                    Right
+                </div>
+            </header>
+            <div class="app-body">
+                <div id="sidebar">
+                    <div class="sidebar-item" onclick="console.log('test')">
+                        <div class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path fill="currentColor" d="M12 8.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Zm9 3.25a7.9 7.9 0 0 0-.1-1.2l2-1.55-2-3.46-2.42.98a8.1 8.1 0 0 0-2.07-1.2L14.9 2h-3.8l-.51 2.57a8.1 8.1 0 0 0-2.07 1.2l-2.42-.98-2 3.46 2 1.55A7.9 7.9 0 0 0 6 12c0 .41.03.81.1 1.2l-2 1.55 2 3.46 2.42-.98c.63.5 1.33.9 2.07 1.2L11.1 22h3.8l.51-2.57c.74-.3 1.44-.7 2.07-1.2l2.42.98 2-3.46-2-1.55c.07-.39.1-.79.1-1.2Z"/>
+                            </svg>
+                        </div>
+                        <div class="label">Dashboard</div>
+                    </div>
+                    <div class="sidebar-item">
+                        <div class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path fill="currentColor" d="M12 8.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Zm9 3.25a7.9 7.9 0 0 0-.1-1.2l2-1.55-2-3.46-2.42.98a8.1 8.1 0 0 0-2.07-1.2L14.9 2h-3.8l-.51 2.57a8.1 8.1 0 0 0-2.07 1.2l-2.42-.98-2 3.46 2 1.55A7.9 7.9 0 0 0 6 12c0 .41.03.81.1 1.2l-2 1.55 2 3.46 2.42-.98c.63.5 1.33.9 2.07 1.2L11.1 22h3.8l.51-2.57c.74-.3 1.44-.7 2.07-1.2l2.42.98 2-3.46-2-1.55c.07-.39.1-.79.1-1.2Z"/>
+                            </svg>
+                        </div>
+                        <div class="label">Devices</div>
+                    </div>
+                </div>
+                <main class="main-content">
+
+                </main>
+            </div>
+            <!-- <footer class="app-footer">
+            
+            </footer> -->
         </div>
-        <div id="main_page">
-            <div id="side_bar">
-                {% block sidebar %}{% endblock sidebar %}
-            </div>
-            <div id="main_content">
-                {% block content %}{% endblock content %}
-            </div>
-        <div>
-        
     </body>
+    <script src="{{url_for('static', filename='js/layout.js')}}" async defer></script>
 </html>
