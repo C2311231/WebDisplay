@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+html, body, #root {
+  height: 100%;
+}
+
+.main_content {
+  @apply w-full h-full bg-gray-900 text-gray-50 p-3 overflow-y-scroll;
+}
