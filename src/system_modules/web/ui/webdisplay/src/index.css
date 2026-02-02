@@ -16,6 +16,6 @@ html, body, #root {
   @apply pb-1 pl-3 text-sm font-medium text-gray-300;
 }
 
-.dashboard_card hr {
-  @apply m-2 opacity-25;
+hr {
+  @apply m-2 text-gray-700;
 }

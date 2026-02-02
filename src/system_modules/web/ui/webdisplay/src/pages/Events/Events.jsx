@@ -1,6 +1,21 @@
-import Table from "./components/Table"
+import Table from "../../components/Table"
+import CreateEvent from "./CreateEvent"
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+
 
 export default function Events() {
+   return (
+    <div className="main_content">
+    <Routes>
+        <Route index element={<EventTable />} />
+        <Route path="create" element={<CreateEvent />} />
+    </Routes>
+
+    </div>
+  )
+}
+
+function EventTable() {
     const data = [
         {
             name: "Vid Test Trigger",
@@ -33,15 +48,11 @@ export default function Events() {
         { key: "content", label: "Content" },
         { key: "active", label: "Is Active?" },
     ];
-
-
     return (
-    <>
-      <div className='main_content'>
-          <div className="dashboard_card">
-            <Table data={data} columns={columns} />
-          </div>
+      <div className="dashboard_card">
+        <NavLink to={"create"} className={`block hover:bg-gray-700 bg-gray-900 p-2 rounded w-fit border border-gray-700 `}>Create</NavLink>
+        <hr></hr>
+        <Table data={data} columns={columns} />
       </div>
-    </>
-  )
+    )
 }

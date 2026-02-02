@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { LineChart, Line, Pie, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, PieChart } from 'recharts';
-import Table from './components/Table.jsx'
+import Table from '../components/Table.jsx'
 
 
 export default function Dashboard() {

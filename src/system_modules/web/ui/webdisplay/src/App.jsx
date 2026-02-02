@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import Dashboard from './Dashboard.jsx'
-import Devices from './Devices.jsx'
-import Logs from './Logs.jsx';
-import Content from './Content.jsx';
-import Events from './Events.jsx';
+import Dashboard from './pages/Dashboard.jsx'
+import Devices from './pages/Devices.jsx'
+import Logs from './pages/Logs.jsx';
+import Content from './pages/Content.jsx';
+import Events from './pages/Events/Events.jsx';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -61,11 +61,11 @@ function MainContent({sidebarOpen}) {
       <main className='flex h-full'>
         <SideBar isOpen={sidebarOpen} />
         <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/devices" element={<Devices />} />
-            <Route path="/logs" element={<Logs />} />
-            <Route path="/content" element={<Content />} />
-            <Route path="/events" element={<Events />} />
+            <Route path="/*" element={<Dashboard />} />
+            <Route path="/devices/*" element={<Devices />} />
+            <Route path="/logs/*" element={<Logs />} />
+            <Route path="/content/*" element={<Content />} />
+            <Route path="/events/*" element={<Events />} />
         </Routes>
       </main>
     </>
@@ -91,7 +91,7 @@ function SideBar({isOpen}) {
 function NavButton({btn_name, url, icon, isOpen }) {
     return (
     <>
-      <NavLink to={url} className={({ isActive }) => `block hover:bg-gray-700 p-2 rounded ${isActive ? 'bg-gray-700' : ''}`}>{btn_name}</NavLink>
+      <NavLink to={url} className={({ isActive }) => `block hover:bg-gray-700 p-2 m-1 rounded ${isActive ? 'bg-gray-700' : ''}`}>{btn_name}</NavLink>
     </>
   )
 }
