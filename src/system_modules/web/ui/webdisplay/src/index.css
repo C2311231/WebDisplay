@@ -7,3 +7,15 @@ html, body, #root {
 .main_content {
   @apply w-full h-full bg-gray-900 text-gray-50 p-3 overflow-y-scroll;
 }
+
+.dashboard_card {
+  @apply bg-gray-800 rounded-lg p-4 shadow-md min-h-60;
+}
+
+.dashboard_card h3 {
+  @apply pb-1 pl-3 text-sm font-medium text-gray-300;
+}
+
+.dashboard_card hr {
+  @apply m-2 opacity-25;
+}

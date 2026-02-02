@@ -55,7 +55,8 @@ function DeviceTable() {
         },
     ];
 
-    return (<div className="overflow-x-auto">
+    return (
+    <div className="overflow-x-auto">
       <table className="w-full text-sm text-left">
         <thead className="text-gray-400 border-b border-gray-700">
           <tr>
