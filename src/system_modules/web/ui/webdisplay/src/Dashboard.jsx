@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { LineChart, Line, Pie, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, PieChart } from 'recharts';
-
+import Table from './components/Table.jsx'
 
 
 export default function Dashboard() {
@@ -140,34 +140,7 @@ function AlertsCard({}) {
         <div className="dashboard_card col-span-2">
             <h3>Alerts:</h3>
             <hr></hr>
-            <table className="w-full text-sm text-left">
-            <thead className="text-gray-400 border-b border-gray-700">
-            <tr>
-                {columns.map(col => (
-                <th key={col.key} className="px-3 py-2">
-                    {col.label}
-                </th>
-                ))}
-            </tr>
-            </thead>
-
-            <tbody>
-            {data.map(row => (
-                <tr
-                key={row.id}
-                className="border-b border-gray-800 hover:bg-gray-900/50"
-                >
-                {columns.map(col => (
-                    <td key={col.key} className="px-3 py-2">
-                    {col.render
-                        ? col.render(row[col.key], row)
-                        : row[col.key]}
-                    </td>
-                ))}
-                </tr>
-            ))}
-            </tbody>
-        </table>
+            <Table data={data} columns={columns} />
       </div>
     )
 }
