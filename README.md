@@ -5,6 +5,8 @@
 
 Simple project to remotely manage and control a web browser for digital signage
 
+> Note: This is the device client that would run on the signage device. The webserver for control will be available in the WebDisplay-server repository.
+
 #### Features
 
 - Display Google Slides
@@ -82,7 +84,6 @@ Enable Service
 1. It should provide the option to configure user information and wifi, if you are using wifi you can configure it here, and change the default password if you would like (Username may not be changed).
 1. Flash the micro sd card and install it into the RPI.
 1. Boot the RPI, and it should automatically complete the rest of the setup after a few minutes.
-1. It should now be accessible at http://{device ip}:5000.
 
 #### Windows Install (Coming Soon)
 
@@ -90,12 +91,7 @@ Enable Service
 
 #### Running Manually:
 
-    /{path/to/WebDisplay/directory}/.venv/bin/python3 /{path/to/WebDisplay/directory}/main.py db.db {port}
-
-#### Accessing the Web Interface:
-
-The web interface is available at: http://{device ip}:{port}  
-Other devices should automatically be detected and added to the side menu.
+    /{path/to/WebDisplay/directory}/.venv/bin/python3 /{path/to/WebDisplay/directory}/main.py db.db
 
 ## To Do Next Version
 
