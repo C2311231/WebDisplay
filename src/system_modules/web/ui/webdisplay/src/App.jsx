@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-do
 import Dashboard from './pages/Dashboard.jsx'
 import Devices from './pages/Devices.jsx'
 import Logs from './pages/Logs.jsx';
-import Content from './pages/Content.jsx';
+import Content from './pages/Content/Content.jsx';
 import Events from './pages/Events/Events.jsx';
+import Screens from './pages/Screens.jsx';
+import SystemSettings from './pages/Settings.jsx';
+
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -31,7 +34,7 @@ export default App
 function Header({toggleSideBar}) {
   return (
     <>
-      <header className="flex w-full bg-gray-600 p-3 justify-between pl-5 pr-5">
+      <header className="flex w-full bg-(--color-header) p-3 text-(--color-text) justify-between pl-5 pr-5">
 
         <div className="flex gap-3">
           <button onClick={toggleSideBar}>
@@ -66,6 +69,8 @@ function MainContent({sidebarOpen}) {
             <Route path="/logs/*" element={<Logs />} />
             <Route path="/content/*" element={<Content />} />
             <Route path="/events/*" element={<Events />} />
+            <Route path="/screens/*" element={<Screens />} />
+            <Route path="/system/settings/*" element={<SystemSettings />} />
         </Routes>
       </main>
     </>
@@ -75,14 +80,16 @@ function MainContent({sidebarOpen}) {
 function SideBar({isOpen}) {
   return (
     <>
-      <nav className={`max-w-96 h-full bg-gray-500 transition-all duration-300
+      <nav className={`max-w-96 h-full transition-all duration-300 bg-(--color-surface) text-(--color-text)
         ${isOpen ? 'w-64 p-2' : 'w-0 p-0 overflow-hidden'}
       `}>
         <NavButton btn_name={"Dashboard"} url={"/"} />
         <NavButton btn_name={"Devices"} url={"/devices"} />
+        <NavButton btn_name={"Screens"} url={"/screens"} />
         <NavButton btn_name={"Content"} url={"/content"} />
         <NavButton btn_name={"Events"} url={"/events"} />
         <NavButton btn_name={"Logs"} url={"/logs"} />
+        <NavButton btn_name={"System Settings"} url={"/system/settings"} />
       </nav>
     </>
   )
@@ -91,7 +98,7 @@ function SideBar({isOpen}) {
 function NavButton({btn_name, url, icon, isOpen }) {
     return (
     <>
-      <NavLink to={url} className={({ isActive }) => `block hover:bg-gray-700 p-2 m-1 rounded ${isActive ? 'bg-gray-700' : ''}`}>{btn_name}</NavLink>
+      <NavLink to={url} className={({ isActive }) => `block hover:bg-(--color-background-accent) p-2 m-1 rounded ${isActive ? 'bg-(--color-background-accent)' : ''}`}>{btn_name}</NavLink>
     </>
   )
 }

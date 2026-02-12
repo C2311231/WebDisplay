@@ -50,7 +50,7 @@ function EventTable() {
     ];
     return (
       <div className="dashboard_card">
-        <NavLink to={"create"} className={`block hover:bg-gray-700 bg-gray-900 p-2 rounded w-fit border border-gray-700 `}>Create</NavLink>
+        <NavLink to={"create"} className={`block hover:bg-(--color-background-accent) bg-(--color-surface) p-2 pb-1 pt-1 rounded w-fit border border-gray-700 `}>Create</NavLink>
         <hr></hr>
         <Table data={data} columns={columns} />
       </div>

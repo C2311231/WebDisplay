@@ -1,21 +1,40 @@
 @import "tailwindcss";
 
+
+:root {
+  --color-bg: rgb(33,33,33);
+  --color-surface: var(--color-gray-800);
+  --color-header: var(--color-gray-900);
+  --color-text-accent: #b7670b;
+  --color-background-accent: var(--color-gray-900);
+  --color-text: #ffffff;
+}
+
+[data-theme="light"] {
+  --color-bg: #c8c8c8;
+  --color-surface: #ffffff;
+  --color-header: #c8c8c8;
+  --color-accent: #b7670b;
+  --color-background-accent: var(--color-gray-200);
+  --color-text: #111827;
+}
+
 html, body, #root {
   height: 100%;
 }
 
 .main_content {
-  @apply w-full h-full bg-gray-900 text-gray-50 p-3 overflow-y-scroll;
+  @apply w-full h-full text-(--color-text) p-3 bg-(--color-bg) overflow-y-scroll;
 }
 
 .dashboard_card {
-  @apply bg-gray-800 rounded-lg p-4 shadow-md min-h-60;
+  @apply bg-(--color-surface) rounded-lg p-4 shadow-md min-h-60;
 }
 
 .dashboard_card h3 {
-  @apply pb-1 pl-3 text-sm font-medium text-gray-300;
+  @apply pb-1 pl-3 text-sm font-medium text-(--color-text);
 }
 
 hr {
-  @apply m-2 text-gray-700;
+  @apply m-2 text-(--color-text);
 }
