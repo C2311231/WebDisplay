@@ -12,47 +12,38 @@ Notes:
 """
 
 from src.device import Device 
-from src.device_modules.database.setting import Setting
-from src.device_modules.database.settings_manager import SettingsManager
 import uuid
 
 class Screen():
-    def __init__(self, device: Device, screen_name: str, x: int, y: int, port: str, resolution_x: int, resolution_y: int, volume: float, sound_device: str, screen_type: str, scale: float, screen_id: str = ""):
+    def __init__(self, device: Device, screen_name: str, port: str, volume: float, sound_device: str, screen_type: str, scale: float, screen_id: str = ""):
         self.device = device
         self.device = device
-        self.db_manager: SettingsManager = system.get_module("settings_manager") # type: ignore
         
         if screen_id == "":
             screen_id = str(uuid.uuid4())
             
-        domain = "devices." + self.device.device_id + ".screens." + screen_id 
-        
-        self.screen_id = screen_id
-        
-        self.resolution_x = self.db_manager.register_setting(domain, "V1", "Screen X Resolution", str(resolution_x), "string", "X Resolution for this screen", {}, False).push_to_db()
-        self.resolution_y = self.db_manager.register_setting(domain, "V1", "Screen Y Resolution", str(resolution_y), "string", "Y Resolution for this screen", {}, False).push_to_db()
-        self.port = self.db_manager.register_setting(domain, "V1", "Screen Port", port, "enum", "Port connected to this screen", {"options": []}, True).push_to_db()
-        self.scale = self.db_manager.register_setting(domain, "V1", "Screen Scale", str(scale), "float", "Scaling factor for this screen", {"min_value": 0, "max_value": 4}, True).push_to_db()
-        self.screen_name = self.db_manager.register_setting(domain, "V1", "Screen Name", screen_name, "string", "Name for this screen", {}, True).push_to_db()
-        self.volume = self.db_manager.register_setting(domain, "V1", "Screen Volume", str(volume), "float", "Volume for this screen", {"min_value": 0, "max_value": 1}, True).push_to_db()
-        self.sound_device = self.db_manager.register_setting(domain, "V1", "Screen Audio Device", sound_device, "enum", "Audio output for this screen", {"options": []}, True).push_to_db()
-        self.screen_type = self.db_manager.register_setting(domain, "V1", "Screen Type", screen_type, "enum", "Type for this screen", {"options": ["Local", "Remote"]}, True).push_to_db()
+        self.data, self.first_init = self.device.config.get_module("screens_" + screen_id, default={
+                "screen_name": screen_name,
+                "port": port,
+                "volume": str(volume),
+                "sound_device": sound_device,
+                "screen_type": screen_type,
+                "scale": str(scale),
+                "screen_id": screen_id,
+                "enabled": True,
+        })
         self.active = False
-        self.locked = False
-        self.x = self.db_manager.register_setting(domain, "V1", "Screen Location X", str(x), "enum", "X location of this screen", {}, False).push_to_db()
-        self.y = self.db_manager.register_setting(domain, "V1", "Screen Location Y", str(y), "enum", "Y location of this screen", {}, False).push_to_db()
+        self.save_data()
+        
+    def save_data(self):
+        self.device.config.save_module("screens_" + self.get_id(), self.data)
         
     @classmethod
-    def from_db(cls, device: Device, screen_id: str):
-        """
-        Generates an existing screen from the db
-
-        Args:
-            system (src.Device): _description_
-            device (device.Device): _description_
-            screen_id (str): _description_
-        """        
-        return cls(device, "", 0, 0, "", 0, 0, 0, "", "", 0, screen_id)
+    def from_config(cls, device: Device, screen_id: str):
+        data, first_init = device.config.get_module("screens_" + screen_id)
+        if first_init:
+            raise ValueError(f"Screen with id {screen_id} not found in config.")
+        return cls(device, data["screen_name"], data["port"], float(data["volume"]), data["sound_device"], data["screen_type"], float(data["scale"]), screen_id)
         
     def set_active(self, active: bool) -> None:
         self.active = active
@@ -85,7 +76,7 @@ class Screen():
         return self.screen_name.get_value() # type: ignore
     
     def get_id(self) -> str:
-        return self.screen_id
+        return self.data["screen_id"]
     
     def get_type(self) -> str:
         return self.screen_type.get_value() # type: ignore

@@ -11,25 +11,22 @@ Author: C2311231
 Notes:
 """
 
-import os
 import subprocess
 import src.module
 import socket
 from src.device import Device
-import src.device_modules.database.settings_manager as settings_manager
 
 class NetworkingManager(src.module.module):
     def __init__(self, device: Device):
         self.device = device
-        device.require_modules("settings_manager")
         
     def start(self) -> None:
-        self.settings_manager: settings_manager.SettingsManager = self.device.get_module("settings_manager") # type: ignore
-
+        pass
+    
     def configure_wifi(self, ssid: str, psk: str) -> None:
         command = f'nmcli dev wifi connect "{ssid}" password "{psk}"'
-        result = os.system(command)
-        if result == 0:
+        result = subprocess.run(command, shell=True, capture_output=True)
+        if result.returncode == 0:
             print(f"Successfully connected to SSID: {ssid}")
         else:
             print(
@@ -38,16 +35,16 @@ class NetworkingManager(src.module.module):
 
     def configure_dhcp(self, interface: str) -> None:
         command = f"nmcli con mod {interface} ipv4.method auto"
-        os.system(command)
-        os.system(f"nmcli con up {interface}")
+        subprocess.run(command, shell=True, capture_output=True)
+        subprocess.run(f"nmcli con up {interface}", shell=True, capture_output=True)
         print(f"Ethernet ({interface}) configured to use DHCP.")
 
     def configure_static(self, ip: str, gateway: str, dns: str, interface: str) -> None:
-        os.system(f"nmcli con mod {interface} ipv4.addresses {ip}/24")
-        os.system(f"nmcli con mod {interface} ipv4.gateway {gateway}")
-        os.system(f"nmcli con mod {interface} ipv4.dns {dns}")
-        os.system(f"nmcli con mod {interface} ipv4.method manual")
-        os.system(f"nmcli con up {interface}")
+        subprocess.run(f"nmcli con mod {interface} ipv4.addresses {ip}/24", shell=True, capture_output=True)
+        subprocess.run(f"nmcli con mod {interface} ipv4.gateway {gateway}", shell=True, capture_output=True)
+        subprocess.run(f"nmcli con mod {interface} ipv4.dns {dns}", shell=True, capture_output=True)
+        subprocess.run(f"nmcli con mod {interface} ipv4.method manual", shell=True, capture_output=True)
+        subprocess.run(f"nmcli con up {interface}", shell=True, capture_output=True)
         print(f"Ethernet ({interface}) configured with static IP: {ip}")
 
     def get_interfaces(self) -> list[dict]:

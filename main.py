@@ -11,11 +11,11 @@ Author: C2311231
 Notes:
 """
 
-import src.system as system
-system_manager = system.system()
-system_manager.load_modules()
-system_manager.validate_required_modules()
-system_manager.start_modules()
+import src.device as Device
+device = Device.Device()
+device.load_modules()
+device.validate_required_modules()
+device.start_modules()
 
 ## Start program loop
-system_manager.main_loop()
+device.main_loop()

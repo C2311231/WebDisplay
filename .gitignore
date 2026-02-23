@@ -4,3 +4,4 @@ instance/
 __pycache__/
 .vscode/
 *.db
+device_data/

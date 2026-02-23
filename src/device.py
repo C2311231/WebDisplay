@@ -12,36 +12,41 @@ Notes:
 """
 
 import datetime
+import uuid
 from sqlalchemy import String, JSON, DateTime, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
-from src.device_modules.database.extentions import db # TODO Find a way to validate this module exists (Or just make a system requried module handler)
 from sqlalchemy.ext.mutable import MutableDict
 import pkgutil
 import src.device_modules as device_modules
 import importlib
 import src.module as Module
 import time
+from src.config_manager import JSONStore
 
-class Device(db):
-    __tablename__ = "device"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    device_id: Mapped[str] = mapped_column(unique=True, nullable=False, index=True)
-    device_type: Mapped[str] = mapped_column(String(20), nullable=False)  # discriminator
-    device_name: Mapped[str] = mapped_column(nullable=False)
-    created_at = mapped_column(DateTime, nullable=False, default=datetime.datetime.now(datetime.timezone.utc))
-    last_seen = mapped_column(DateTime, nullable=True)
-    version = mapped_column(String(32), nullable=True)
-    enabled = mapped_column(Boolean, nullable=False, default=True)
-    extra_config = mapped_column(MutableDict.as_mutable(JSON), default=dict)
-    
-    def __init__(self, **kwargs):
+class Device():
+    def __init__(self):
+        self.config = JSONStore("device_data")
         self.modules = {}
         self._last_update_time = time.time()
         self.required_modules = []
         self.running = True
-        self.load_modules()
-        super().__init__(**kwargs)
+        self.data, self.first_init = self.config.get_module("device", default={})
         
+        if self.first_init:
+             self.data = {
+                "device_id": str(uuid.uuid4()),
+                "device_name": "Unnamed Device",
+                "device_type": "Unknown",
+                "version": "0.1.0",
+                "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "enabled": True,
+                "extra_config": {}
+             }
+             self.config.save_module("device", self.data)
+             
+    def save_data(self):
+        self.config.save_module("device", self.data)
+
     def load_modules(self):
         for _, module_name, _ in pkgutil.iter_modules(device_modules.__path__):
             module = importlib.import_module(f"{device_modules.__name__}.{module_name}")
@@ -59,6 +64,10 @@ class Device(db):
             else:
                 raise ValueError(f"Module {module_name} does not have a register function.")
                 
+    def register_module(self, module_id: str, module: Module.module):
+        if module_id in self.modules:
+            raise ValueError(f"Module with id {module_id} is already registered.")
+        self.modules[module_id] = module
                 
     def get_module(self, module_id: str):
         if module_id not in self.modules:

@@ -18,7 +18,6 @@ import struct
 import json
 import time
 from src.device import Device
-import src.device_modules.database.settings_manager as settings_manager
 import src.module
 from src.device_modules.networking import NetworkingManager
 from datetime import datetime
@@ -27,36 +26,35 @@ from src.device_modules.api import APIRegistry
 class DiscoveryEngine(src.module.module):
     def __init__(self, device: Device):
         self.device = device
-        device.require_modules("settings_manager", "networking", "api_registry")
+        device.require_modules("networking", "api_registry")
         self.api_send_id = 0
         self.last_send_time = time.time()
         self.remotes = {}
         
     def start(self) -> None:
-        self.settings_manager: settings_manager.SettingsManager = self.device.get_module("settings_manager") # type: ignore
         self.networking: NetworkingManager = self.device.get_module("networking") # type: ignore
         self.api_registery: APIRegistry = self.device.get_module("api_registry") # type: ignore
-        self.device_manager: DeviceManager = self.device.get_module("device_manager") # type: ignore
         
-        self.discovery_port = self.settings_manager.register_setting(domain="discovery", version="V1", setting_name="Discovery Port", default_value="5000", type="int", description="Port to be used for multicast discovery. (Must be the same across all devices)", validation_data={}, user_facing=True)
-        self.discovery_multicast_address = self.settings_manager.register_setting(domain="discovery", version="V1", setting_name="Discovery Multicast Address", default_value="239.143.23.9", type="ip", description="Address to be used for multicast discovery. (Must be the same across all devices)", validation_data={"multicast": True}, user_facing=True)
-    
-        print(self.discovery_port.get_value())
+        self.data, self.first_init = self.device.config.get_module("discovery", default={"Discovery Port": "5000", "Discovery Multicast Address": "239.143.23.9"})
+        
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
         self.sock.setblocking(False)
-        self.sock.bind(("0.0.0.0", self.discovery_port.get_value())) # TODO adjust to only bind to private ip ranges for security
+        self.sock.bind(("0.0.0.0", int(self.data["Discovery Port"]))) # TODO adjust to only bind to private ip ranges for security
         
-        group = socket.inet_aton(str(self.discovery_multicast_address.get_value()))
+        group = socket.inet_aton(str(self.data["Discovery Multicast Address"]))
         mreq = struct.pack("4sL", group, socket.INADDR_ANY)
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        
+    def save_data(self):
+        self.device.config.save_module("discovery", self.data)
         
     def send_discovery(self) -> None:
         """Send discovery message"""
         
         init_message = {
                 "type": "discover",
-                "id": self.settings_manager.get_setting("device", "id").get_value(),
+                "id": self.device.data["device_id"],
                 "ver": 1,
                 "http": f"http://{self.networking.get_local_ip()}:{5000}/api",
                 "ws": f"ws://{self.networking.get_local_ip()}:{5000}/ws",
@@ -66,7 +64,7 @@ class DiscoveryEngine(src.module.module):
         message = json.dumps(init_message, indent=4).encode()
         
         try:
-            self.sock.sendto(message, (str(self.discovery_multicast_address.get_value()), self.discovery_port.get_value()))
+            self.sock.sendto(message, (str(self.data["Discovery Multicast Address"]), int(self.data["Discovery Port"])))
             self.api_send_id += 1
             
         except Exception as e:

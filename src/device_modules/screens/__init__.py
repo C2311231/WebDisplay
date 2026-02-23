@@ -17,24 +17,30 @@ from src.device import Device
 # TODO find a way to get more data on specific ports in use
 from screeninfo import get_monitors
 from src.device_modules.screens.screen import Screen
-from src.device_modules.database.settings_manager import SettingsManager
 
 class ScreenManager(module.module):
     def __init__(self, device: Device):
         self.device = device
         self.screens = []
-        self.monitors = get_monitors()[0]
+        self.monitors = get_monitors()
         
     def start(self):
         super().start()
-        self.setting_manager: SettingsManager = self.device.get_module("setting_manager") # type: ignore
-        domain = "devices." + self.device.device_id + ".screens" 
-        existing = self.setting_manager.get_unique_subdomains(domain)
-        for screen in existing:
-            self.register_screen(Screen.from_db(self.device, screen))
+        self.data, self.first_init = self.device.config.get_module("screens", default={"screens": []})
+        if self.first_init:
+            monitors = get_monitors()
+            for monitor in monitors:
+                self.register_screen(Screen(self.device, str(monitor.name), str(monitor.name), 100, "", "local", 1.0))
+            
+        else:
+            existing = self.data["screens"]
+            for screen in existing:
+                self.register_screen(Screen.from_config(self.device, screen))
         
     def register_screen(self, screen: Screen) -> None:
         self.screens.append(screen)
+        self.data["screens"] = [screen.get_id() for screen in self.screens]
+        self.device.config.save_module("screens", self.data)
         
     def get_screens(self) -> list[Screen]:
         return self.screens

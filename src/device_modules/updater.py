@@ -39,7 +39,7 @@ class UpdateManager(src.module.module):
         self.content_url = content_url
         
     def start(self):
-        self.api_registar: src.api.api_register = self.device.get_module("api_registry")  # type: ignore
+        self.api_registar: config_manager.api.api_register = self.device.get_module("api_registry")  # type: ignore
         return super().start()
     
     def shutdown(self):

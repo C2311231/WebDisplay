@@ -13,7 +13,6 @@ Notes:
 
 import src.module as device_module
 from src.device_modules.content.content.content import Content
-from src.device_modules.database.base_setting import SettingBase
 
 class ContentManager(device_module.module):
     def __init__(self, device_module: device_module.module):
