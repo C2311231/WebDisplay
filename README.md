@@ -1,4 +1,3 @@
-
 # WebDisplay V2.0
 
 > **Work in progress**
@@ -95,29 +94,28 @@ Enable Service
 
 ## To Do Next Version
 
-
 - Improved UI
-    - Tooltips / Setting Descriptions
-    - Centralized management
-        - Global On/Off
-    - Add networking config
-    - Improved event scheduling
-        - Event Priorities
-        
+  - Tooltips / Setting Descriptions
+  - Centralized management
+    - Global On/Off
+  - Add networking config
+  - Improved event scheduling
+    - Event Priorities
 
 ## To Do Eventually
+
 - Prerecord looping content to improve playback experience
 - Add user defined templates
 - Add automated tests
 - Create Install Script
 - Improved device onboarding
-    - WiFi hotspot
-    - Onboarding Startup Screen with instructions
+  - WiFi hotspot
+  - Onboarding Startup Screen with instructions
 - Video Events
-    - Automaticly Transcode to optimal res/codec (h265 up to 4k rpi 5, h264 1080 for other pis)
-    - Synchronous video events (Multiple devices in near frame perfect sync)
-    - Audio sync
-    - Video streams (RTMP, WebRTC)
+  - Automaticly Transcode to optimal res/codec (h265 up to 4k rpi 5, h264 1080 for other pis)
+  - Synchronous video events (Multiple devices in near frame perfect sync)
+  - Audio sync
+  - Video streams (RTMP, WebRTC)
 - Device Groups (Device can be a member of multiple groups)
 - algorithmic Scheduling
 - Day Specific overrides (For holidays or other events)

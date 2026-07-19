@@ -14,7 +14,6 @@ Notes:
 import src.module as module
 from src.device import Device
 
-# TODO find a way to get more data on specific ports in use
 from screeninfo import get_monitors
 from src.device_modules.screens.screen import Screen
 

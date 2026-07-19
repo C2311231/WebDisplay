@@ -123,7 +123,7 @@ class Device():
         while self.running:
             #print("src Loop Tick")
             self.update_modules()
-            time.sleep(0.01) ## Allows other threads to run if they are implmented
+            time.sleep(0.01) ## Allows other threads to run if they are implemented
             
         self.shutdown_modules()
         exit(0)
