@@ -14,9 +14,10 @@
     - Implement client device website content displaying functionality.
     - Implement schedule following automation for content.
 
-4. v2.0.0-dev.4 CEC Control
+4. v2.0.0-dev.4 CEC Control and Persistant Storage
     - Implement CEC display controls and configuration.
     - Automate controls with content display.
+    - Persistant storage on server and displays.
 
 5. v2.0.0-dev.5 Configuration Syncing
     - Connect client and server devices over api.
