@@ -52,3 +52,31 @@ flowchart TB
 
 - Allows users to monitor and manage players, schedules, and configurations.
 - Manages user accounts and authentication.
+
+## Server Player API Architecture
+
+``` mermaid
+flowchart TB
+    UI[Web UI]
+    DM[Device Manager]
+    DC[(Desired Config)]
+    PS[(Player State)]
+    PAPI[Player API Handler]
+    SW[Sync Worker]
+    P[Player]
+
+    UI --> DM
+    DM --> DC
+    PS --> SW
+    DC --> SW
+    P --> PAPI
+    PAPI --> PS
+    SW --> PAPI
+    PAPI --> P
+```
+
+- Server shall define the desired operating state of the Player device.
+- A sync worker will ensure that the players current state matches the desired state.
+- If the state doesn't match the Player API handler will issue corrections from the sync worker.
+- Player device updates its state to follow api commands.
+- Player will periodically report its state to the sync worker.
