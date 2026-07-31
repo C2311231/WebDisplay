@@ -80,3 +80,33 @@ flowchart TB
 - If the state doesn't match the Player API handler will issue corrections from the sync worker.
 - Player device updates its state to follow api commands.
 - Player will periodically report its state to the sync worker.
+
+## Onboarding flow
+
+``` mermaid
+sequenceDiagram
+    participant P as Player
+    participant S as Server
+    participant U as User
+
+    P->>P: Generate pairing code
+    P->>S: Begin pairing request
+    P->>P: Display pairing code
+
+    U->>S: Enter pairing code
+
+    P->>S: Poll pairing status
+
+    S-->>P: Pairing accepted
+
+    P->>S: Verify pairing code
+
+    S-->>P: Verification OK
+
+    P->>S: Exchange keys
+
+    S->>S: Create device record
+    S->>S: Create empty configuration
+
+    P->>S: Download configuration
+```

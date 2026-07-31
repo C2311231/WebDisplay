@@ -6,7 +6,8 @@
     - Planning documentation completed for the continuation of this project.
     - Repository cleaned up of systems that will be removed or no longer relevent.
 
-2. v2.0.0-dev.2 Device Registration
+2. v2.0.0-dev.2 Device Registration and Onboarding
+    - Add in easy pairing abilities and authentication.
     - Completion of basic device registration.
     - Complete basic device control api.
 
@@ -46,6 +47,3 @@
 
 6. v2.0.0-alpha.6 Advanced Content
     - Add additional content options including, video, presentions, slideshows, and images.
-
-7. v2.0.0-alpha.7 Onboarding
-    - Add in easy pairing abilities and authentication.
