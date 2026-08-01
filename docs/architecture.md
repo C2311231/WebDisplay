@@ -89,24 +89,25 @@ sequenceDiagram
     participant S as Server
     participant U as User
 
-    P->>P: Generate pairing code
-    P->>S: Begin pairing request
-    P->>P: Display pairing code
+    P->>P: Generate device keypair
+    P->>P: Generate pairing secret/code
+    
+    P->>P: Create encrypted pairing request
+    P->>S: Submit pairing request
+
+    P->>U: Display pairing code
 
     U->>S: Enter pairing code
 
-    P->>S: Poll pairing status
+    S->>S: Derive key from pairing code
+    S->>S: Verify pairing request
 
-    S-->>P: Pairing accepted
-
-    P->>S: Verify pairing code
-
-    S-->>P: Verification OK
-
-    P->>S: Exchange keys
-
-    S->>S: Create device record
-    S->>S: Create empty configuration
-
-    P->>S: Download configuration
+    alt Pairing valid
+        S->>P: Pairing approved
+        P->>S: Exchange authentication information
+        S->>P: Issue permanent credentials
+        P->>P: Store credentials
+    else Pairing invalid
+        S->>U: Reject pairing
+    end
 ```
