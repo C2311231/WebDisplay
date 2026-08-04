@@ -13,7 +13,7 @@ Notes:
 
 import src.onboarding as onboarding
 
-onboarding_handler = onboarding.OnboardingHandler("TestServer", "Arch", [], ["http://localhost:8080"])
+onboarding_handler = onboarding.OnboardingHandler("TestServer", "Arch", [], ["http://localhost:8000"])
 
 onboarding_handler.start_onboarding()
 

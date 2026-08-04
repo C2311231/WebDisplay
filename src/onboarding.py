@@ -101,30 +101,18 @@ class OnboardingHandler:
         print(f"Pairing Code: {self.pairing_code}")
 
         for server in self.servers:
-            # Send pairing code to server
-            print(f"Sending pairing code to server: {server[0]}")
-
-            encrypted_data = encrypt_pairing_data(self.pairing_code, {
-                "encryption_key": self.encryption_key.decode(),
-                "pairing_code": self.pairing_code,
-            })
-
-            requests.post(f"{server[0]}/request_pairing", json={"device_id": self.device_id,
-                          "platform": self.device_platform, "capabilities": self.device_capabilities,
-                                                                "encrypted_data": encrypted_data})
-
-            server[1] = time.time()  # Update last contact time
+            self.send_pairing_request(server)
 
     def send_pairing_request(self, server: list):
         # Send pairing code to server
-        print(f"Sending pairing code to server: {server[0]}")
+        print(f"Sending pairing request to server: {server[0]}")
 
         encrypted_data = encrypt_pairing_data(self.pairing_code, {
             "encryption_key": self.encryption_key.decode(),
             "pairing_code": self.pairing_code,
         })
 
-        requests.post(f"{server[0]}/request_pairing", json={"device_id": self.device_id,
+        requests.post(f"{server[0]}/onboarding/request_pairing", json={"device_id": self.device_id,
                       "platform": self.device_platform, "capabilities": self.device_capabilities,
                                                             "encrypted_data": encrypted_data})
 
@@ -141,13 +129,15 @@ class OnboardingHandler:
                     self.send_pairing_request(server)
             
             if time.time() - self.last_server_check_time > 5:  # Check every 5 seconds
+                self.last_server_check_time = time.time()
                 for server in self.servers:
                     print(
                         f"Checking for pairing response from server: {server[0]}")
                     response = requests.get(
-                        f"{server[0]}/check_pairing_status", params={"device_id": self.device_id})
+                        f"{server[0]}/onboarding/check_pairing_status", params={"device_id": self.device_id})
                     if response.status_code == 200:
                         data = response.json()
+                        print(data)
                         if data.get("status") == "paired" and data.get("pairing_code") == self.pairing_code:
                             print(
                                 f"Device paired successfully with server: {server[0]}")
