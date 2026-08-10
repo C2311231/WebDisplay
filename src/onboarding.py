@@ -112,7 +112,7 @@ class OnboardingHandler:
             "pairing_code": self.pairing_code,
         })
 
-        requests.post(f"{server[0]}/onboarding/request_pairing", json={"device_id": self.device_id,
+        requests.post(f"{server[0]}/api/v1/onboarding/request_pairing", json={"device_id": self.device_id,
                       "platform": self.device_platform, "capabilities": self.device_capabilities,
                                                             "encrypted_data": encrypted_data})
 
@@ -134,7 +134,7 @@ class OnboardingHandler:
                     print(
                         f"Checking for pairing response from server: {server[0]}")
                     response = requests.get(
-                        f"{server[0]}/onboarding/check_pairing_status", params={"device_id": self.device_id})
+                        f"{server[0]}/api/v1/onboarding/check_pairing_status", params={"device_id": self.device_id})
                     if response.status_code == 200:
                         data = response.json()
                         print(data)
