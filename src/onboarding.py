@@ -14,10 +14,9 @@ import secrets
 import time
 from cryptography.fernet import Fernet
 import requests
-import json
-import os
-from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 from argon2.low_level import hash_secret_raw, Type
+import logging
+from encryption_handler import *
 
 ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
@@ -35,33 +34,6 @@ def derive_key(pairing_code: str, salt: bytes) -> bytes:
         hash_len=32,
         type=Type.ID,
     )
-
-
-def encrypt_pairing_data(pairing_code: str, data: dict) -> dict:
-    """
-    Encrypt pairing data using a key derived from the pairing code.
-    """
-    salt = os.urandom(16)
-    nonce = os.urandom(12)
-
-    key = derive_key(pairing_code, salt)
-
-    cipher = ChaCha20Poly1305(key)
-
-    plaintext = json.dumps(data).encode()
-
-    ciphertext = cipher.encrypt(
-        nonce,
-        plaintext,
-        None
-    )
-
-    return {
-        "salt": salt.hex(),
-        "nonce": nonce.hex(),
-        "ciphertext": ciphertext.hex(),
-    }
-
 
 class OnboardingHandler:
     """
@@ -105,14 +77,14 @@ class OnboardingHandler:
 
     def send_pairing_request(self, server: list):
         # Send pairing code to server
-        print(f"Sending pairing request to server: {server[0]}")
+        logging.info(f"Sending pairing request to server: {server[0]}")
 
         encrypted_data = encrypt_pairing_data(self.pairing_code, {
             "encryption_key": self.encryption_key.decode(),
             "pairing_code": self.pairing_code,
         })
 
-        requests.post(f"{server[0]}/api/v1/onboarding/request_pairing", json={"device_id": self.device_id,
+        requests.post(f"{server[0]}/api/v1/onboarding/pairing", json={"device_id": self.device_id,
                       "platform": self.device_platform, "capabilities": self.device_capabilities,
                                                             "encrypted_data": encrypted_data})
 
@@ -131,17 +103,18 @@ class OnboardingHandler:
             if time.time() - self.last_server_check_time > 5:  # Check every 5 seconds
                 self.last_server_check_time = time.time()
                 for server in self.servers:
-                    print(
+                    logging.debug(
                         f"Checking for pairing response from server: {server[0]}")
                     response = requests.get(
-                        f"{server[0]}/api/v1/onboarding/check_pairing_status", params={"device_id": self.device_id})
+                        f"{server[0]}/api/v1/onboarding/pairing", params={"device_id": self.device_id})
                     if response.status_code == 200:
                         data = response.json()
-                        print(data)
-                        if data.get("status") == "paired" and data.get("pairing_code") == self.pairing_code:
-                            print(
-                                f"Device paired successfully with server: {server[0]}")
-                            self.pairing_state = "paired"
+                        if data.get("status") == "awaiting_verification" and data.get("pairing_code") == self.pairing_code:
+                            response = requests.get(f"{server[0]}/api/v1/onboarding/register", params={"device_id": self.device_id, "data": encrypt_msg(self.encryption_key, self.encryption_key)})
+                            if response.status_code == 200:
+                                logging.info(
+                                    f"Device paired successfully with server: {server[0]}")
+                                self.pairing_state = "paired"
                             return
                     server[1] = time.time()  # Update last contact time
 
