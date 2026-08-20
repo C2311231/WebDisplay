@@ -110,7 +110,7 @@ class OnboardingHandler:
                     if response.status_code == 200:
                         data = response.json()
                         if data.get("status") == "awaiting_verification" and data.get("pairing_code") == self.pairing_code:
-                            response = requests.get(f"{server[0]}/api/v1/onboarding/register", params={"device_id": self.device_id, "data": encrypt_msg(self.encryption_key, self.encryption_key)})
+                            response = requests.get(f"{server[0]}/api/v1/onboarding/register", params={"device_id": self.device_id, "data": encrypt_msg(self.encryption_key, {"":""})})
                             if response.status_code == 200:
                                 logging.info(
                                     f"Device paired successfully with server: {server[0]}")

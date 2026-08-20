@@ -57,11 +57,14 @@ def encrypt_pairing_data(pairing_code: str, data: dict) -> dict:
     }
 
 
-def encrypt_msg(key: bytes, data: bytes) -> tuple[bytes, bytes]:
+def encrypt_msg(key: bytes, data: dict) -> tuple[bytes, bytes]:
     nonce: bytes = os.urandom(12)
 
-    cipher: cryptography.hazmat.primitives.ciphers.aead.ChaCha20Poly1305 = cryptography.hazmat.primitives.ciphers.aead.ChaCha20Poly1305(key)
-    ciphertext: bytes = cipher.encrypt(nonce, data, None)
+    buffer = bytes(json.dumps(data), "utf-8")
+
+    cipher: cryptography.hazmat.primitives.ciphers.aead.ChaCha20Poly1305 = cryptography.hazmat.primitives.ciphers.aead.ChaCha20Poly1305(
+        key)
+    ciphertext: bytes = cipher.encrypt(nonce, buffer, None)
 
     return nonce, ciphertext
 
