@@ -89,8 +89,7 @@ sequenceDiagram
     participant S as Server
     participant U as User
 
-    P->>P: Generate device keypair
-    P->>P: Generate pairing secret/code
+    P->>P: Generate pairing secret
     
     P->>P: Create encrypted pairing request
     P->>S: Submit pairing request
@@ -99,15 +98,23 @@ sequenceDiagram
 
     U->>S: Enter pairing code
 
-    S->>S: Derive key from pairing code
+    S->>S: Derive encryption key from pairing code
     S->>S: Verify pairing request
 
     alt Pairing valid
-        S->>P: Pairing approved
-        P->>S: Exchange authentication information
-        S->>P: Issue permanent credentials
-        P->>P: Store credentials
-    else Pairing invalid
+        S->>P: Submit encrypted registration request
+        P->>P: Validate registration request
+        P->>S: Send encrypted approval of request
+        S->>U: Display approved registration
+        P->>P: Generate encryption key
+        P->>S: Transmit new key change request encrypted with previous key
+        S->>S: Validate new key request
+        S->>P: Approve key change request
+    else Server Pairing invalid
+        S->>U: Reject pairing
+    else Client Pairing invalid
+        P->>P: (No responce)
+        S->>S: Registration timeout
         S->>U: Reject pairing
     end
 ```
