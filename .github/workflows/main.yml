@@ -86,7 +86,7 @@ jobs:
     - name: Build Image
       run: |
         cd ./pigen-build
-        chmod 777 ./stage2/04-install-requirements/03-run.sh
+        sudo chmod 777 ./stage2/04-install-requirements/03-run.sh
         sudo ./build.sh
 
     # Pi-Gen does weird things with the image file name, so let's make sure we have it right.
