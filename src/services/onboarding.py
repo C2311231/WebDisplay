@@ -16,7 +16,7 @@ from cryptography.fernet import Fernet
 import requests
 from argon2.low_level import hash_secret_raw, Type
 import logging
-from encryption_handler import *
+from protocol.encryption_handler import *
 
 ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
