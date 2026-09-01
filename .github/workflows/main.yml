@@ -102,4 +102,4 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.config.outputs.image }}
-        path: PiGen/deploy/${{ steps.imagefile.outputs.imagefile }}
+        path: ./pigen-build/deploy/${{ steps.imagefile.outputs.imagefile }}
