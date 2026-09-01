@@ -6,21 +6,12 @@ on:
     branches:
     - main
     - release/*
+permissions:
+  contents: read
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     steps:
-    - name: Maximize Build Space
-      uses: easimon/maximize-build-space@master
-      with:
-        root-reserve-mb: 11240 
-        swap-size-mb: 1024
-        remove-dotnet: 'true'
-        remove-android: 'true'
-        remove-haskell: 'true'
-        remove-codeql: 'true'
-        remove-docker-images: 'true'
-
     - name: List Available Space
       run: |
         echo "Free space:"
@@ -29,7 +20,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install -y coreutils quilt parted qemu-user-static debootstrap arch-test zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc qemu-utils kpartx gpg
+        sudo apt install -y coreutils quilt parted qemu-user-binfmt debootstrap arch-test zerofree zip dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc qemu-utils kpartx gpg pigz xxd
 
     - name: Checkout WebDisplay
       uses: actions/checkout@v3
@@ -87,19 +78,24 @@ jobs:
         cd PiGen
         touch ./stage3/SKIP ./stage4/SKIP ./stage5/SKIP
         touch ./stage4/SKIP_IMAGES ./stage5/SKIP_IMAGES
+        
+    - name: Prepare PiGen Build
+      run: |
+        sudo rm -rf ./pigen-build
+        sudo cp -a PiGen ./pigen-build
+        sudo chown -R root:root ./pigen-build
 
     - name: Build Image
       run: |
-        cd PiGen
-        chmod 777 ./stage2/04-install-requirements/03-run.sh
+        cd ./pigen-build
+        sudo chmod 777 ./stage2/04-install-requirements/03-run.sh
         sudo ./build.sh
 
     # Pi-Gen does weird things with the image file name, so let's make sure we have it right.
     - name: Get Image Name
       id: imagefile
       run: |
-        cd PiGen
-        cd deploy
+        cd ./pigen-build/deploy
         ls
         IMAGE_FILE=$(ls *.img)
         echo "imagefile=$IMAGE_FILE" >> $GITHUB_OUTPUT
@@ -108,4 +104,4 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.config.outputs.image }}
-        path: PiGen/deploy/${{ steps.imagefile.outputs.imagefile }}
+        path: ./pigen-build/deploy/${{ steps.imagefile.outputs.imagefile }}
